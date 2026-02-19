@@ -22,5 +22,4 @@ Trabajo de Fin de Grado de DAW
 
 ## 📂 Estructura de Ramas
 - `main`: Versiones estables.
-- `develop`: Integración continua.
-- `feature/*`: Desarrollo individual de funcionalidades.
+- `Julian/Sara/Victor`: Desarrollo individual de funcionalidades.
