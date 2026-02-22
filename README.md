@@ -1,26 +1,70 @@
-# TFG-DAW-Videoclub-JSV-2026
-Trabajo de Fin de Grado de DAW
+# StreamFlix - Videoclub Online
+**Trabajo de Fin de Grado · 2º DAW · Curso 2025–2026**
 
-# StreamFlix - TFG 2º DAW 2026
-**Proyecto:** Plataforma de Gestión de Videoclub Online
+---
 
 ## 👥 Integrantes del Grupo
-* **Julián Francisco García Sogo** (@sogo4-hub) - Backend & DB
-* **Sara Ruiz Núñez** (@sararunu) - Frontend & UI
-* **Víctor Yuste González** (@neonratz) - Frontend & Node.js
+| Alumno | Usuario GitHub | Rama | Rol principal |
+|---|---|---|---|
+| Julián Francisco García Sogo | [@sogo4-hub](https://github.com/sogo4-hub) | `julian` | Backend & BD |
+| Sara Ruiz Núñez | [@sararunu](https://github.com/sararunu) | `sara` | Frontend & UI |
+| Víctor Yuste González | [@neonratz](https://github.com/neonratz) | `victor` | Frontend & Node.js |
+
+---
+
+## 📋 Descripción
+StreamFlix es una aplicación web full stack que simula el funcionamiento de un videoclub online, integrando la visualización de contenido audiovisual y la gestión empresarial del negocio. La plataforma permite a los usuarios registrarse, autenticarse de forma segura y acceder a un catálogo de películas y series disponibles para su alquiler digital.
+
+---
+
+## 🎯 Funcionalidades Principales
+
+### Usuario
+- Registro e inicio de sesión con autenticación JWT
+- Exploración del catálogo mediante buscador y filtros
+- Alquiler de contenidos por tiempo limitado
+- Valoraciones y comentarios sobre contenidos visualizados
+
+### Administrador
+- Gestión completa del catálogo (operaciones CRUD)
+- Subida y gestión de archivos de vídeo
+- Administración de usuarios registrados
+- Visualización de estadísticas: películas más alquiladas, ingresos generados y actividad de la plataforma
+
+---
 
 ## 🛠️ Stack Tecnológico
-* **Backend:** Java 17 + Spring Boot 3 (Spring Security / JWT).
-* **Frontend:** Angular/React + TypeScript + Tailwind CSS.
-* **Persistencia:** MySQL (Relacional) y MongoDB (NoSQL).
-* **DevOps:** Docker + GitHub Actions.
+| Capa | Tecnología |
+|---|---|
+| **Frontend** | React + TypeScript + Tailwind CSS |
+| **Backend** | Java 17 + Spring Boot 3 + Spring Security + JWT |
+| **BD Relacional** | MySQL (usuarios, alquileres, ingresos) |
+| **BD NoSQL** | MongoDB + GridFS (archivos multimedia) |
+| **API Externa** | TMDB – The Movie Database |
+| **Control de versiones** | GitHub |
 
-## 📅 Hitos del Proyecto
-- [x] 16/02: Entrega de listado de grupo.
-- [ ] 20/02: Entrega de Anteproyecto (PDF).
-- [ ] Junio: Defensa del proyecto.
+---
 
 ## 📂 Estructura de Ramas
-- `main`: Versiones estables.
-- `develop`: Integración continua.
-- `feature/*`: Desarrollo individual de funcionalidades.
+- `main` — Versiones estables e integración final
+- `feature/julian` — Desarrollo individual de Julián
+- `feature/sara` — Desarrollo individual de Sara
+- `feature/victor` — Desarrollo individual de Víctor
+
+---
+
+## 📅 Hitos del Proyecto
+- [x] 16/02/2026 — Entrega del listado de grupos
+- [x] 20/02/2026 — Entrega del anteproyecto en PDF
+- [ ] Junio 2026 — Defensa del proyecto
+
+---
+
+## 📖 Memoria
+La memoria completa del proyecto estará disponible en este repositorio. 
+
+---
+
+## 👨‍🏫 Tutores
+- **Mari Luz Elola** ([@profeMelola](https://github.com/profeMelola))
+- **Pablo Martín Ruiz** ([@pamaruiz](https://github.com/pamaruiz))
