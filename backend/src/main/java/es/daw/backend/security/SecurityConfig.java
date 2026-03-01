@@ -28,9 +28,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
+                // AÑADE ESTA LÍNEA PARA PERMITIR LOS IFRAMES DE LA CONSOLA H2
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // Login y Registro públicos
+                        .requestMatchers("/h2-console/**").permitAll() // Permiso para la consola H2
+                        .requestMatchers("/error").permitAll() // Para ver el error
                         .requestMatchers(HttpMethod.GET, "/api/peliculas/**").permitAll() // Catálogo público
                         .anyRequest().authenticated()
                 )
