@@ -1,13 +1,59 @@
 import './Registro.css';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function Registro() {
 
     //datos del state
-    const [camposRegistro, setCamposRegistro] = useState({ nombre: '', email: '', password: '', repetirPassword: '', politica: false, noticias: false });
+    const [camposRegistro, setCamposRegistro] = useState({
+        nombre: '',
+        email: '',
+        password: '',
+        repetirPassword: '',
+        politica: false,
+        noticias: false
+    });
     console.log('todos los campos: ', camposRegistro);
 
     const [errores, setErrores] = useState({});
+
+    const [recaptchaToken, setRecaptchaToken] = useState(null);
+    const recaptchaRef = useRef(null); //---guardar id del checkbox del recaptcha
+
+
+    useEffect(() => {
+        const renderRecaptcha = () => {
+            const container = document.getElementById('recaptcha-registro');
+
+            //pintar el recaptcha si el div está vacío--para pintarlo solo una vez
+            if (container &&
+                window.grecaptcha &&
+                window.grecaptcha.enterprise &&
+                container.innerHTML === ''
+            ) {
+                //---pintar el recaptcha y guardar el sitekey en el useref
+                recaptchaRef.current = window.grecaptcha.enterprise.render(
+                    container,
+                    {
+                        sitekey: '6Lf2XnssAAAAAIDyekNCwc8TG-5zR_1joAtO1JF4',
+                        //borrar el error del recaptcha cuando se complete
+                        callback: (token) => { //---es cuando el token se genere
+                            setErrores(prev => ({ ...prev, recaptcha: '' }));
+                            setRecaptchaToken(token);
+                        }
+                    }
+                );
+            }
+        };
+
+        //renderizar captcha cuando google está cargado
+        if (window.grecaptcha && window.grecaptcha.enterprise) {
+            window.grecaptcha.enterprise.ready(() => {
+                renderRecaptcha();
+            });
+        }
+
+    }, []);
+
 
     //funciones - validaciones
     function onChangeHandler(e) {
@@ -29,7 +75,10 @@ function Registro() {
         return regex.test(password);
     }
 
-    function pulsarBoton(e) {
+
+    async function pulsarBoton(e) {
+        //e.preventDefault();
+
         let hayErrores = false;
         const erroresValidacion = { nombre: '', email: '', password: '', repetirPassword: '', politica: '' };
 
@@ -69,12 +118,61 @@ function Registro() {
             hayErrores = true;
         }
 
-        setErrores(erroresValidacion); //---añadir los errores al objeto
-
-        if (!hayErrores) {
-            console.log("todo correcto: ", camposRegistro)
+        const token = recaptchaRef.current ? window.grecaptcha.enterprise.getResponse(recaptchaRef.current) : null;
+        if (!token) {
+            erroresValidacion.recaptcha = "Debes completar el recaptcha.";
+            hayErrores = true;
         }
 
+        if (hayErrores) {
+            setErrores(erroresValidacion);
+            return;
+        }
+
+        try {
+            setRecaptchaToken(token);
+
+            //aqui enviar datos y token al backend---------------
+            const response = await fetch('http://localhost:8080/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nombre: camposRegistro.nombre,
+                    email: camposRegistro.email,
+                    password: camposRegistro.password,
+                    noticias: camposRegistro.noticias,
+                    recaptchaToken: token
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Registro completado, bienvenido a StreamFlix :)');
+
+                // Limpiar el formulario
+                setCamposRegistro({
+                    nombre: '',
+                    email: '',
+                    password: '',
+                    repetirPassword: '',
+                    politica: false,
+                    noticias: false
+                });
+
+                setErrores({});
+
+                // Resetear el checkbox del recaptcha
+                window.grecaptcha.enterprise.reset(recaptchaRef.current);
+
+            } else {
+                alert('Error: ' + (data.error || 'El registro ha fallado'));
+            }
+
+        } catch (error) {
+            alert('Hubo un error al enviar el registro.');
+            console.error(error);
+        }
     }
 
     return (
@@ -102,6 +200,13 @@ function Registro() {
 
             <br></br>
 
+            {/*recaptcha*/}
+            <div>
+                {errores.recaptcha && <div className="errorMensaje">{errores.recaptcha}</div>}
+                <div id="recaptcha-registro" className="m-4"></div>
+            </div>
+            <br></br>
+
             {/*checkboxes y botón*/}
             <div>
                 <input type="checkbox" id="politica" name="politica" required onChange={onChangeHandler}></input>
@@ -123,7 +228,7 @@ function Registro() {
             </div>
 
             <div>
-                <p>¿Ya tienes cuenta? <i class="fa-solid fa-hand-point-right"></i>
+                <p>¿Ya tienes cuenta? <i className="fa-solid fa-hand-point-right"></i>
                     <a><u> Iniciar sesión</u></a></p>
             </div>
 
