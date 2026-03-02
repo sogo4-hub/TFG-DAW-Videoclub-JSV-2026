@@ -60,6 +60,19 @@ StreamFlix es una aplicación web full stack que simula el funcionamiento de un 
 
 ---
 
+## 🔀 Pull Requests Realizados
+
+Se han realizado **4 Pull Requests** hasta la fecha:
+
+| # | Título | Estado | Fecha |
+|---|--------|--------|-------|
+| [#6](https://github.com/sogo4-hub/TFG-DAW-Videoclub-JSV-2026/pull/6) | Feature/julian sogo — Se añade la parte de Backend al proyecto global | ✅ Merged | 24/02/2026 |
+| [#10](https://github.com/sogo4-hub/TFG-DAW-Videoclub-JSV-2026/pull/10) | Actualización de los cambios realizados en el proyecto recién creado para arreglar los problemas de incompatibilidades de versiones de Java | ✅ Merged | 28/02/2026 |
+| [#11](https://github.com/sogo4-hub/TFG-DAW-Videoclub-JSV-2026/pull/11) | Creación de las bases de datos SQL y MongoDB. Por ahora solo se han realizado pruebas con la base de datos SQL | ✅ Merged | 01/03/2026 |
+| [#12](https://github.com/sogo4-hub/TFG-DAW-Videoclub-JSV-2026/pull/12) | Se terminó la configuración básica del SQL para usuarios y quedó lista la base para comenzar con la parte de películas | ✅ Merged | 02/03/2026 |
+
+---
+
 ## 📖 Memoria
 La memoria completa del proyecto estará disponible en este repositorio. 
 
