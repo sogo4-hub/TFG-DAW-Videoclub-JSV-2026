@@ -1,9 +1,8 @@
-package es.daw.backend.model;
+package es.daw.backend.entity;
 
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

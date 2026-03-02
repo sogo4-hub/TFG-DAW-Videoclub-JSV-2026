@@ -1,6 +1,6 @@
 package es.daw.backend.repository;
 
-import es.daw.backend.model.Usuario;
+import es.daw.backend.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
