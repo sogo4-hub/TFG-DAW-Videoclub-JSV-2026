@@ -1,12 +1,12 @@
 package es.daw.backend.controller;
 
+import es.daw.backend.dto.UsuarioRequest;
 import es.daw.backend.dto.UsuarioResponse;
-import es.daw.backend.model.Usuario;
-import es.daw.backend.repository.UsuarioRepository;
+import es.daw.backend.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,34 +14,24 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin/usuarios")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')") // Restringe todo el controlador a ADMINs
+@PreAuthorize("hasRole('ADMIN')")
 public class UsuarioController {
 
-    private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UsuarioService usuarioService;
 
-    // Listar todos los usuarios
     @GetMapping
-    public List<UsuarioResponse> listarTodos() {
-        return usuarioRepository.findAll().stream()
-                .map(u -> new UsuarioResponse(u.getId(), u.getEmail(), u.getRol()))
-                .toList();
+    public ResponseEntity<List<UsuarioResponse>> listarTodos() {
+        return ResponseEntity.ok(usuarioService.listarTodos());
     }
 
-    // Crear un usuario (desde panel de admin)
     @PostMapping
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        return ResponseEntity.ok(usuarioRepository.save(usuario));
+    public ResponseEntity<UsuarioResponse> crearUsuario(@RequestBody UsuarioRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.crearUsuario(request));
     }
 
-    // Borrar un usuario por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
-        if (!usuarioRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        usuarioRepository.deleteById(id);
+        usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
     }
 }
