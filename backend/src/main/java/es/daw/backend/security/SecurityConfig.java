@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll() // Permiso para la consola H2
                         .requestMatchers("/error").permitAll() // Para ver el error
                         .requestMatchers(HttpMethod.GET, "/api/peliculas/**").permitAll() // Catálogo público
+                        .requestMatchers(HttpMethod.GET, "/api/media/**").permitAll() //AÑADE ESTA LÍNEA PARA LAS IMÁGENES
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

@@ -1730,3 +1730,19 @@ The connection was not closed by the application and is garbage collected [90018
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 127 more
+2026-03-03 18:48:38.038263+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "PELICULAS" no encontrada
+Table "PELICULAS" not found; SQL statement:
+insert into peliculas (anio,director,genero,sinopsis,titulo,url_imagen,id) values (?,?,?,?,?,?,default) [42102-232]
+2026-03-03 18:49:26.678713+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "PELICULAS" no encontrada
+Table "PELICULAS" not found; SQL statement:
+select p1_0.id,p1_0.anio,p1_0.director,p1_0.genero,p1_0.sinopsis,p1_0.titulo,p1_0.url_imagen from peliculas p1_0 [42102-232]
+2026-03-03 18:51:33.908646+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "PELICULAS" no encontrada
+Table "PELICULAS" not found; SQL statement:
+select p1_0.id,p1_0.anio,p1_0.director,p1_0.genero,p1_0.sinopsis,p1_0.titulo,p1_0.url_imagen from peliculas p1_0 [42102-232]
+2026-03-03 18:53:14.630378+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "PELICULAS" no encontrada
+Table "PELICULAS" not found; SQL statement:
+select p1_0.id,p1_0.anio,p1_0.director,p1_0.genero,p1_0.sinopsis,p1_0.titulo,p1_0.url_imagen from peliculas p1_0 [42102-232]
