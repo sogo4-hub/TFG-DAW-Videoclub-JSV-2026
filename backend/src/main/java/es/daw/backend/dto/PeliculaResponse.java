@@ -15,4 +15,5 @@ public class PeliculaResponse {
     private int anio;
     private String genero;
     private String urlImagen;
+    private String urlVideo;
 }

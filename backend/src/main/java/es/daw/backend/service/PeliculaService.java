@@ -64,4 +64,20 @@ public class PeliculaService {
         Pelicula guardada = peliculaRepository.save(pelicula);
         return peliculaMapper.toResponseDTO(guardada);
     }
+
+    public PeliculaResponse guardarConMultimedia(PeliculaRequest request, MultipartFile imagen, MultipartFile video) throws java.io.IOException {
+        // 1. Guardamos la imagen en MongoDB
+        String imgId = mediaService.guardarArchivo(imagen);
+
+        // 2. Guardamos el vídeo en MongoDB
+        String videoId = mediaService.guardarArchivo(video);
+
+        // 3. Mapeamos y asignamos las "URLs" lógicas
+        Pelicula pelicula = peliculaMapper.toEntity(request);
+        pelicula.setUrlImagen("/api/media/" + imgId);
+        pelicula.setUrlVideo("/api/media/" + videoId);
+
+        Pelicula guardada = peliculaRepository.save(pelicula);
+        return peliculaMapper.toResponseDTO(guardada);
+    }
 }

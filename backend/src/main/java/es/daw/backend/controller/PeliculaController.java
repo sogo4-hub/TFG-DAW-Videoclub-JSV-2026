@@ -28,10 +28,12 @@ public class PeliculaController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PeliculaResponse> crear(
             @RequestPart("datos") PeliculaRequest request, // El JSON de la película
-            @RequestPart("archivo") MultipartFile archivo  // La imagen real
+            @RequestPart("archivo") MultipartFile archivo,  // La imagen real
+            @RequestPart("video") MultipartFile video // ARCHIVO DE VIDEO
     ) throws java.io.IOException {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(peliculaService.guardarConImagen(request, archivo));
+                // Usamos el método nuevo pasándole imagen y vídeo
+                .body(peliculaService.guardarConMultimedia(request, archivo, video));
     }
 
     @DeleteMapping("/{id}")

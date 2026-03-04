@@ -28,4 +28,6 @@ public class Pelicula {
     private String genero;
 
     private String urlImagen;
+
+    private String urlVideo;
 }
