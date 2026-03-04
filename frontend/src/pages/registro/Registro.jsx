@@ -1,6 +1,9 @@
 import './Registro.css';
 import { useState, useEffect, useRef } from 'react';
 
+import { Link } from "react-router-dom";
+
+
 function Registro() {
 
     //datos del state
@@ -80,7 +83,13 @@ function Registro() {
         //e.preventDefault();
 
         let hayErrores = false;
-        const erroresValidacion = { nombre: '', email: '', password: '', repetirPassword: '', politica: '' };
+        const erroresValidacion = {
+            nombre: '',
+            email: '',
+            password: '',
+            repetirPassword: '',
+            politica: ''
+        };
 
         //sacar mensaje de error a cada campo al pulsar el botón
         if (!camposRegistro.nombre.trim()) {
@@ -118,10 +127,15 @@ function Registro() {
             hayErrores = true;
         }
 
-        const token = recaptchaRef.current ? window.grecaptcha.enterprise.getResponse(recaptchaRef.current) : null;
+        //const token = recaptchaRef.current ? window.grecaptcha.enterprise.getResponse(recaptchaRef.current) : null;
+        const token = window.grecaptcha.enterprise.getResponse(recaptchaRef.current);
+
         if (!token) {
             erroresValidacion.recaptcha = "Debes completar el recaptcha.";
             hayErrores = true;
+        } else {
+            console.log("el token es: ", token)
+
         }
 
         if (hayErrores) {
@@ -176,7 +190,7 @@ function Registro() {
     }
 
     return (
-        <div>
+        <div className="registro-page">
             <div>
                 <label htmlFor="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required onChange={onChangeHandler}></input>
@@ -227,9 +241,14 @@ function Registro() {
                 <button type="submit" onClick={pulsarBoton}>Registrarse</button>
             </div>
 
-            <div>
+            {/* <div>
                 <p>¿Ya tienes cuenta? <i className="fa-solid fa-hand-point-right"></i>
-                    <a><u> Iniciar sesión</u></a></p>
+                    <a href=""><u> Iniciar sesión</u></a></p>
+            </div> */}
+            <div>
+                <p>¿Ya tienes cuenta? <i className="fa-solid fa-hand-point-right "></i>
+                    <Link to="/login" className="underline text-blue-500 hover:text-blue-700"> Iniciar sesión</Link>
+                </p>
             </div>
 
         </div>
