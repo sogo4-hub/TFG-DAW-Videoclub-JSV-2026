@@ -1,2 +1,43 @@
-DELETE http://localhost:8080/api/peliculas/2
+### 1. Login para obtener el token de Administrador
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "nuevo_admin@streamflix.es",
+  "password": "admin123"
+}
+
+> {% client.global.set("auth_token", response.body.token); %}
+
+### 2. Crear Película Completa (Cartel + Vídeo)
+POST http://localhost:8080/api/peliculas
 Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="datos"
+Content-Type: application/json
+
+{
+  "titulo": "Interstellar",
+  "sinopsis": "Un equipo de exploradores viaja a través de un agujero de gusano para salvar a la humanidad.",
+  "director": "Christopher Nolan",
+  "anio": 2014,
+  "genero": "Ciencia Ficción"
+}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="archivo"; filename="InterestallerV1.jpg"
+Content-Type: image/jpeg
+
+< ../../../../Imagenes/InterestallerV1.jpg
+
+--WebAppBoundary
+Content-Disposition: form-data; name="video"; filename="Intellestelar-corta I.mp4"
+Content-Type: video/mp4
+
+< ../../../../Videos/Intellestelar-corta I.mp4
+--WebAppBoundary--
+
+### 3. Listar todas las películas para ver las nuevas URLs
+GET http://localhost:8080/api/peliculas

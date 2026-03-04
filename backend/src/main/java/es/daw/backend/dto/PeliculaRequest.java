@@ -14,4 +14,5 @@ public class PeliculaRequest {
     private int anio;
     private String genero;
     private String urlImagen;
+    private String urlVideo;
 }
