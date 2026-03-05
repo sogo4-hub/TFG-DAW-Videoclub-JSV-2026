@@ -17,5 +17,6 @@ CREATE TABLE IF NOT EXISTS peliculas (
                                          director VARCHAR(255),
                                          anio INT,
                                          genero VARCHAR(255),
-                                         url_imagen VARCHAR(255)
+                                         url_imagen VARCHAR(255),
+                                         url_video VARCHAR(255)
 );

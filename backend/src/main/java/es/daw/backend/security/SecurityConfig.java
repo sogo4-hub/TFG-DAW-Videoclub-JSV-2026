@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableMethodSecurity
@@ -27,6 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // <--- AÑADE ESTA LÍNEA AQUÍ
                 .csrf(csrf -> csrf.disable())
                 // AÑADE ESTA LÍNEA PARA PERMITIR LOS IFRAMES DE LA CONSOLA H2
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
@@ -60,5 +62,23 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
+        org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
+
+        // 1. Permitir el puerto donde corre el frontend de Sara (React/Vite suele ser 5173, si usa Create React App es 3000)
+        configuration.setAllowedOrigins(java.util.List.of("http://localhost:5173", "http://localhost:3000"));
+
+        // 2. Permitir los métodos HTTP que vais a usar
+        configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // 3. Permitir las cabeceras (¡CRUCIAL para que pase el token JWT!)
+        configuration.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type"));
+
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Aplica a todas las rutas de tu API
+        return source;
     }
 }
