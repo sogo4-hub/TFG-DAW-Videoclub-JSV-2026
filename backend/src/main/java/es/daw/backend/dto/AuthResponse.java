@@ -8,4 +8,5 @@ import lombok.*;
 @NoArgsConstructor
 public class AuthResponse {
     private String token;
+    private String rol; // <--- NUEVO: Añadimos el rol para que el frontend lo lea
 }
