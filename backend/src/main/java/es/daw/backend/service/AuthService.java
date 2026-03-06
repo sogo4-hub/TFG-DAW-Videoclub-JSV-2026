@@ -36,7 +36,11 @@ public class AuthService {
 
         usuarioRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder().token(jwtToken).build();
+        // <--- NUEVO: Devolvemos el rol en la respuesta
+        return AuthResponse.builder()
+                .token(jwtToken)
+                .rol(user.getRol())
+                .build();
     }
 
     public AuthResponse login(AuthRequest request) {
@@ -48,6 +52,10 @@ public class AuthService {
                 .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
         String jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder().token(jwtToken).build();
+        // <--- NUEVO: Devolvemos el rol en la respuesta
+        return AuthResponse.builder()
+                .token(jwtToken)
+                .rol(user.getRol())
+                .build();
     }
 }
