@@ -1,6 +1,6 @@
 #FileLock
-#Sun Mar 08 18:46:46 CET 2026
+#Sun Mar 08 18:12:54 UTC 2026
 hostName=DESKTOP-VFRUTN3
-id=19cce8f0a5644654c7d332ca34241a177fc9f0ac2f2
+id=19ccea6f32f8cfce5562c05c04f43d516b6ccddecc3
 method=file
-server=192.168.1.38\:60193
+server=192.168.1.38\:53992
