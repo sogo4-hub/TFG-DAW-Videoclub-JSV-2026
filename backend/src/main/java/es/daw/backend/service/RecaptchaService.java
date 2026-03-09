@@ -15,13 +15,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RecaptchaService {
 
-    @Value("${google.recaptcha.api-key}")
+    @Value("${google.recaptcha.api-key}") // Coincide con google.recaptcha.api-key en .properties
     private String apiKey;
 
-    @Value("${google.recaptcha.project-id}")
+    @Value("${google.recaptcha.project-id}") // Coincide con google.recaptcha.project-id en .properties
     private String projectId;
 
-    @Value("${google.recaptcha.site-key}")
+    @Value("${google.recaptcha.site-key}") // Coincide con google.recaptcha.site-key en .properties
     private String siteKey;
 
     public boolean validateToken(String token) {
