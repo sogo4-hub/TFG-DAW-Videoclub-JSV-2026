@@ -32,4 +32,12 @@ public class GlobalExceptionHandler {
         response.put("error", "Credenciales inválidas");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
+
+    @ExceptionHandler(RecaptchaException.class)
+    public ResponseEntity<Map<String, String>> handleRecaptchaException(RecaptchaException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+        // Devolvemos 400 Bad Request porque es un fallo de validación del formulario
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 }
