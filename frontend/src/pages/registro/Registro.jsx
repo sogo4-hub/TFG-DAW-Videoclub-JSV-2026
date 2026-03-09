@@ -1,10 +1,17 @@
 import './Registro.css';
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+
 
 import { Link } from "react-router-dom";
 
 
 function Registro() {
+    const navigate = useNavigate();
+
+    const { login } = useAuth(); //---funcion de autologin
+    // |---> cuando se registre, va al home ya logueado
 
     //datos del state
     const [camposRegistro, setCamposRegistro] = useState({
@@ -34,25 +41,44 @@ function Registro() {
                 container.innerHTML === ''
             ) {
                 //---pintar el recaptcha y guardar el sitekey en el useref
-                recaptchaRef.current = window.grecaptcha.enterprise.render(
-                    container,
-                    {
-                        sitekey: '6Lf2XnssAAAAAIDyekNCwc8TG-5zR_1joAtO1JF4',
-                        //borrar el error del recaptcha cuando se complete
-                        callback: (token) => { //---es cuando el token se genere
-                            setErrores(prev => ({ ...prev, recaptcha: '' }));
-                            setRecaptchaToken(token);
-                        }
+                // recaptchaRef.current = window.grecaptcha.enterprise.render(
+                //     container,
+                //     {
+                //         sitekey: '6Lf2XnssAAAAAIDyekNCwc8TG-5zR_1joAtO1JF4',
+                //         action: 'REGISTER',
+                //         //borrar el error del recaptcha cuando se complete
+                //         callback: (token) => { //---es cuando el token se genere
+                //             setErrores(prev => ({ ...prev, recaptcha: '' }));
+                //             setRecaptchaToken(token);
+                //         }
+                //     }
+                // );
+
+                recaptchaRef.current = window.grecaptcha.enterprise.render(container, {
+                    sitekey: '6Lf2XnssAAAAAIDyekNCwc8TG-5zR_1joAtO1JF4',
+                    action: 'REGISTER',
+                    size: 'normal',
+                    theme: 'light',
+                    callback: (token) => {
+                        //console.log('el token es: ', token);
+                        setRecaptchaToken(token);
+                        setErrores(prev => ({ ...prev, recaptcha: '' }));
                     }
-                );
+                });
+
             }
         };
 
+
+
         //renderizar captcha cuando google está cargado
-        if (window.grecaptcha && window.grecaptcha.enterprise) {
-            window.grecaptcha.enterprise.ready(() => {
-                renderRecaptcha();
-            });
+        // if (window.grecaptcha && window.grecaptcha.enterprise) {
+        //     window.grecaptcha.enterprise.ready(() => {
+        //         renderRecaptcha();
+        //     });
+        // }
+        if (window.grecaptcha?.enterprise) {
+            window.grecaptcha.enterprise.ready(renderRecaptcha);
         }
 
     }, []);
@@ -79,115 +105,270 @@ function Registro() {
     }
 
 
+    // async function pulsarBoton(e) {
+    //     //e.preventDefault();
+
+    //     let hayErrores = false;
+    //     const erroresValidacion = {
+    //         nombre: '',
+    //         email: '',
+    //         password: '',
+    //         repetirPassword: '',
+    //         politica: ''
+    //     };
+
+    //     //sacar mensaje de error a cada campo al pulsar el botón
+    //     if (!camposRegistro.nombre.trim()) {
+    //         erroresValidacion.nombre = "El nombre es obligatorio.";
+    //         hayErrores = true;
+    //     }
+
+    //     if (!camposRegistro.email.trim()) {
+    //         erroresValidacion.email = "El email es obligatorio.";
+    //         hayErrores = true;
+    //     } else if (!validarEmail(camposRegistro.email)) {
+    //         erroresValidacion.email = "El formato del email es inválido.";
+    //         hayErrores = true;
+    //     }
+
+    //     if (!camposRegistro.password.trim()) {
+    //         erroresValidacion.password = "La contraseña es obligatoria.";
+    //         hayErrores = true;
+    //     } else if (!validarPassword(camposRegistro.password)) {
+    //         erroresValidacion.password = "Debe tener mínimo 8 caracteres, 1 mayúscula y 1 símbolo (!@#$%^&*.)";
+    //         hayErrores = true;
+    //     }
+
+    //     if (!camposRegistro.repetirPassword.trim()) {
+    //         erroresValidacion.repetirPassword = "Debes repetir la contraseña.";
+    //         hayErrores = true;
+    //     } else if (camposRegistro.password !== camposRegistro.repetirPassword) {
+    //         erroresValidacion.password = "Las contraseñas no coinciden";
+    //         erroresValidacion.repetirPassword = "Las contraseñas no coinciden";
+    //         hayErrores = true;
+    //     }
+
+    //     if (!camposRegistro.politica) {
+    //         erroresValidacion.politica = "Debes aceptar la política de privacidad.";
+    //         hayErrores = true;
+    //     }
+
+    //     //const token = window.grecaptcha.enterprise.getResponse(recaptchaRef.current);
+    //     // const token = recaptchaRef.current ?
+    //     //     window.grecaptcha.enterprise.getResponse(recaptchaRef.current) : null;
+
+    //     // if (!token) {
+    //     //     erroresValidacion.recaptcha = "Debes completar el recaptcha.";
+    //     //     hayErrores = true;
+    //     // } else {
+    //     //     console.log("el token es: ", token)
+
+    //     // }
+
+
+    //     // ✅ VALIDACIÓN ENTERPRISE VISIBLE:
+    //     let token = null;
+    //     if (recaptchaRef.current != null) {
+    //         token = window.grecaptcha.enterprise.getResponse(recaptchaRef.current);
+    //         console.log('🔍 Token Enterprise:', token);
+
+    //         if (!token) {
+    //             console.log("❌ No has hecho click en el checkbox");
+    //             erroresValidacion.recaptcha = "Debes completar el reCAPTCHA";
+    //             hayErrores = true;
+    //             setErrores(erroresValidacion);
+    //             return;
+    //         }
+    //     } else {
+    //         console.log('⏳ Google reCAPTCHA no está cargado aún');
+    //         erroresValidacion.recaptcha = "Cargando verificación...";
+    //         hayErrores = true;
+    //         setErrores(erroresValidacion);
+    //         return;
+    //     }
+
+    //     if (hayErrores) {
+    //         setErrores(erroresValidacion);
+    //         return;
+    //     }
+
+    //     try {
+    //         setRecaptchaToken(token);
+
+    //         //aqui enviar datos y token al backend---------------
+    //         const response = await fetch('http://localhost:8080/api/auth/register', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({
+    //                 nombre: camposRegistro.nombre,
+    //                 email: camposRegistro.email,
+    //                 password: camposRegistro.password,
+    //                 noticias: camposRegistro.noticias,
+    //                 recaptchaToken: token
+    //             })
+    //         });
+
+    //         const data = await response.json();
+
+    //         if (response.ok) {
+    //             alert('Registro completado, bienvenido a StreamFlix :)');
+
+    //             //--autologin y redirección a home
+    //             login({
+    //                 token: data.token,
+    //                 rol: data.rol
+    //             });
+
+    //             navigate('/', { replace: true });
+
+    //             // Limpiar el formulario -----(con navigate no hace falta)
+    //             // setCamposRegistro({
+    //             //     nombre: '',
+    //             //     email: '',
+    //             //     password: '',
+    //             //     repetirPassword: '',
+    //             //     politica: false,
+    //             //     noticias: false
+    //             // });
+
+    //             // setErrores({});
+
+    //             // Resetear el checkbox del recaptcha
+
+    //             window.grecaptcha.enterprise.reset(recaptchaRef.current);
+
+    //         } else {
+    //             alert('Error: ' + (data.error || 'El registro ha fallado'));
+    //         }
+
+    //     } catch (error) {
+    //         alert('Hubo un error al enviar el registro.');
+    //         console.error(error);
+    //     }
+    // }
+
     async function pulsarBoton(e) {
-        //e.preventDefault();
+    e.preventDefault(); //---evitar que se recargue la página al enviar el formulario, para que no se pierda el estado ni el token del recaptcha
 
-        let hayErrores = false;
-        const erroresValidacion = {
-            nombre: '',
-            email: '',
-            password: '',
-            repetirPassword: '',
-            politica: ''
-        };
+    let hayErrores = false;
+    const erroresValidacion = {
+        nombre: '',
+        email: '',
+        password: '',
+        repetirPassword: '',
+        politica: ''
+    };
 
-        //sacar mensaje de error a cada campo al pulsar el botón
-        if (!camposRegistro.nombre.trim()) {
-            erroresValidacion.nombre = "El nombre es obligatorio.";
-            hayErrores = true;
-        }
+    //---validaciones
+    if (!camposRegistro.nombre.trim()) {
+        erroresValidacion.nombre = "El nombre es obligatorio.";
+        hayErrores = true;
+    }
 
-        if (!camposRegistro.email.trim()) {
-            erroresValidacion.email = "El email es obligatorio.";
-            hayErrores = true;
-        } else if (!validarEmail(camposRegistro.email)) {
-            erroresValidacion.email = "El formato del email es inválido.";
-            hayErrores = true;
-        }
+    if (!camposRegistro.email.trim()) {
+        erroresValidacion.email = "El email es obligatorio.";
+        hayErrores = true;
+    } else if (!validarEmail(camposRegistro.email)) {
+        erroresValidacion.email = "El formato del email es inválido.";
+        hayErrores = true;
+    }
 
-        if (!camposRegistro.password.trim()) {
-            erroresValidacion.password = "La contraseña es obligatoria.";
-            hayErrores = true;
-        } else if (!validarPassword(camposRegistro.password)) {
-            erroresValidacion.password = "Debe tener mínimo 8 caracteres, 1 mayúscula y 1 símbolo (!@#$%^&*.)";
-            hayErrores = true;
-        }
+    if (!camposRegistro.password.trim()) {
+        erroresValidacion.password = "La contraseña es obligatoria.";
+        hayErrores = true;
+    } else if (!validarPassword(camposRegistro.password)) {
+        erroresValidacion.password = "Debe tener mínimo 8 caracteres, 1 mayúscula y 1 símbolo (!@#$%^&*.)";
+        hayErrores = true;
+    }
 
-        if (!camposRegistro.repetirPassword.trim()) {
-            erroresValidacion.repetirPassword = "Debes repetir la contraseña.";
-            hayErrores = true;
-        } else if (camposRegistro.password !== camposRegistro.repetirPassword) {
-            erroresValidacion.password = "Las contraseñas no coinciden";
-            erroresValidacion.repetirPassword = "Las contraseñas no coinciden";
-            hayErrores = true;
-        }
+    if (!camposRegistro.repetirPassword.trim()) {
+        erroresValidacion.repetirPassword = "Debes repetir la contraseña.";
+        hayErrores = true;
+    } else if (camposRegistro.password !== camposRegistro.repetirPassword) {
+        erroresValidacion.password = "Las contraseñas no coinciden";
+        erroresValidacion.repetirPassword = "Las contraseñas no coinciden";
+        hayErrores = true;
+    }
 
-        if (!camposRegistro.politica) {
-            erroresValidacion.politica = "Debes aceptar la política de privacidad.";
-            hayErrores = true;
-        }
+    if (!camposRegistro.politica) {
+        erroresValidacion.politica = "Debes aceptar la política de privacidad.";
+        hayErrores = true;
+    }
 
-        //const token = recaptchaRef.current ? window.grecaptcha.enterprise.getResponse(recaptchaRef.current) : null;
-        const token = window.grecaptcha.enterprise.getResponse(recaptchaRef.current);
+    //recaptcha
+    let token = null;
+    if (recaptchaRef.current != null) {
+        token = window.grecaptcha.enterprise.getResponse(recaptchaRef.current);
+        console.log('el token de racaptcha es: ', token);
 
         if (!token) {
-            erroresValidacion.recaptcha = "Debes completar el recaptcha.";
+            erroresValidacion.recaptcha = "Debes completar el reCAPTCHA";
             hayErrores = true;
-        } else {
-            console.log("el token es: ", token)
-
-        }
-
-        if (hayErrores) {
             setErrores(erroresValidacion);
             return;
         }
+    } else {
+        console.log('el recaptcha no se ha cargado aún...');
+        erroresValidacion.recaptcha = "cargando la verificación...";
+        hayErrores = true;
+        setErrores(erroresValidacion);
+        return;
+    }
 
-        try {
-            setRecaptchaToken(token);
+    if (hayErrores) {
+        setErrores(erroresValidacion);
+        return;
+    }
 
-            //aqui enviar datos y token al backend---------------
-            const response = await fetch('http://localhost:8080/api/auth/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nombre: camposRegistro.nombre,
-                    email: camposRegistro.email,
-                    password: camposRegistro.password,
-                    noticias: camposRegistro.noticias,
-                    recaptchaToken: token
-                })
+    try {
+        setRecaptchaToken(token);
+
+        const datosRegistro = {
+            nombre: camposRegistro.nombre.trim() || "Usuario StreamFlix",
+            email: camposRegistro.email.trim(),
+            password: camposRegistro.password,
+            recaptchaToken: token
+        };
+
+        console.log('enviando al backend: ', datosRegistro);
+
+        const response = await fetch('http://localhost:8080/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datosRegistro)
+        });
+
+        const data = await response.json();
+        console.log('respuesta de backend:', data);
+
+        if (response.ok) {
+            alert('Registro completado, bienvenido a StreamFlix :)');
+            
+            //autologin y redirección:
+            login({
+                token: data.token,
+                rol: data.rol
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
-                alert('Registro completado, bienvenido a StreamFlix :)');
-
-                // Limpiar el formulario
-                setCamposRegistro({
-                    nombre: '',
-                    email: '',
-                    password: '',
-                    repetirPassword: '',
-                    politica: false,
-                    noticias: false
-                });
-
-                setErrores({});
-
-                // Resetear el checkbox del recaptcha
+            navigate('/', { replace: true });
+            
+            //resetear recaptcha
+            if (recaptchaRef.current) {
                 window.grecaptcha.enterprise.reset(recaptchaRef.current);
-
-            } else {
-                alert('Error: ' + (data.error || 'El registro ha fallado'));
             }
 
-        } catch (error) {
-            alert('Hubo un error al enviar el registro.');
-            console.error(error);
+        } else {
+            alert('Error: ' + (data.error || 'El registro ha fallado'));
+            console.error('wups error en backend...:', data);
         }
+
+    } catch (error) {
+        console.error('error en el fetch: ', error);
+        alert('Hubo un error al enviar el registro. Backend corriendo?');
     }
+}
+
+
 
     return (
         <div className="registro-page">
@@ -230,10 +411,10 @@ function Registro() {
                 {errores.politica && <div className="errorMensaje">{errores.politica}</div>}
             </div>
 
-            <div>
-                <input type="checkbox" id="noticias" name="noticias" onChange={onChangeHandler}></input> {/*-----opcional*/}
-                <label htmlFor="noticias">Quiero recibir noticias de SteamFlix</label>
-            </div>
+            {/* <div> */}
+                {/* <input type="checkbox" id="noticias" name="noticias" onChange={onChangeHandler}></input> -----opcional */}
+                {/* <label htmlFor="noticias">Quiero recibir noticias de SteamFlix</label> */}
+            {/* </div> */}
 
             <br></br>
 
