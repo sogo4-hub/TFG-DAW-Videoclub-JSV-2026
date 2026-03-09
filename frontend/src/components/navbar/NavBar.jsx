@@ -11,12 +11,14 @@ const NavBar = () => {
     logout()
     navigate('/', { replace: true })
   }
+  //-----
 
   return (
     <nav className="navbar">
 
+
       <div className="navbar-links">
-        {/*pags públicas */}
+        {/*pags públicass */}
         {!token && (
           <>
             <Link to="/">Inicio</Link>
