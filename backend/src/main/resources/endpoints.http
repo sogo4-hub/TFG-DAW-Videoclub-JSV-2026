@@ -1,0 +1,37 @@
+### 1. Registro Exitoso (Usando el Bypass de reCAPTCHA)
+# Gracias a la clave de prueba de Google, cualquier texto en 'recaptchaToken' será aceptado.
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Usuario Prueba Exitosa",
+  "email": "exito_captcha@streamflix.es",
+  "password": "password123",
+  "recaptchaToken": "token_cualquiera_de_prueba"
+}
+
+### 2. Login con el Usuario Creado
+# Esto confirma que el proceso de registro terminó correctamente y persistió los datos.
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "exito_captcha@streamflix.es",
+  "password": "password123"
+}
+
+### 3. Verificar en la lista de usuarios (Requiere ser ADMIN)
+# Primero hacemos login como admin para obtener el token
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "nuevo_admin@streamflix.es",
+  "password": "admin123"
+}
+
+> {% client.global.set("admin_token", response.body.token); %}
+
+### 4. Obtener todos los usuarios
+GET http://localhost:8080/api/admin/usuarios
+Authorization: Bearer {{admin_token}}
