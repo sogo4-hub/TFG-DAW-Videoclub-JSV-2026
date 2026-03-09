@@ -4,15 +4,15 @@ const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
   
-  const [authData, setAuthData] = useState({ token: null, rol: null })
+  const [authData, setAuthData] = useState({ token: null, rol: null, nombre:null })
   
-  const login = ({ token, rol }) => {
-    setAuthData({ token, rol })
-    localStorage.setItem('auth', JSON.stringify({ token, rol }))
+  const login = ({ token, rol, nombre }) => {
+    setAuthData({ token, rol, nombre })
+    localStorage.setItem('auth', JSON.stringify({ token, rol, nombre }))
   }
   
   const logout = () => {
-    setAuthData({ token: null, rol: null })
+    setAuthData({ token: null, rol: null, nombre:null })
     localStorage.removeItem('auth')
   }
 
@@ -25,10 +25,12 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
 
+  //guardar el token y rol del user----
   return (
     <AuthContext.Provider value={{ 
       token: authData.token, 
       rol: authData.rol, 
+      nombre: authData.nombre,
       login, 
       logout 
     }}>

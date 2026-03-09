@@ -10,10 +10,10 @@ function Login() {
     const auth = useAuth()
     const login = auth.login
 
-    const navigate = useNavigate() //funcion para cambiar de pag tras logearse
+    const navigate = useNavigate() //funcion para cambiar de pag tras loguearse
 
     const [camposLogin, setCamposLogin] = useState({
-        nombreOemail: '',
+        email: '',
         password: ''
     })
 
@@ -37,9 +37,9 @@ function Login() {
         setLoading(true)
         setErrores({})
 
-        if (!camposLogin.nombreOemail.trim() || !camposLogin.password.trim()) {
+        if (!camposLogin.email.trim() || !camposLogin.password.trim()) {
             setErrores({
-                nombreOemail: !camposLogin.nombreOemail.trim() ? 'Nombre o email requerido' : '',
+                email: !camposLogin.email.trim() ? 'Nombre o email requerido' : '',
                 password: !camposLogin.password.trim() ? 'Contraseña requerida' : ''
             })
             setLoading(false)
@@ -65,7 +65,8 @@ function Login() {
                 //guardar en authcontext
                 login({
                     token: credenciales.token,
-                    rol: credenciales.rol
+                    rol: credenciales.rol,
+                    nombre: credenciales.nombre
                 })
 
                 //---redirigir a home tras login----(es el landing)
@@ -89,14 +90,14 @@ function Login() {
             <div>
                 <label>Nombre o email: </label>
                 <input
-                    name="nombreOemail"
+                    name="email"
                     type="text"
                     placeholder="Introduce tu nombre o email"
-                    value={camposLogin.nombreOemail}
+                    value={camposLogin.email}
                     onChange={handleChange}
                     required
                 />
-                {errores.nombreOemail && <div className="errorMensaje">{errores.nombreOemail}</div>}
+                {errores.email && <div className="errorMensaje">{errores.email}</div>}
 
             </div>
 
