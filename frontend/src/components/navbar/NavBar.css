@@ -1,0 +1,23 @@
+/*los links en la misma fila*/
+nav{
+padding-top: 10px;
+}
+
+nav>div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navbar-logo {
+  width: 100px;
+  height: auto;
+  object-fit: cover;
+  padding-left: 10px;
+}
+
+.nav-link.active {
+    color: white;
+    font-weight: bold;
+}
+

@@ -1,11 +1,11 @@
 // App.jsx - VERSIÓN SEGURA (copia esto)
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import Home from './pages/Home.jsx'
+import Home from './pages/home/Home.jsx'
 import Registro from './pages/registro/Registro.jsx'
 import Login from './pages/login/Login.jsx'
 import NavBar from './components/navbar/NavBar.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
-import Footer from './components/Footer.jsx'
+import Footer from './components/footer/Footer.jsx'
 
 function App() {
   return (
