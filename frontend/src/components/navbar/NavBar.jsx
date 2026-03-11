@@ -6,7 +6,7 @@ import './NavBar.css'
 const NavBar = () => {
   const { token, rol, nombre, logout } = useAuth()
   const navigate = useNavigate()
-  const location = useLocation()
+  const location = useLocation() //---para ver en qué link está
 
   const handleLogout = () => {
     logout()
@@ -25,6 +25,7 @@ const NavBar = () => {
     <nav className="navbar">
       <div className="navbar-container">
 
+        {/* users públicos: */}
         {/* clic a logo o inicio, va a / (home.jsx, y se muestra siempre el navbar.jsx*/}
         <Link
           to={getHomeLink().to}
@@ -40,11 +41,13 @@ const NavBar = () => {
           Inicio
         </Link>
 
+        <Link to="/catalogo" className={`nav-link ${location.pathname === '/catalogo' ? 'active' : ''}`}>
+          Catálogo
+        </Link>
+
+        {/* users logueados: */}
         {token && (
           <>
-            <Link to="/catalogo" className={`nav-link ${location.pathname === '/catalogo' ? 'active' : ''}`}>
-              Catálogo
-            </Link>
             <Link to="/mis-alquileres" className={`nav-link ${location.pathname === '/mis-alquileres' ? 'active' : ''}`}>
               Mis Alquileres
             </Link>
@@ -69,7 +72,7 @@ const NavBar = () => {
         {token && (
           <div className="navbar-user">
             {/* por si le pasamos nombre.......*/}
-            <span className="user-name">{nombre || rol}</span> 
+            <span className="user-name">{nombre || rol}</span>
             <button onClick={handleLogout} className="nav-logout">
               Cerrar Sesión
             </button>

@@ -1,8 +1,4 @@
 /*los links en la misma fila*/
-nav{
-padding-top: 10px;
-}
-
 nav>div {
     display: flex;
     align-items: center;
