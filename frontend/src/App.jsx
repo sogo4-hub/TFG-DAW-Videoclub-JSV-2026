@@ -11,7 +11,6 @@ import DetallePelicula from './pages/detallePelicula/DetallePelicula.jsx'
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
         <NavBar />
         <main style={{ padding: '2rem' }}>
           <Routes>
@@ -23,7 +22,6 @@ function App() {
           </Routes>
         </main>
         <Footer />
-      </BrowserRouter>
     </AuthProvider>
   )
 }
