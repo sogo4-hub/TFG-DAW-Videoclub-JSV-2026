@@ -1,14 +1,27 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import "./Home.css";
 
-// hay q modificarlo ya se verá q se pone
-
-const Home = () => {
+export default function Home() {
   return (
     <div>
       <h1>este es el home.jsx</h1>
+      <h1>Peliculas etc</h1>
+      <h1>blablabla</h1>
+      <h1>blablabla</h1>
+      <h1>blablabla</h1>
+            <h1></h1>
+
+      <h1>blablabla</h1>      <h1>Peliculas etc</h1>
+      <h1>Peliculas etc</h1>
+                  <h1></h1>
+
+      <h1>Peliculas etc</h1>
+      <h1>Peliculas etc</h1>
+
+            <h1></h1>
+      <h1>Peliculas etc</h1>
+      <h1>Peliculas etc</h1>
+      <h1>Peliculas etc</h1>
+
     </div>
   );
-};
-
-export default Home;
+}
