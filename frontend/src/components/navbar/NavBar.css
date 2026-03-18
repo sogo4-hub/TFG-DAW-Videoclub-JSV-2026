@@ -1,19 +1,184 @@
-/*los links en la misma fila*/
-nav>div {
+/* =========================================================
+   NAVBAR GENERAL
+   ========================================================= */
+
+.navbar {
+    width: 100%;
+    height: 70px;
+    background-color: #00000039;
+    color: #fff;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: center;
+    padding: 0 2rem;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    gap: 40px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.712);
+}
+
+
+/* =========================================================
+   LOGO + TEXTO
+   ========================================================= */
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 4;
+    position: sticky;
 }
 
 .navbar-logo {
-  width: 100px;
-  height: auto;
-  object-fit: cover;
-  padding-left: 10px;
+    height: 40px;
 }
 
-.nav-link.active {
-    color: white;
-    font-weight: bold;
+.navbar-title {
+    font-family: "Permanent Marker", cursive;
+    color: red;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
+
+/* =========================================================
+   ENLACES DE NAVEGACIÓN
+   ========================================================= */
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    z-index: 4;
+    position: sticky;
+}
+
+.navbar-links a {
+    color: #ebebeb;
+    text-decoration: none;
+    font-size: 17px;
+    margin: 0;
+    transition: opacity 0.3s ease;
+    z-index: 4;
+    position: sticky;
+}
+
+.navbar-links a:hover {
+    opacity: 0.7;
+    color: #fff;
+    text-shadow: 1px 1px 4px #000000;
+}
+
+
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
+
+.navbar-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index: 4;
+    position: sticky;
+}
+
+.navbar-search input {
+    height: 36px;
+    padding: 0 35px 0 12px;
+    border-radius: 6px;
+    border: 1px solid hsla(0, 0%, 100%, 0.271);
+    background-color: #0000003c;
+    color: #ffffff;
+    outline: none;
+    font-size: 15px;
+    z-index: 4;
+    position: sticky;
+}
+
+.navbar-search input:focus {
+    border-color: #ff0000;
+}
+
+.navbar-search i {
+    position: absolute;
+    right: 10px;
+    color: #df0000;
+    z-index: 4;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        gap: 1rem;
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .tape-navbar {
+        position: absolute;
+    top: 200px;
+            left: 50%;
+        transform: translateX(-50%) rotate(-3deg);
+        width: 160px;
+        height: 50px;
+        z-index: 6;
+    }
+
+    .navbar-links {
+        margin: 0;
+        margin-bottom:10px;
+    }
+
+    .navbar-search {
+        width: 30%;
+        top: 30px;
+    }
+
+    .navbar-search input {
+        width: 100%;
+
+    }
+}
+
+@media (min-width: 768px) {
+    .tape-navbar {
+        top: 50px;
+
+    }
+}
+
+.tape-navbar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 160px;
+    height: 50px;
+    z-index: 1000;
+}
+
+
+
+.navbar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-color: #111;
+    /*background-image: url('../src/imgs/filmroll-gif.gif');*/
+    background-position: center;
+    background-size: 100% 100%;
+    opacity: 0.7;
+    z-index: 0;
+}

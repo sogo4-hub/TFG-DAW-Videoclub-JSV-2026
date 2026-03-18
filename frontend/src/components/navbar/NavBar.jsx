@@ -1,98 +1,37 @@
-import React from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
-import './NavBar.css'
+// src/components/navbar/Navbar.jsx
 
-const NavBar = () => {
-  const { token, rol, nombre, logout } = useAuth()
-  const navigate = useNavigate()
-  const location = useLocation() //---para ver en qué link está
+import React from "react";
+import "./Navbar.css";
+import logo from "../../imgs/logo.png";
 
-  const handleLogout = () => {
-    logout()
-    navigate('/', { replace: true })
-  }
-
-  const getHomeLink = () => ({
-    to: '/',
-    isActive: location.pathname === '/'
-  })
-
-  const isAdmin = token && rol === 'ADMIN'
-  const isAdminInDashboardArea = location.pathname.startsWith('/adminnavbar')
-
+export default function Navbar() {
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
+    <><nav className="navbar">
 
-        {/* users públicos: */}
-        {/* clic a logo o inicio, va a / (home.jsx, y se muestra siempre el navbar.jsx*/}
-        <Link
-          to={getHomeLink().to}
-          className={`navbar-logo-link ${getHomeLink().isActive ? 'active' : ''}`}
-        >
-          <img src="../public/imgs/logo.png" className="navbar-logo" />
-        </Link>
-
-        <Link
-          to={getHomeLink().to}
-          className={`nav-link ${getHomeLink().isActive ? 'active' : ''}`}
-        >
-          Inicio
-        </Link>
-
-        <Link to="/catalogo" className={`nav-link ${location.pathname === '/catalogo' ? 'active' : ''}`}>
-          Catálogo
-        </Link>
-
-        {/* users logueados: */}
-        {token && (
-          <>
-            <Link to="/mis-alquileres" className={`nav-link ${location.pathname === '/mis-alquileres' ? 'active' : ''}`}>
-              Mis Alquileres
-            </Link>
-            <Link to="/favoritos" className={`nav-link ${location.pathname === '/favoritos' ? 'active' : ''}`}>
-              Favoritos
-            </Link>
-          </>
-        )}
-
-        {/* Dashboard --solo para admin */}
-        {isAdmin && (
-          <Link
-            to="/adminnavbar"
-            className={`nav-link ${isAdminInDashboardArea ? 'active' : ''}`}
-          >
-            Dashboard
-          </Link>
-        )}
-
-        <div className="navbar-spacer"></div>
-
-        {token && (
-          <div className="navbar-user">
-            {/* por si le pasamos nombre.......*/}
-            <span className="user-name">{nombre || rol}</span>
-            <button onClick={handleLogout} className="nav-logout">
-              Cerrar Sesión
-            </button>
-          </div>
-        )}
-
-        {!token && (
-          <>
-            <Link to="/login" className={`nav-link ${location.pathname === '/login' ? 'active' : ''}`}>
-              Iniciar Sesión
-            </Link>
-            <Link to="/registro" className={`nav-link ${location.pathname === '/registro' ? 'active' : ''}`}>
-              Registro
-            </Link>
-          </>
-        )}
+      {/* IZQUIERDA: LOGO + TEXTO */}
+      <div className="navbar-left">
+        <img src={logo} alt="StreamFlix Logo" className="navbar-logo" />
+        <h3 className="navbar-title">StreamFlix</h3>
       </div>
-    </nav>
-  )
+
+      {/* CENTRO: ENLACES */}
+      <ul className="navbar-links">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/catalogo">Catálogo</a></li>
+        <li><a href="/series">Series</a></li>
+        <li><a href="/peliculas">Películas</a></li>
+      </ul>
+
+      {/* DERECHA: BUSCADOR */}
+      <div className="navbar-search">
+        <input
+          type="text"
+          placeholder="Buscar..."
+          aria-label="Buscar en StreamFlix" />
+        <i className="fa-solid fa-magnifying-glass"></i>
+      </div>
+
+    </nav><img src="/imgs/masking-tape.png" className='tape-navbar'></img></>
+
+  );
 }
-
-
-export default NavBar

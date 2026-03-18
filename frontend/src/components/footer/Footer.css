@@ -1,0 +1,217 @@
+/* ============================
+    FOOTER BASE
+   ============================ */
+footer {
+    width: 100%;
+    background-color: transparent;
+    padding: 2px;
+    overflow-x: hidden;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 60px;
+
+    position: relative;
+    color: #fff;
+    text-align: center;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.712);
+}
+
+/* ============================
+    ETIQUETA ADHESIVA VHS
+   ============================ */
+
+footer .logo-text {
+    position: relative;
+    z-index: 3;
+    font-family: "Permanent Marker", cursive;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    color: #c62828;
+    margin-top: 10px;
+}
+
+.tape-footer > img {
+    position: absolute;
+    top: auto;
+    bottom: 230px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 160px;
+    height: 50px;
+    z-index: 100;
+    max-width: 100%;
+}
+
+/* ============================
+    TEXTO Y LISTAS
+   ============================ */
+
+footer h4,
+footer p,
+footer ul,
+footer ul li,
+footer a,
+footer i,
+footer div:last-child {
+    position: relative;
+    /* ← antes era sticky (error) */
+    z-index: 4;
+}
+
+footer h4 {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    color: #ff3b3b;
+}
+
+footer p {
+    margin: 5px 0;
+    color: #ccc;
+}
+
+footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+footer ul li {
+    margin: 3px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+footer a:hover {
+    color: #ff3b3b;
+}
+
+footer i {
+    color: #ff3b3b;
+}
+
+footer div:last-child {
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 60px;
+    width: 100%;
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+/* ============================
+    EFECTO VHS + GLITCH RGB
+   ============================ */
+
+footer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+
+    /*background-image: url('../../imgs/filmroll-gif.gif'); /* ← ruta correcta */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-color: #111;
+    opacity: 0.7;
+}
+
+/* ============================
+   RESPONSIVE — MÓVILES
+   ============================ */
+
+@media (max-width: 600px) {
+
+    footer {
+        gap: 20px;
+    }
+
+    footer>div {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1px;
+        max-width: 100%;
+    }
+
+    footer div:last-child {
+        order: 99;
+        margin-top: 10px;
+        gap: 20px;
+    }
+
+    .tape-footer {
+        left: 50%;
+        transform: translateX(-50%) rotate(-3deg);
+    }
+}
+
+/* ============================
+   DESKTOP — 3 COLUMNAS ARRIBA + CRÉDITOS ABAJO
+   ============================ */
+
+@media (min-width: 1024px) {
+
+    footer {
+        justify-content: space-between;
+        gap: 40px;
+    }
+
+    footer>div {
+        flex-basis: auto;
+        flex-grow: 1;
+        max-width: 100%;
+    }
+
+    footer ul li {
+        justify-content: center;
+        text-align: center;
+    }
+
+    footer h4 {
+        width: 100%;
+        text-align: center;
+    }
+
+    footer div:last-child {
+        flex-basis: 100%;
+        text-align: center;
+        order: 2;
+    }
+}
+
+/* ====== FIX: evitar hueco a la derecha ====== */
+
+footer {
+    overflow-x: hidden;
+    /* evita desbordes horizontales */
+}
+
+footer>div {
+    max-width: 100%;
+    /* ningún div puede crecer más del ancho */
+}
+
+.tape-footer {
+    max-width: 100%;
+    /* evita que la cinta sobresalga */
+}
+
+footer::after {
+    background-size: 100% 100%;
+    /* evita overflow del GIF */
+}
