@@ -34,7 +34,7 @@ const Footer = () => {
 
                 <div>
                     <p>&copy; 2026 StreamFlix - TFG 2º DAW A</p>
-                    <p>Francisco García Sogo | Víctor Yuste | Sara Ruiz</p>
+                    <p>Julián Francisco García Sogo | Víctor Yuste | Sara Ruiz</p>
                 </div>
             </footer>
         </>
