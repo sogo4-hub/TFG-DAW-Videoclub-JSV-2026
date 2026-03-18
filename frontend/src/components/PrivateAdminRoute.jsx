@@ -10,7 +10,7 @@ export default function PrivateAdminRoute({ children }) {
     }
 
     // Está logueado pero NO es admin → fuera
-    if (rol !== "admin") {
+    if (rol !== "ADMIN") {
         return <Navigate to="/" replace />;
     }
 

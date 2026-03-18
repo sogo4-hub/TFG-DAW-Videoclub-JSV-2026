@@ -6,6 +6,8 @@ import Login from "./pages/login/Login.jsx";
 import Catalogo from "./pages/catalogo/Catalogo.jsx";
 import DetallePelicula from "./pages/detallePelicula/DetallePelicula.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import Dashboard from "./pages/dashboard/dashboard.jsx";
+import PrivateAdminRoute from "./components/PrivateAdminRoute.jsx";
 
 function App() {
   return (
@@ -17,6 +19,13 @@ function App() {
           <Route path="/registro" element={<Registro />} />
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/pelicula/:id" element={<DetallePelicula />} />
+
+          {/*Ruta protegida */}
+          <Route path="/dashboard" element={
+            <PrivateAdminRoute>
+              <Dashboard />
+            </PrivateAdminRoute>
+          } />
         </Routes>
       </Layout>
     </AuthProvider>
