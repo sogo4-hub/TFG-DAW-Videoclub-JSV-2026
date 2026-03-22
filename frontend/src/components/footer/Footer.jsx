@@ -11,7 +11,7 @@ const Footer = () => {
             <footer>
                 <div>
                     <h3 className='logo-text'>StreamFlix</h3>
-                    <p>El mejor videoclub online</p>
+                    <p>El mejor videoclub online :)</p>
                 </div>
 
                 <div>
