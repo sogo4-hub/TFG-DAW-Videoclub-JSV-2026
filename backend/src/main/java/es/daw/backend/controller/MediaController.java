@@ -1,18 +1,23 @@
 package es.daw.backend.controller;
 
+import es.daw.backend.entity.Pelicula;
+import es.daw.backend.exception.PeliculaNoAlquiladaException;
+import es.daw.backend.repository.PeliculaRepository;
+import es.daw.backend.service.AlquilerService;
 import es.daw.backend.service.MediaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
-import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/media")
@@ -20,26 +25,41 @@ import java.io.IOException;
 public class MediaController {
 
     private final MediaService mediaService;
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Resource> getMedia(@PathVariable String id) {
-//        // 1. Llamamos al servicio para recuperar los bytes de MongoDB
-//        Resource recurso = mediaService.descargarArchivo(id);
-//
-//        // 2. Lo devolvemos con el tipo de contenido adecuado
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.IMAGE_JPEG) // O MediaType.parseMediaType(recurso.getContentType()) si quieres que sea dinámico
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "inline") // "inline" para que se vea en el navegador, no se descargue
-//                .body(recurso);
-//    }
+    private final AlquilerService alquilerService;
+    private final PeliculaRepository peliculaRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<Resource> getMedia(@PathVariable String id) {
-        GridFsResource recurso = (GridFsResource) mediaService.descargarArchivo(id);
+        // 1. Identificar al usuario desde el Token
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        // 2. Determinar si el recurso es un vídeo buscando en el catálogo SQL
+        Optional<Pelicula> peliculaOpt = peliculaRepository.findAll().stream()
+                .filter(p -> p.getUrlVideo() != null && p.getUrlVideo().endsWith("/" + id))
+                .findFirst();
+
+        // 3. Si es un vídeo, aplicar el filtro de seguridad de alquileres
+        if (peliculaOpt.isPresent()) {
+            Pelicula pelicula = peliculaOpt.get();
+
+            if (email.equals("anonymousUser") || !alquilerService.esAlquilerValido(email, pelicula.getId())) {
+                // Lanzamos la excepción con un mensaje descriptivo
+                throw new PeliculaNoAlquiladaException("No tienes un alquiler activo para la película: " + pelicula.getTitulo());
+            }
+
+            // Si el código llega aquí, es un vídeo y tiene permiso
+            Resource resource = mediaService.descargarArchivo(id);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("video/mp4"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline")
+                    .body(resource);
+        }
+
+        // 4. Si no se encontró en 'url_video', asumimos que es una imagen (cartel)
+        // Las imágenes son públicas para que el catálogo se vea bonito siempre
+        Resource resource = mediaService.descargarArchivo(id);
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(recurso.getContentType())) // DETECTA SI ES IMAGEN O VÍDEO AUTOMÁTICAMENTE
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline")
-                .body(recurso);
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(resource);
     }
 }

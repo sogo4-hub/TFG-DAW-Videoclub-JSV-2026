@@ -40,4 +40,12 @@ public class GlobalExceptionHandler {
         // Devolvemos 400 Bad Request porque es un fallo de validación del formulario
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+    @ExceptionHandler(PeliculaNoAlquiladaException.class)
+    public ResponseEntity<Map<String, String>> handlePeliculaNoAlquilada(PeliculaNoAlquiladaException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Acceso denegado");
+        error.put("mensaje", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN); // 403 Forbidden
+    }
 }
