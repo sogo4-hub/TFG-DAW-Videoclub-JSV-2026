@@ -13,6 +13,10 @@ const Catalogo = () => {
   const [alquiladas, setAlquiladas] = useState([]);
   const [favoritas, setFavoritas] = useState([]);
 
+  const handleAlquilarExito = (peliculaId) => {
+  setAlquiladas(prev => [...prev, peliculaId]);
+};
+
   useEffect(() => {
     if (!isLogged) return;
 
@@ -21,8 +25,8 @@ const Catalogo = () => {
         const alquileres = await getMisAlquileres();
         const favs = await getFavoritos();
 
-        const idsAlquiladas = alquileres.map(a => a.pelicula?.id || a.id);
-        const idsFavoritas = favs.map(f => f.pelicula?.id || f.id);
+        const idsAlquiladas = alquileres.map(a => a.id);
+        const idsFavoritas = favs.map(f => f.id);
 
         setAlquiladas(idsAlquiladas);
         setFavoritas(idsFavoritas);
@@ -50,11 +54,13 @@ const Catalogo = () => {
       <div className="catalogo-grid">
         {peliculas.map((pelicula) => (
           <PeliculaCard
-            key={pelicula.id}
+            //key única que fuerce a React a remontar la card cuando cambian los datos:
+            key={`${pelicula.id}-${favoritas.includes(pelicula.id)}-${alquiladas.includes(pelicula.id)}`}
             pelicula={pelicula}
             isLogged={isLogged}
             yaAlquilada={alquiladas.includes(pelicula.id)}
             initialFavorito={favoritas.includes(pelicula.id)}
+            onAlquilar={handleAlquilarExito}
           />
         ))}
       </div>
