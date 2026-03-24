@@ -1,37 +1,64 @@
-### 1. Registro Exitoso (Usando el Bypass de reCAPTCHA)
-# Gracias a la clave de prueba de Google, cualquier texto en 'recaptchaToken' será aceptado.
-POST http://localhost:8080/api/auth/register
+### 0. Configuración de Variables
+@url = http://localhost:8080/api
+@email = estudiante_tfg@streamflix.es
+@password = password123
+
+### 1. Autenticación (Login)
+# Obtenemos el token JWT para las peticiones protegidas
+POST {{url}}/auth/login
 Content-Type: application/json
 
 {
-  "nombre": "Usuario Prueba Exitosa",
-  "email": "exito_captcha@streamflix.es",
-  "password": "password123",
-  "recaptchaToken": "token_cualquiera_de_prueba"
+  "email": "{{email}}",
+  "password": "{{password}}"
 }
 
-### 2. Login con el Usuario Creado
-# Esto confirma que el proceso de registro terminó correctamente y persistió los datos.
-POST http://localhost:8080/api/auth/login
-Content-Type: application/json
+> {% client.global.set("auth_token", response.body.token); %}
 
-{
-  "email": "exito_captcha@streamflix.es",
-  "password": "password123"
-}
+### 2. Consultar Catálogo
+# Identifica un "id" de película (ej. 5) y el código de "urlVideo" (ej. 65e9...)
+GET {{url}}/peliculas
+Accept: application/json
 
-### 3. Verificar en la lista de usuarios (Requiere ser ADMIN)
-# Primero hacemos login como admin para obtener el token
-POST http://localhost:8080/api/auth/login
-Content-Type: application/json
+### ==========================================================
+### TEST DE FAVORITOS (Toggle y Listado)
+### ==========================================================
 
-{
-  "email": "nuevo_admin@streamflix.es",
-  "password": "admin123"
-}
+### 3. Alternar Favorito (Añadir/Quitar)
+# Cambia el /5 por el ID de la película que desees probar
+POST {{url}}/favoritos/2
+Authorization: Bearer {{auth_token}}
 
-> {% client.global.set("admin_token", response.body.token); %}
+### 4. Listar Mis Favoritos
+GET {{url}}/favoritos
+Authorization: Bearer {{auth_token}}
+Accept: application/json
 
-### 4. Obtener todos los usuarios
-GET http://localhost:8080/api/admin/usuarios
-Authorization: Bearer {{admin_token}}
+### ==========================================================
+### TEST DE ALQUILERES Y SEGURIDAD MULTIMEDIA
+### ==========================================================
+
+### 5. Intento de acceso a VÍDEO NO ALQUILADO (Debe dar 403 Forbidden)
+# Sustituye ID_VIDEO por el código que viste en urlVideo (paso 2)
+GET {{url}}/media/69ab2d85c0600a49c384e9d3
+Authorization: Bearer {{auth_token}}
+
+### 6. Acceso a IMAGEN/CARTEL (Debe dar 200 OK - Es público)
+# Sustituye ID_IMAGEN por el código que viste en urlImagen (paso 2)
+GET {{url}}/media/69ab2d84c0600a49c384e9c5
+Authorization: Bearer {{auth_token}}
+
+### 7. Realizar Alquiler de la película
+# Esto activa el acceso por 48 horas
+POST {{url}}/alquileres/2
+Authorization: Bearer {{auth_token}}
+
+### 8. Verificar Listado de Alquileres Activos
+GET {{url}}/alquileres
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### 9. Acceso a VÍDEO ALQUILADO (Ahora debe dar 200 OK)
+# Usa el mismo ID_VIDEO del paso 5
+GET {{url}}/media/69ab2d84c0600a49c384e9c7
+Authorization: Bearer {{auth_token}}
