@@ -1,0 +1,49 @@
+.pelicula-card {
+  background: #070309;
+  color: white;
+  padding: 3rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(75, 50, 80, 0.8);
+}
+
+.pelicula-card h1 {
+  font-size: 3rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.pelicula-card img {
+  border-radius: 15px;
+  box-shadow: 0 5px 30px rgba(136, 51, 127, 0.6);
+  width: 280px;
+  height: 420px;
+}
+
+.pelicula-card button:first-of-type {
+  background: #dfc740;
+  color: #000;
+}
+
+.pelicula-card button:last-of-type {
+  background: #25a75f;
+  color: white;
+}
+
+.pelicula-card p {
+  font-size: 1rem;
+}
+
+.pelicula-card button {
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: bold;
+  margin: 0.5rem;
+  cursor: pointer;
+}
+
+.pelicula-card button:hover {
+  transform: translateY(-3px);
+}

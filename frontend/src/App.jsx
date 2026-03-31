@@ -8,6 +8,8 @@ import DetallePelicula from "./pages/detallePelicula/DetallePelicula.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import Dashboard from "./pages/dashboard/dashboard.jsx";
 import PrivateAdminRoute from "./components/PrivateAdminRoute.jsx";
+import Favoritos from './pages/favoritos/Favoritos';
+import MisAlquileres from './pages/misAlquileres/MisAlquileres';
 
 function App() {
   return (
@@ -19,6 +21,9 @@ function App() {
           <Route path="/registro" element={<Registro />} />
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/pelicula/:id" element={<DetallePelicula />} />
+
+          <Route path="/favoritos" element={<Favoritos />} />
+          <Route path="/mis-alquileres" element={<MisAlquileres />} />
 
           {/*Ruta protegida */}
           <Route path="/dashboard" element={

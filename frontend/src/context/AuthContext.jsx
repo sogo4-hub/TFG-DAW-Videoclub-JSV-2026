@@ -4,6 +4,7 @@ const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
   
+  
   const [authData, setAuthData] = useState({ token: null, rol: null, nombre:null })
   
   const login = ({ token, rol, nombre }) => {
