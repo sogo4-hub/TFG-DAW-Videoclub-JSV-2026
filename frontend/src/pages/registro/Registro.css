@@ -1,4 +1,125 @@
+/* Contenedor principal centrado en toda la pantalla */
+.signUpContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 65vh;
+    width: 100%;
+    padding: 20px;
+
+    text-align: center;
+    margin: 0 auto;
+
+    max-width: 380px;
+}
+
+.nameEmailInput,
+.passwordInput {
+    max-width: 400px;
+    margin: 8px auto;
+
+    label {
+        font-weight: bold;
+    }
+}
+
+.signUpContainer input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: 1px solid #740b0b;
+    font-size: 1rem;
+    background-color: #111;
+}
+
+input:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 1px #ff4d4d;
+    /* ejemplo */
+    border-color: #ff4d4d;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #111;
+  border: 2px solid #740b0b;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  margin-right: 8px;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #740b0b;
+  border-color: #740b0b;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✘";
+  color: white;
+  font-size: 15px;
+  position: absolute;
+  top: -1px;
+  left: 3px;
+}
+
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 30px;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #740b0b;
+    border: none
+}
+
+button:hover {
+    background-color: red;
+    border: none;
+
+}
+
+
+/* Mensajes de error */
 .errorMensaje {
     color: red;
-    font-size: small;
+    font-size: 0.85rem;
+    margin-top: 4px;
+
+}
+
+/* 📱 Ajustes para móviles */
+@media (max-width: 480px) {
+    .signUpContainer {
+        max-width: 320px;
+        padding: 15px;
+        min-height: 55vh;
+    }
+
+    .signUpContainer input,
+    button {
+        font-size: 0.9rem;
+        padding: 9px;
+    }
+}
+
+.logInDisclaimer {
+
+    a {
+        color: red;
+    }
+}
+.privacyPolicy{
+    display: flex;
+    padding: 10px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 }

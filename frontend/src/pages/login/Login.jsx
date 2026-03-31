@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-
+import './Login.css'
 
 function Login() {
 
@@ -81,13 +81,13 @@ function Login() {
 
 
     return (
-        <div>
+        <div className="loginContainer">
             {errores.general && (
                 <div style={{ color: 'red', marginBottom: '10px' }}>
                     {errores.general}
                 </div>
             )}
-            <div>
+            <div className="nameEmailInput">
                 <label>Nombre o email: </label>
                 <input
                     name="email"
@@ -101,7 +101,7 @@ function Login() {
 
             </div>
 
-            <div>
+            <div className="passwordInput">
                 <label>Contraseña: </label>
                 <input
                     name="password"
@@ -122,7 +122,7 @@ function Login() {
 
             <br />
 
-            <div>
+            <div className='signUpDisclaimer'>
                 <p>
                     ¿Aún no tienes cuenta? <i className="fa-solid fa-hand-point-right"></i>
                     <Link to="/registro"> Regístrate</Link>

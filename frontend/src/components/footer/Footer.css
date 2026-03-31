@@ -34,17 +34,46 @@ footer .logo-text {
     margin-top: 10px;
 }
 
-.tape-footer > img {
+@media (max-width:600px) {
+    .tape-footer>img {
+        position: absolute;
+        bottom: -30px;
+        left: 100%;
+        transform: translateX(-50%) rotate(-3deg);
+        width: 160px;
+        height: 50px;
+        z-index: 100;
+        max-width: 100%;
+    }
+}
+
+@media (min-width:600px) {
+    .tape-footer>img {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%) rotate(-3deg);
+        width: 160px;
+        height: 50px;
+        z-index: 100;
+        bottom: 230px;
+        max-width: 100%;
+    }
+}
+
+@media (min-width:1024px) {
+    .tape-footer>img {
     position: absolute;
-    top: auto;
-    bottom: 230px;
     left: 50%;
     transform: translateX(-50%) rotate(-3deg);
     width: 160px;
     height: 50px;
     z-index: 100;
+    bottom: 210px;
     max-width: 100%;
 }
+}
+
+
 
 /* ============================
     TEXTO Y LISTAS
@@ -156,6 +185,7 @@ footer::after {
 
     .tape-footer {
         left: 50%;
+        z-index: 2;
         transform: translateX(-50%) rotate(-3deg);
     }
 }

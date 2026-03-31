@@ -2,6 +2,7 @@ import './Registro.css';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import './Registro.css'
 
 
 import { Link } from "react-router-dom";
@@ -372,25 +373,29 @@ function Registro() {
 
 
     return (
-        <div className="registro-page">
-            <div>
+        <div className="registro-page signUpContainer">
+            <div className="nameEmailInput">
                 <label htmlFor="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required onChange={onChangeHandler}></input>
+                <input type="text" id="nombre" name="nombre" required onChange={onChangeHandler} placeholder="Introduce tu nombre"
+                ></input>
                 {errores.nombre && <div className="errorMensaje">{errores.nombre}</div>}
             </div>
-            <div>
+            <div className="nameEmailInput">
                 <label htmlFor="email">Email:</label>
-                <input type="email" id="email" name="email" required onChange={onChangeHandler}></input>
+                <input type="email" id="email" name="email" required onChange={onChangeHandler} placeholder="Introduce tu email"
+                ></input>
                 {errores.email && <div className="errorMensaje">{errores.email}</div>}
             </div>
-            <div>
+            <div className="passwordInput">
                 <label htmlFor="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required onChange={onChangeHandler}></input>
+                <input type="password" id="password" name="password" required onChange={onChangeHandler} placeholder="Introduce tu contraseña"
+                ></input>
                 {errores.password && <div className="errorMensaje">{errores.password}</div>}
             </div>
-            <div>
+            <div className="passwordInput">
                 <label htmlFor="repetirPassword">Repetir contraseña:</label>
-                <input type="password" id="repetirPassword" name="repetirPassword" required onChange={onChangeHandler}></input>
+                <input type="password" id="repetirPassword" name="repetirPassword" required onChange={onChangeHandler} placeholder="Introduce otra vez tu contraseña"
+                ></input>
                 {errores.repetirPassword && <div className="errorMensaje">{errores.repetirPassword}</div>}
             </div>
 
@@ -404,7 +409,7 @@ function Registro() {
             <br></br>
 
             {/*checkboxes y botón*/}
-            <div>
+            <div className="privacyPolicy">
                 <input type="checkbox" id="politica" name="politica" required onChange={onChangeHandler}></input>
                 <label htmlFor="politica">
                     Acepto la política de privacidad
@@ -427,7 +432,7 @@ function Registro() {
                 <p>¿Ya tienes cuenta? <i className="fa-solid fa-hand-point-right"></i>
                     <a href=""><u> Iniciar sesión</u></a></p>
             </div> */}
-            <div>
+            <div className="logInDisclaimer">
                 <p>¿Ya tienes cuenta? <i className="fa-solid fa-hand-point-right "></i>
                     <Link to="/login" className="underline text-blue-500 hover:text-blue-700"> Iniciar sesión</Link>
                 </p>
