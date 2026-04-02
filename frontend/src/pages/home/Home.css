@@ -1,0 +1,20 @@
+h3{
+    margin-left:40px;
+}
+
+.description {
+    display: flex;
+    margin-left: 70px;;
+}
+
+.description p {
+    width: 30%;
+}
+
+.description img {
+    width:30%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: 150px;
+}
