@@ -1,64 +1,73 @@
-### 0. Configuración de Variables
-@url = http://localhost:8080/api
-@email = estudiante_tfg@streamflix.es
-@password = password123
+# ==========================================
+# VARIABLES GLOBALES
+# ==========================================
+@host = http://localhost:8080/api
+@contentType = application/json
 
-### 1. Autenticación (Login)
-# Obtenemos el token JWT para las peticiones protegidas
-POST {{url}}/auth/login
-Content-Type: application/json
+# ==========================================
+# 1. AUTENTICACIÓN
+# ==========================================
+
+### 1.1 Login de Administrador (Julián)
+# @name loginAdmin
+POST {{host}}/auth/login
+Content-Type: {{contentType}}
 
 {
-  "email": "{{email}}",
-  "password": "{{password}}"
+  "email": "nuevo_admin@streamflix.es",
+  "password": "admin123"
 }
+> {% client.global.set("tokenAdmin", response.body.token) %}
 
-> {% client.global.set("auth_token", response.body.token); %}
 
-### 2. Consultar Catálogo
-# Identifica un "id" de película (ej. 5) y el código de "urlVideo" (ej. 65e9...)
-GET {{url}}/peliculas
-Accept: application/json
+# ==========================================
+# 2. FLUJO: CASABLANCA (ID LOCAL 1)
+# ==========================================
 
-### ==========================================================
-### TEST DE FAVORITOS (Toggle y Listado)
-### ==========================================================
+### 2.1 Importar metadatos de Casablanca desde TMDB (ID: 289)
+# Al ser la primera película tras reiniciar, recibirá el ID 1 en H2
+POST {{host}}/peliculas/tmdb/import/289
+Authorization: Bearer {{tokenAdmin}}
 
-### 3. Alternar Favorito (Añadir/Quitar)
-# Cambia el /5 por el ID de la película que desees probar
-POST {{url}}/favoritos/2
-Authorization: Bearer {{auth_token}}
+### 2.2 Subir archivo de vídeo Casablanca.mp4
+PATCH {{host}}/peliculas/1/upload-video
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
 
-### 4. Listar Mis Favoritos
-GET {{url}}/favoritos
-Authorization: Bearer {{auth_token}}
-Accept: application/json
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="Casablanca.mp4"
+Content-Type: video/mp4
 
-### ==========================================================
-### TEST DE ALQUILERES Y SEGURIDAD MULTIMEDIA
-### ==========================================================
+< D:/TFG DAW/TFG-DAW-Videoclub-JSV-2026/Videos/Casablanca.mp4
+--WebAppBoundary--
 
-### 5. Intento de acceso a VÍDEO NO ALQUILADO (Debe dar 403 Forbidden)
-# Sustituye ID_VIDEO por el código que viste en urlVideo (paso 2)
-GET {{url}}/media/69ab2d85c0600a49c384e9d3
-Authorization: Bearer {{auth_token}}
 
-### 6. Acceso a IMAGEN/CARTEL (Debe dar 200 OK - Es público)
-# Sustituye ID_IMAGEN por el código que viste en urlImagen (paso 2)
-GET {{url}}/media/69ab2d84c0600a49c384e9c5
-Authorization: Bearer {{auth_token}}
+# ==========================================
+# 3. FLUJO: INTERSTELLAR (ID LOCAL 2)
+# ==========================================
 
-### 7. Realizar Alquiler de la película
-# Esto activa el acceso por 48 horas
-POST {{url}}/alquileres/2
-Authorization: Bearer {{auth_token}}
+### 3.1 Importar metadatos de Interstellar desde TMDB (ID: 157336)
+# Recibirá el ID 2 en H2
+POST {{host}}/peliculas/tmdb/import/157336
+Authorization: Bearer {{tokenAdmin}}
 
-### 8. Verificar Listado de Alquileres Activos
-GET {{url}}/alquileres
-Authorization: Bearer {{auth_token}}
-Accept: application/json
+### 3.2 Subir archivo de vídeo Interslestellar.mp4
+PATCH {{host}}/peliculas/2/upload-video
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
 
-### 9. Acceso a VÍDEO ALQUILADO (Ahora debe dar 200 OK)
-# Usa el mismo ID_VIDEO del paso 5
-GET {{url}}/media/69ab2d84c0600a49c384e9c7
-Authorization: Bearer {{auth_token}}
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="Interslestellar.mp4"
+Content-Type: video/mp4
+
+< D:/TFG DAW/TFG-DAW-Videoclub-JSV-2026/Videos/Interslestellar.mp4
+--WebAppBoundary--
+
+
+# ==========================================
+# 4. VERIFICACIÓN
+# ==========================================
+
+### 4.1 Consultar el catálogo para confirmar las URLs de vídeo
+GET {{host}}/peliculas
+Authorization: Bearer {{tokenAdmin}}

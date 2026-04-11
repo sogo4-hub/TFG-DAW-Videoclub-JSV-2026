@@ -30,4 +30,11 @@ public class Pelicula {
     private String urlImagen;
 
     private String urlVideo;
+
+
+    @Column(unique = true)
+    private Long tmdbId; // Para saber si ya hemos importado esta película
+
+    private String backdropPath; // Imagen de fondo para el frontend
+    private Double voteAverage; // Nota de TMDB
 }

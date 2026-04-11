@@ -2,11 +2,16 @@ package es.daw.backend.service;
 
 import es.daw.backend.dto.PeliculaRequest;
 import es.daw.backend.dto.PeliculaResponse;
+import es.daw.backend.dto.tmdb.TmdbCrewDTO;
+import es.daw.backend.dto.tmdb.TmdbGenreDTO;
+import es.daw.backend.dto.tmdb.TmdbMovieDTO;
 import es.daw.backend.entity.Pelicula;
+import es.daw.backend.exception.PeliculaAlreadyExistsException;
 import es.daw.backend.mapper.PeliculaMapper;
 import es.daw.backend.repository.PeliculaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -16,6 +21,7 @@ import java.util.List;
 public class PeliculaService {
 
     private final PeliculaRepository peliculaRepository;
+    private final TmdbService tmdbService;
     private final PeliculaMapper peliculaMapper;
     private final MediaService mediaService;
 
@@ -79,5 +85,80 @@ public class PeliculaService {
 
         Pelicula guardada = peliculaRepository.save(pelicula);
         return peliculaMapper.toResponseDTO(guardada);
+    }
+
+    @Transactional
+    public PeliculaResponse importarPeliculaTmdb(Long tmdbId) {
+        // 1. Validar que no exista previamente
+        if (peliculaRepository.existsByTmdbId(tmdbId)) {
+            throw new PeliculaAlreadyExistsException("La película ya existe en nuestro catálogo local.");
+        }
+
+        // 2. Traer datos de TMDB
+        TmdbMovieDTO tmdbData = tmdbService.getMovieDetails(tmdbId)
+                .orElseThrow(() -> new RuntimeException("Película no encontrada en TMDB."));
+
+        // 3. Mapear a tu entidad Pelicula local
+        Pelicula pelicula = new Pelicula();
+        pelicula.setTitulo(tmdbData.getTitle());
+        pelicula.setSinopsis(tmdbData.getOverview());
+        pelicula.setUrlImagen(tmdbData.getPosterPath());
+        pelicula.setTmdbId(tmdbId);
+        pelicula.setBackdropPath(tmdbData.getBackdropPath());
+        pelicula.setVoteAverage(tmdbData.getVoteAverage());
+
+        // 🔥 EXTRAER EL AÑO (Los primeros 4 caracteres de '2010-07-15')
+        if (tmdbData.getReleaseDate() != null && tmdbData.getReleaseDate().length() >= 4) {
+            pelicula.setAnio(Integer.parseInt(tmdbData.getReleaseDate().substring(0, 4)));
+        }
+
+        // 🔥 EXTRAER LOS GÉNEROS (Concatenados por comas: "Acción, Ciencia Ficción")
+        if (tmdbData.getGenres() != null && !tmdbData.getGenres().isEmpty()) {
+            String generosFormateados = tmdbData.getGenres().stream()
+                    .map(TmdbGenreDTO::getName)
+                    .reduce((g1, g2) -> g1 + ", " + g2)
+                    .orElse("Desconocido");
+            pelicula.setGenero(generosFormateados);
+        }
+
+        // 🔥 EXTRAER EL DIRECTOR (Filtrando el equipo técnico)
+        if (tmdbData.getCredits() != null && tmdbData.getCredits().getCrew() != null) {
+            String director = tmdbData.getCredits().getCrew().stream()
+                    .filter(crewMember -> "Director".equals(crewMember.getJob()))
+                    .map(TmdbCrewDTO::getName)
+                    .findFirst() // Nos quedamos con el primero que encuentre
+                    .orElse("Desconocido");
+            pelicula.setDirector(director);
+        }
+
+        // OJO: El GridFsId (el vídeo en mongo) estará nulo/vacío hasta que lo subas desde un panel de admin.
+        // pelicula.setGridFsId(null);
+
+        // 4. Guardar en H2 y retornar DTO
+        Pelicula saved = peliculaRepository.save(pelicula);
+        return peliculaMapper.toResponseDTO(saved);// Convierte a tu DTO de respuesta para el frontend
+    }
+
+    @Transactional
+    public PeliculaResponse subirVideo(Long peliculaId, MultipartFile file) {
+        // 1. Buscamos la película en la base de datos relacional (H2)
+        Pelicula pelicula = peliculaRepository.findById(peliculaId)
+                .orElseThrow(() -> new RuntimeException("Película no encontrada con ID: " + peliculaId));
+
+        try {
+            // 2. Subimos el archivo a MongoDB Atlas mediante tu MediaService
+            // NOTA: Asumo que en tu MediaService tienes un método llamado 'uploadFile'
+            // o 'guardarVideo'. Si se llama distinto, ajusta este nombre.
+            String gridFsId = mediaService.uploadFile(file);
+
+            // 3. Creamos la URL estandarizada para que Sara la consuma en React
+            pelicula.setUrlVideo("/api/media/stream/" + gridFsId);
+
+            // 5. Guardamos los cambios y devolvemos el DTO actualizado
+            return peliculaMapper.toResponseDTO(peliculaRepository.save(pelicula));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error crítico al subir el archivo a MongoDB Atlas: " + e.getMessage());
+        }
     }
 }
