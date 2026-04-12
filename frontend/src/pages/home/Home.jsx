@@ -20,8 +20,8 @@ export default function Home() {
           </p>
           <a href="/catalogo" className="hero-cta">Explorar catálogo →</a>
         </div>
-        <img className="hero-img" src="/public/imgs/fondo-casetes.avif" alt="Fondo" />
-      <img className="hero-side-img" src="/public/imgs/posters.avif" alt="Videoclub" />
+        <img className="hero-img" src="/imgs/vhs-fondo.jpg" alt="Fondo" />
+      <img className="hero-side-img" src="/imgs/posters.avif" alt="Videoclub" />
 
       </section>
 
