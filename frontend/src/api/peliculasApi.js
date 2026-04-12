@@ -1,5 +1,14 @@
 import axiosClient from './axiosClient';
 
+const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p';
+
+export const getMediaUrl = (path, size = 'w500') => {
+  if (!path) return null;
+  if (path.startsWith('/api/media/')) return `http://localhost:8080${path}`;
+  // Ruta relativa de TMDB
+  return `${TMDB_IMG_BASE}/${size}${path}`;
+};
+
 export const getPeliculas = async () => {
   const response = await axiosClient.get('/api/peliculas');
   return response.data;
@@ -9,6 +18,3 @@ export const getPeliculaById = async (id) => {
   const response = await axiosClient.get(`/api/peliculas/${id}`);
   return response.data;
 };
-
-// Construye la URL completa para imágenes y vídeos
-export const getMediaUrl = (path) => `http://localhost:8080${path}`;

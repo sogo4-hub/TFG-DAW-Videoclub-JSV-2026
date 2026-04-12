@@ -1,23 +1,28 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import { getPeliculaById, getMediaUrl } from '../../api/peliculasApi';
+import { useParams, useLocation } from 'react-router-dom';
+import { getPeliculas, getMediaUrl } from '../../api/peliculasApi';
 import './DetallePelicula.css';
 
 const DetallePelicula = () => {
   const { id } = useParams();
+  const { state } = useLocation();
   const videoRef = useRef(null);
 
-  const [pelicula, setPelicula] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [pelicula, setPelicula] = useState(state?.pelicula || null);
+  const [loading, setLoading] = useState(!state?.pelicula);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (state?.pelicula) return;
+
     const fetchPelicula = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getPeliculaById(id);
-        setPelicula(data);
+        const todas = await getPeliculas();
+        const encontrada = todas.find(p => p.id === Number(id));
+        if (!encontrada) throw new Error('Película no encontrada');
+        setPelicula(encontrada);
       } catch (err) {
         setError(err.message || 'Error al cargar la película');
       } finally {
@@ -26,48 +31,29 @@ const DetallePelicula = () => {
     };
 
     fetchPelicula();
-  }, [id]);
+  }, [id, state]);
 
-  if (loading) return <div className="detalle-loading">Cargando película...</div>;
+  if (loading) return <div className="detalle-loading">Cargando...</div>;
   if (error) return <div className="detalle-error">Error: {error}</div>;
   if (!pelicula) return null;
 
   return (
     <div className="detalle-container">
-      <div className="detalle-hero">
-        <div className="detalle-poster">
-          <img
-            src={getMediaUrl(pelicula.urlImagen)}
-            alt={pelicula.titulo}
-            className="detalle-imagen"
-          />
+      {pelicula.urlVideo ? (
+        <video
+          ref={videoRef}
+          controls
+          autoPlay
+          className="detalle-video"
+        >
+          <source src={getMediaUrl(pelicula.urlVideo)} type="video/mp4" />
+          Este navegador no soporta la reproducción de vídeo.
+        </video>
+      ) : (
+        <div className="detalle-sin-video">
+          <p>🎬 Vídeo no disponible todavía.</p>
         </div>
-
-        <div className="detalle-video-container">
-          <video
-            ref={videoRef}
-            controls
-            autoPlay
-            poster={getMediaUrl(pelicula.urlImagen)}
-            className="detalle-video"
-          >
-            <source src={getMediaUrl(pelicula.urlVideo)} type="video/mp4" />
-            Error de navegador. Este no navegador no soporta la reproducción de vídeo.
-          </video>
-        </div>
-      </div>
-
-      <div className="detalle-contenido">
-        <h1 className="detalle-titulo">{pelicula.titulo}</h1>
-
-        <div className="detalle-meta">
-          <span className="detalle-anio">{pelicula.anio}</span>
-          <span className="detalle-genero">{pelicula.genero}</span>
-          <span className="detalle-director">{pelicula.director}</span>
-        </div>
-
-        <p className="detalle-sinopsis">{pelicula.sinopsis}</p>
-      </div>
+      )}
     </div>
   );
 };

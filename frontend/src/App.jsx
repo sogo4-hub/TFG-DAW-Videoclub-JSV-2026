@@ -21,6 +21,7 @@ function App() {
           <Route path="/registro" element={<Registro />} />
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/pelicula/:id" element={<DetallePelicula />} />
+          
 
           <Route path="/favoritos" element={<Favoritos />} />
           <Route path="/mis-alquileres" element={<MisAlquileres />} />
