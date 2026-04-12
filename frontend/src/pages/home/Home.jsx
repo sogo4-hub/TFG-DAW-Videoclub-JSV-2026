@@ -2,15 +2,62 @@ import "./Home.css";
 
 export default function Home() {
   return (
-    <>
-      <h3>'Tu videoclub favorito, modernizado para ti ;)'</h3>
-      <div className="description">
-        <p>Explora un catálogo digital modernizado y descubre una experiencia online creada para hacer más sencillo buscar, alquilar y disfrutar del mejor contenido.</p>
-        <img src="../../../public/imgs/fondo.avif" alt="Videoclub"></img>
-        <hr></hr>
-        <img src="../../../public/imgs/posters.avif" alt="Videoclub"></img>
+    <div className="home">
 
-      </div>
-    </>
+      {/* ── HERO ── */}
+      <section className="hero">
+        <div className="hero-glow" />
+
+        <div className="hero-content">
+          <span className="hero-eyebrow">Tu videoclub digital</span>
+          <h1 className="hero-title">
+            Bienvenidos a<br />
+            <span className="hero-name">Streamflix</span>
+          </h1>
+          <p className="hero-desc">
+            El espíritu del videoclub de barrio, ahora en tu pantalla.
+            Sin filas, sin devoluciones tardías.
+          </p>
+          <a href="/catalogo" className="hero-cta">Explorar catálogo →</a>
+        </div>
+        <img className="hero-img" src="/public/imgs/fondo-casetes.avif" alt="Fondo" />
+      <img className="hero-side-img" src="/public/imgs/posters.avif" alt="Videoclub" />
+
+      </section>
+
+      {/* ── HORARIO ── */}
+      <section className="schedule">
+        <div className="schedule-glow" />
+
+        <div className="schedule-inner">
+          <div className="schedule-header">
+            <h2 className="schedule-title">Horario</h2>
+          </div>
+
+          <div className="schedule-rows">
+            <div className="schedule-row">
+              <span className="schedule-day">Lunes - Viernes</span>
+              <div className="schedule-bar" />
+              <span className="schedule-time">10:00 - 22:00</span>
+            </div>
+            <div className="schedule-row">
+              <span className="schedule-day">Sábado</span>
+              <div className="schedule-bar" />
+              <span className="schedule-time">10:00 - 23:00</span>
+            </div>
+            <div className="schedule-row">
+              <span className="schedule-day">Domingo</span>
+              <div className="schedule-bar" />
+              <span className="schedule-time">12:00 - 21:00</span>
+            </div>
+          </div>
+
+          <p className="schedule-note">
+            * El catálogo online está disponible <strong>24 horas</strong>, todos los días.
+          </p>
+        </div>
+      </section>
+
+    </div>
   );
 }

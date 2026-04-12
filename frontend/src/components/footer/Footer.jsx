@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <>
             <div className="tape-footer">
-                <img src="/imgs/masking-tape.png" alt='tape'/>
+                <img src="/imgs/masking-tape.png" alt='tape' />
             </div>
 
             <footer>
@@ -24,6 +24,17 @@ const Footer = () => {
                 </div>
 
                 <div>
+                    <h4>Dónde encontrarnos</h4>
+                    <p>
+                        Calle del Cine, 7<br />
+                        28001 Madrid<br />
+                        +34 612343216<br />
+                        tuvideoclub@streamflix.es
+                    </p>
+                </div>
+
+
+                <div>
                     <h4>Legal</h4>
                     <ul>
                         <li><a href="/">Política de privacidad </a><i className="fa-solid fa-shield-halved"></i></li>
@@ -36,7 +47,7 @@ const Footer = () => {
                     <p>&copy; 2026 StreamFlix - TFG 2º DAW A</p>
                     <p>Julián Francisco García Sogo | Víctor Yuste | Sara Ruiz</p>
                 </div>
-            </footer>
+            </footer >
         </>
     );
 };
