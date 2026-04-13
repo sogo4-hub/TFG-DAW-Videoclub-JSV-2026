@@ -28,7 +28,8 @@ public class MediaController {
     private final AlquilerService alquilerService;
     private final PeliculaRepository peliculaRepository;
 
-    @GetMapping("/{id}")
+    // ✅ SOPORTA AMBAS RUTAS: La nueva para streaming y la antigua/pública para imágenes
+    @GetMapping({"/stream/{id}", "/{id}"})
     public ResponseEntity<Resource> getMedia(@PathVariable String id) {
         // 1. Identificar al usuario desde el Token
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
