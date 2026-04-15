@@ -60,4 +60,12 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(AlquilerNoActivoException.class)
+    public ResponseEntity<Map<String, String>> handleAlquilerNoActivo(AlquilerNoActivoException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "Conflicto de Alquiler");
+        response.put("mensaje", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 }

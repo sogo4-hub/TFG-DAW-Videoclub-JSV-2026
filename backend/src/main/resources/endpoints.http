@@ -5,69 +5,47 @@
 @contentType = application/json
 
 # ==========================================
-# 1. AUTENTICACIÓN
+# 1. AUTENTICACIÓN DEL USUARIO
 # ==========================================
 
-### 1.1 Login de Administrador (Julián)
-# @name loginAdmin
+### 1.1 Login de intento_hacker@streamflix.es
+# @name loginHacker
 POST {{host}}/auth/login
 Content-Type: {{contentType}}
 
 {
-  "email": "nuevo_admin@streamflix.es",
-  "password": "admin123"
+  "email": "intento_hacker@streamflix.es",
+  "password": "password123"
 }
-> {% client.global.set("tokenAdmin", response.body.token) %}
+
+> {% client.global.set("tokenHacker", response.body.token); %}
 
 
 # ==========================================
-# 2. FLUJO: CASABLANCA (ID LOCAL 1)
+# 2. OPERACIONES DE ALQUILER
 # ==========================================
 
-### 2.1 Importar metadatos de Casablanca desde TMDB (ID: 289)
-# Al ser la primera película tras reiniciar, recibirá el ID 1 en H2
-POST {{host}}/peliculas/tmdb/import/289
-Authorization: Bearer {{tokenAdmin}}
+### 2.1 Alquilar la película "Origen" (ID: 6)
+# @name alquilarPeli
+POST {{host}}/alquileres/6
+Authorization: Bearer {{tokenHacker}}
 
-### 2.2 Subir archivo de vídeo Casablanca.mp4
-PATCH {{host}}/peliculas/1/upload-video
-Authorization: Bearer {{tokenAdmin}}
-Content-Type: multipart/form-data; boundary=WebAppBoundary
-
---WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="Casablanca.mp4"
-Content-Type: video/mp4
-
-< D:/TFG DAW/TFG-DAW-Videoclub-JSV-2026/Videos/Casablanca.mp4
---WebAppBoundary--
+### 2.2 Verificar que aparece en "Mis Alquileres"
+# Debe devolver la película Origen en la lista
+GET {{host}}/alquileres
+Authorization: Bearer {{tokenHacker}}
 
 
 # ==========================================
-# 3. FLUJO: INTERSTELLAR (ID LOCAL 2)
+# 3. CANCELACIÓN (BORRADO LÓGICO)
 # ==========================================
 
-### 3.1 Importar metadatos de Interstellar desde TMDB (ID: 157336)
-# Recibirá el ID 2 en H2
-POST {{host}}/peliculas/tmdb/import/157336
-Authorization: Bearer {{tokenAdmin}}
+### 3.1 Anular el alquiler de "Origen"
+# @name cancelarPeli
+DELETE {{host}}/alquileres/6
+Authorization: Bearer {{tokenHacker}}
 
-### 3.2 Subir archivo de vídeo Interslestellar.mp4
-PATCH {{host}}/peliculas/2/upload-video
-Authorization: Bearer {{tokenAdmin}}
-Content-Type: multipart/form-data; boundary=WebAppBoundary
-
---WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="Interslestellar.mp4"
-Content-Type: video/mp4
-
-< D:/TFG DAW/TFG-DAW-Videoclub-JSV-2026/Videos/Interslestellar.mp4
---WebAppBoundary--
-
-
-# ==========================================
-# 4. VERIFICACIÓN
-# ==========================================
-
-### 4.1 Consultar el catálogo para confirmar las URLs de vídeo
-GET {{host}}/peliculas
-Authorization: Bearer {{tokenAdmin}}
+### 3.2 Verificar que el catálogo de alquileres está vacío
+# Debería devolver [] ya que el alquiler ha caducado lógicamente
+GET {{host}}/alquileres
+Authorization: Bearer {{tokenHacker}}

@@ -39,4 +39,11 @@ public class UsuarioService {
         }
         usuarioRepository.deleteById(id);
     }
+
+    // Añadir a UsuarioService.java
+    public UsuarioResponse obtenerPorEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con email: " + email));
+        return usuarioMapper.toResponseDTO(usuario);
+    }
 }
