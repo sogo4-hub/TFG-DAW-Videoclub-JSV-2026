@@ -3,6 +3,7 @@ package es.daw.backend.service;
 import es.daw.backend.entity.Alquiler;
 import es.daw.backend.entity.Pelicula;
 import es.daw.backend.entity.Usuario;
+import es.daw.backend.exception.AlquilerNoActivoException;
 import es.daw.backend.repository.AlquilerRepository;
 import es.daw.backend.repository.PeliculaRepository;
 import es.daw.backend.repository.UsuarioRepository;
@@ -66,4 +67,25 @@ public class AlquilerService {
                 usuario, pelicula, LocalDateTime.now());
         return activo.isPresent();
     }
+
+    @Transactional
+    public void cancelarAlquiler(String email, Long idPelicula) {
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
+        Pelicula pelicula = peliculaRepository.findById(idPelicula).orElseThrow();
+
+        // 1. Buscamos si existe un alquiler ACTIVO en este momento
+        Optional<Alquiler> activo = alquilerRepository.findByUsuarioAndPeliculaAndFechaFinAfter(
+                usuario, pelicula, LocalDateTime.now());
+
+        if (activo.isPresent()) {
+            Alquiler alquiler = activo.get();
+            // 2. MAGIA DE ARQUITECTURA: En vez de borrar, "caducamos" el alquiler instantáneamente
+            alquiler.setFechaFin(LocalDateTime.now());
+            alquilerRepository.save(alquiler);
+        } else {
+            // ✅ USAMOS NUESTRA EXCEPCIÓN PERSONALIZADA
+            throw new AlquilerNoActivoException("No tienes un alquiler activo para esta película.");
+        }
+    }
+
 }
