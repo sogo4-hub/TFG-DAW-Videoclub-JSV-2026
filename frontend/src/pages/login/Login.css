@@ -2,3 +2,112 @@
     color: red;
     font-size: small;
 }
+
+.login-page {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('/imgs/logo2.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 80%;
+}
+
+.login-titulo {
+    position: absolute;
+    top: 21%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgb(137, 35, 35);
+    font-size: 3.5rem;
+    letter-spacing: 2px;
+    font-family: 'Permanent Marker', cursive;}
+
+.login-card {
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    color: white;
+    margin-top: 5rem;
+}
+
+.login-card h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+.login-card label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    margin-bottom: 0.2rem;
+    box-sizing: border-box;
+}
+
+.login-card input::placeholder {
+    color: #aaa;
+}
+
+.login-card button {
+    width: 100%;
+    padding: 0.7rem;
+    margin-top: 2rem;
+    border-radius: 6px;
+    border: none;
+    background: #e50914;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.login-card button:hover:not(:disabled) {
+    background: #b20710;
+}
+
+.login-card button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.login-card p {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.login-card a {
+    color: #e50914;
+    text-decoration: none;
+}
+
+.login-card a:hover {
+    text-decoration: underline;
+}
+
+.login-error-general {
+    color: #ff6b6b;
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
