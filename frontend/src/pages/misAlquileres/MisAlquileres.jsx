@@ -30,7 +30,7 @@ const MisAlquileres = () => {
       await cancelarAlquiler(id);
       setPeliculas(prev => prev.filter(p => p.id !== id));
     } catch (err) {
-      alert('Error al cancelar el alquiler');
+      alert('Error al cancelar el alquiler', err.message);
     }
   };
 
