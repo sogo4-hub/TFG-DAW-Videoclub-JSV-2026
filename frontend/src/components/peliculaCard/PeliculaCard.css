@@ -128,7 +128,6 @@
 }
 
 @media (max-width: 768px) {
-
     .peliculas-grid,
     .peliculas-container {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));

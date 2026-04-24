@@ -1,23 +1,31 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import { getPeliculaById, getMediaUrl } from '../../api/peliculasApi';
+import { useParams, useLocation } from 'react-router-dom';
+import { getPeliculas, getMediaUrl } from '../../api/peliculasApi';
+import axiosClient from '../../api/axiosClient';
 import './DetallePelicula.css';
 
 const DetallePelicula = () => {
   const { id } = useParams();
+  const { state } = useLocation();
   const videoRef = useRef(null);
 
-  const [pelicula, setPelicula] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [pelicula, setPelicula] = useState(state?.pelicula || null);
+  const [loading, setLoading] = useState(!state?.pelicula);
+  const [videoUrl, setVideoUrl] = useState(null);
   const [error, setError] = useState(null);
 
+  // cargar datos peli
   useEffect(() => {
+    if (state?.pelicula) return;
+
     const fetchPelicula = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getPeliculaById(id);
-        setPelicula(data);
+        const todas = await getPeliculas();
+        const encontrada = todas.find(p => p.id === Number(id));
+        if (!encontrada) throw new Error('Película no encontrada');
+        setPelicula(encontrada);
       } catch (err) {
         setError(err.message || 'Error al cargar la película');
       } finally {
@@ -26,48 +34,59 @@ const DetallePelicula = () => {
     };
 
     fetchPelicula();
-  }, [id]);
+  }, [id, state]);
 
-  if (loading) return <div className="detalle-loading">Cargando película...</div>;
-  if (error) return <div className="detalle-error">Error: {error}</div>;
+  //con tmdb-----
+  //descarga el vídeo con axios (lleva el token JWT) y crea una URL en memoria
+  useEffect(() => {
+    if (!pelicula?.urlVideo) return;
+
+    axiosClient.get(pelicula.urlVideo, { responseType: 'blob' })
+      .then(res => {
+        const url = URL.createObjectURL(res.data);
+        setVideoUrl(url);
+      })
+      .catch(() => setError('No tienes permiso para ver este vídeo o no tienes un alquiler activo.'));
+
+    // Limpia la URL en memoria al salir de la página
+    return () => {
+      if (videoUrl) URL.revokeObjectURL(videoUrl);
+    };
+  }, [pelicula]);
+
+  if (loading) return <div className="detalle-loading">Cargando...</div>;
+  if (error) return <div className="detalle-error">{error}</div>;
   if (!pelicula) return null;
 
+  const posterUrl = getMediaUrl(pelicula.urlImagen, 'w500');
+
+
+  // //codigo antiguo sin tmdb
+  // <video controls autoPlay poster={posterUrl} className="detalle-video">
+  //   <source src={getMediaUrl(pelicula.urlVideo)} type="video/mp4" />
+  // </video>
   return (
     <div className="detalle-container">
-      <div className="detalle-hero">
-        <div className="detalle-poster">
-          <img
-            src={getMediaUrl(pelicula.urlImagen)}
-            alt={pelicula.titulo}
-            className="detalle-imagen"
-          />
-        </div>
-
-        <div className="detalle-video-container">
+      {pelicula.urlVideo ? (
+        videoUrl ? (
           <video
             ref={videoRef}
             controls
             autoPlay
-            poster={getMediaUrl(pelicula.urlImagen)}
+            poster={posterUrl}
             className="detalle-video"
           >
-            <source src={getMediaUrl(pelicula.urlVideo)} type="video/mp4" />
-            Error de navegador. Este no navegador no soporta la reproducción de vídeo.
+            <source src={videoUrl} type="video/mp4" />
+            Este navegador no soporta la reproducción de vídeo.
           </video>
+        ) : (
+          <div className="detalle-loading">Cargando vídeo...</div>
+        )
+      ) : (
+        <div className="detalle-sin-video">
+          <p>Vídeo no disponible todavía...</p>
         </div>
-      </div>
-
-      <div className="detalle-contenido">
-        <h1 className="detalle-titulo">{pelicula.titulo}</h1>
-
-        <div className="detalle-meta">
-          <span className="detalle-anio">{pelicula.anio}</span>
-          <span className="detalle-genero">{pelicula.genero}</span>
-          <span className="detalle-director">{pelicula.director}</span>
-        </div>
-
-        <p className="detalle-sinopsis">{pelicula.sinopsis}</p>
-      </div>
+      )}
     </div>
   );
 };

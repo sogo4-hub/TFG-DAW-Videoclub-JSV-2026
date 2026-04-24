@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.security.authentication.BadCredentialsException;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,5 +48,24 @@ public class GlobalExceptionHandler {
         error.put("error", "Acceso denegado");
         error.put("mensaje", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN); // 403 Forbidden
+    }
+
+    @ExceptionHandler(PeliculaAlreadyExistsException.class)
+    public ResponseEntity<Map<String, Object>> handlePeliculaAlreadyExistsException(PeliculaAlreadyExistsException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("error", "Conflict");
+        response.put("message", ex.getMessage());
+        response.put("status", HttpStatus.CONFLICT.value()); // HTTP 409
+        response.put("timestamp", LocalDateTime.now());
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(AlquilerNoActivoException.class)
+    public ResponseEntity<Map<String, String>> handleAlquilerNoActivo(AlquilerNoActivoException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "Conflicto de Alquiler");
+        response.put("mensaje", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }

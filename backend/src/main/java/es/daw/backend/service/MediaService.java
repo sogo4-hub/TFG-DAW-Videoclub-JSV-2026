@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+import org.bson.types.ObjectId;
 
 import java.io.IOException;
 
@@ -38,5 +40,25 @@ public class MediaService {
     // NUEVO MÉTODO: Elimina el archivo de MongoDB
     public void eliminarArchivo(String id) {
         gridFsTemplate.delete(new Query(Criteria.where("_id").is(id)));
+    }
+
+    /**
+     * Sube un archivo a MongoDB Atlas (GridFS) y devuelve el ID generado.
+     */
+    public String uploadFile(MultipartFile file) {
+        try {
+            // Guardamos el flujo de bytes en GridFS pasándole el nombre y el tipo (ej: video/mp4)
+            ObjectId objectId = gridFsTemplate.store(
+                    file.getInputStream(),
+                    file.getOriginalFilename(),
+                    file.getContentType()
+            );
+
+            // Retornamos el ID generado por MongoDB convertido a String
+            return objectId.toString();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error crítico al subir el archivo a MongoDB Atlas: " + e.getMessage());
+        }
     }
 }

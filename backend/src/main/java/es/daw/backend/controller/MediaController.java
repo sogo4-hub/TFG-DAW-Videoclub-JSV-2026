@@ -28,7 +28,8 @@ public class MediaController {
     private final AlquilerService alquilerService;
     private final PeliculaRepository peliculaRepository;
 
-    @GetMapping("/{id}")
+    // ✅ SOPORTA AMBAS RUTAS: La nueva para streaming y la antigua/pública para imágenes
+    @GetMapping({"/stream/{id}", "/{id}"})
     public ResponseEntity<Resource> getMedia(@PathVariable String id) {
         // 1. Identificar al usuario desde el Token
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -41,11 +42,12 @@ public class MediaController {
         // 3. Si es un vídeo, aplicar el filtro de seguridad de alquileres
         if (peliculaOpt.isPresent()) {
             Pelicula pelicula = peliculaOpt.get();
-
+        // --- COMENTAR ESTE BLOQUE TEMPORALMENTE PARA DESABILITAR LA COMPROBACIÓN DE ALQUILERES ---
             if (email.equals("anonymousUser") || !alquilerService.esAlquilerValido(email, pelicula.getId())) {
                 // Lanzamos la excepción con un mensaje descriptivo
                 throw new PeliculaNoAlquiladaException("No tienes un alquiler activo para la película: " + pelicula.getTitulo());
             }
+        // --------------------------------------------------------
 
             // Si el código llega aquí, es un vídeo y tiene permiso
             Resource resource = mediaService.descargarArchivo(id);

@@ -1,64 +1,51 @@
-### 0. Configuración de Variables
-@url = http://localhost:8080/api
-@email = estudiante_tfg@streamflix.es
-@password = password123
+# ==========================================
+# VARIABLES GLOBALES
+# ==========================================
+@host = http://localhost:8080/api
+@contentType = application/json
 
-### 1. Autenticación (Login)
-# Obtenemos el token JWT para las peticiones protegidas
-POST {{url}}/auth/login
-Content-Type: application/json
+# ==========================================
+# 1. AUTENTICACIÓN DEL USUARIO
+# ==========================================
+
+### 1.1 Login de intento_hacker@streamflix.es
+# @name loginHacker
+POST {{host}}/auth/login
+Content-Type: {{contentType}}
 
 {
-  "email": "{{email}}",
-  "password": "{{password}}"
+  "email": "intento_hacker@streamflix.es",
+  "password": "password123"
 }
 
-> {% client.global.set("auth_token", response.body.token); %}
+> {% client.global.set("tokenHacker", response.body.token); %}
 
-### 2. Consultar Catálogo
-# Identifica un "id" de película (ej. 5) y el código de "urlVideo" (ej. 65e9...)
-GET {{url}}/peliculas
-Accept: application/json
 
-### ==========================================================
-### TEST DE FAVORITOS (Toggle y Listado)
-### ==========================================================
+# ==========================================
+# 2. OPERACIONES DE ALQUILER
+# ==========================================
 
-### 3. Alternar Favorito (Añadir/Quitar)
-# Cambia el /5 por el ID de la película que desees probar
-POST {{url}}/favoritos/2
-Authorization: Bearer {{auth_token}}
+### 2.1 Alquilar la película "Origen" (ID: 6)
+# @name alquilarPeli
+POST {{host}}/alquileres/6
+Authorization: Bearer {{tokenHacker}}
 
-### 4. Listar Mis Favoritos
-GET {{url}}/favoritos
-Authorization: Bearer {{auth_token}}
-Accept: application/json
+### 2.2 Verificar que aparece en "Mis Alquileres"
+# Debe devolver la película Origen en la lista
+GET {{host}}/alquileres
+Authorization: Bearer {{tokenHacker}}
 
-### ==========================================================
-### TEST DE ALQUILERES Y SEGURIDAD MULTIMEDIA
-### ==========================================================
 
-### 5. Intento de acceso a VÍDEO NO ALQUILADO (Debe dar 403 Forbidden)
-# Sustituye ID_VIDEO por el código que viste en urlVideo (paso 2)
-GET {{url}}/media/69ab2d85c0600a49c384e9d3
-Authorization: Bearer {{auth_token}}
+# ==========================================
+# 3. CANCELACIÓN (BORRADO LÓGICO)
+# ==========================================
 
-### 6. Acceso a IMAGEN/CARTEL (Debe dar 200 OK - Es público)
-# Sustituye ID_IMAGEN por el código que viste en urlImagen (paso 2)
-GET {{url}}/media/69ab2d84c0600a49c384e9c5
-Authorization: Bearer {{auth_token}}
+### 3.1 Anular el alquiler de "Origen"
+# @name cancelarPeli
+DELETE {{host}}/alquileres/6
+Authorization: Bearer {{tokenHacker}}
 
-### 7. Realizar Alquiler de la película
-# Esto activa el acceso por 48 horas
-POST {{url}}/alquileres/2
-Authorization: Bearer {{auth_token}}
-
-### 8. Verificar Listado de Alquileres Activos
-GET {{url}}/alquileres
-Authorization: Bearer {{auth_token}}
-Accept: application/json
-
-### 9. Acceso a VÍDEO ALQUILADO (Ahora debe dar 200 OK)
-# Usa el mismo ID_VIDEO del paso 5
-GET {{url}}/media/69ab2d84c0600a49c384e9c7
-Authorization: Bearer {{auth_token}}
+### 3.2 Verificar que el catálogo de alquileres está vacío
+# Debería devolver [] ya que el alquiler ha caducado lógicamente
+GET {{host}}/alquileres
+Authorization: Bearer {{tokenHacker}}

@@ -38,10 +38,13 @@ const PeliculaCard = ({ pelicula, isLogged, initialFavorito = false, yaAlquilada
     }
   };
 
+  // urlImagen puede ser ruta relativa TMDB (/xxx.jpg) o interna (/api/media/...)
+  const posterUrl = getMediaUrl(pelicula.urlImagen, 'w500');
+
   return (
     <div className="pelicula-card">
       <img
-        src={getMediaUrl(pelicula.urlImagen)}
+        src={posterUrl}
         alt={pelicula.titulo}
         loading="lazy"
         onError={(e) => {

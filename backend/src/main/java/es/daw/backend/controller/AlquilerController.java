@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/alquileres")
@@ -26,5 +28,19 @@ public class AlquilerController {
     public ResponseEntity<String> alquilar(@PathVariable Long id) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(alquilerService.alquilar(email, id));
+    }
+
+    @DeleteMapping("/{peliculaId}")
+    public ResponseEntity<Map<String, String>> cancelarAlquiler(
+            @PathVariable Long peliculaId,
+            org.springframework.security.core.Authentication authentication) {
+
+        String email = authentication.getName(); // Extraemos email del Token JWT
+        alquilerService.cancelarAlquiler(email, peliculaId);
+
+        // Devolvemos un JSON amigable para el frontend
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Alquiler cancelado correctamente");
+        return ResponseEntity.ok(response);
     }
 }

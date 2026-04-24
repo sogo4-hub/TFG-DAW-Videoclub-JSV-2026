@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getMediaUrl } from '../../api/peliculasApi';
 import { getMisAlquileres, cancelarAlquiler } from '../../api/alquileresApi';
-import axiosClient from '../../api/axiosClient';
 import './MisAlquileres.css';
 
 const MisAlquileres = () => {
   const [peliculas, setPeliculas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAlquileres = async () => {
@@ -33,17 +34,10 @@ const MisAlquileres = () => {
     }
   };
 
-  const handleVerPelicula = async (urlVideo) => {
-    try {
-      const response = await axiosClient.get(urlVideo, {
-        responseType: 'blob', // descarga el vídeo como blob
-      });
-      const blob = new Blob([response.data], { type: 'video/mp4' });
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank'); // abre en nueva pestaña
-    } catch (err) {
-      alert('Error al reproducir la película. Comprueba tu alquiler.');
-    }
+  // El vídeo es un stream directo desde el backend (/api/media/stream/{id}).
+  // Navegamos a la página de detalle donde el <video> hace streaming con el JWT correcto.
+  const handleVerPelicula = (peliculaId) => {
+    navigate(`/pelicula/${peliculaId}`);
   };
 
   if (loading) return <p>Cargando tus alquileres...</p>;
@@ -57,7 +51,7 @@ const MisAlquileres = () => {
         {peliculas.map((pelicula) => (
           <div key={pelicula.id} className="alquiler-card">
             <img
-              src={getMediaUrl(pelicula.urlImagen)}
+              src={getMediaUrl(pelicula.urlImagen, 'w500')}
               alt={`Cartel de ${pelicula.titulo}`}
               className="alquiler-imagen"
               onError={(e) => {
@@ -72,9 +66,11 @@ const MisAlquileres = () => {
             <button
               type="button"
               className="alquiler-boton"
-              onClick={() => handleVerPelicula(pelicula.urlVideo)}
+              onClick={() => handleVerPelicula(pelicula.id)}
+              disabled={!pelicula.urlVideo}
+              title={!pelicula.urlVideo ? 'El vídeo aún no está disponible' : ''}
             >
-              Ver película
+              {pelicula.urlVideo ? 'Ver película' : 'Vídeo no disponible'}
             </button>
             <button
               type="button"

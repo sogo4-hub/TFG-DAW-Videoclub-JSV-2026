@@ -3,10 +3,12 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import './NavBar.css'
+import useSearchBar from '../../hooks/useSearchBar'
 
 const NavBar = () => {
   const { token, rol, nombre, logout } = useAuth()
   const navigate = useNavigate()
+  const { query, setQuery, handleSearch } = useSearchBar()
 
   const handleLogout = () => {
     logout()
@@ -65,8 +67,12 @@ const NavBar = () => {
           <div className="navbar-search">
             <input
               type="text"
-              placeholder="Buscar..."
-              aria-label="Buscar en StreamFlix" />
+              placeholder="Buscar en catálogo..."
+              aria-label="Buscar en StreamFlix"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleSearch}
+            />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
 

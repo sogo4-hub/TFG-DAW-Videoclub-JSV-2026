@@ -1,5 +1,5 @@
 -- Borramos la tabla si ya existe para evitar errores al reiniciar
-DROP TABLE IF EXISTS usuarios, peliculas;
+DROP TABLE IF EXISTS usuarios, peliculas, favoritos, alquileres;
 
 -- Creación de la tabla usuarios basada en la entidad Usuario.java
 CREATE TABLE usuarios (
@@ -19,7 +19,11 @@ CREATE TABLE IF NOT EXISTS peliculas (
                                          anio INT,
                                          genero VARCHAR(255),
                                          url_imagen VARCHAR(255),
-                                         url_video VARCHAR(255)
+                                         url_video VARCHAR(255),
+    -- Nuevos campos para la integración con TMDB
+                                         backdrop_path VARCHAR(255),
+                                         tmdb_id BIGINT UNIQUE,
+                                         vote_average DOUBLE
 );
 
 -- Tabla para Favoritos
