@@ -97,7 +97,8 @@ const NavBar = () => {
 
 
 
-      </nav><img src="/imgs/masking-tape.png" className='tape-navbar'></img></>
+      </nav>
+      <img src="/imgs/masking-tape.png" className='tape-navbar'></img></>
 
   )
 }

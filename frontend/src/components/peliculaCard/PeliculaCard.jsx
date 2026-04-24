@@ -43,6 +43,8 @@ const PeliculaCard = ({ pelicula, isLogged, initialFavorito = false, yaAlquilada
 
   return (
     <div className="pelicula-card">
+      <img src="/imgs/masking-tape2.jpg" className='tape-film'></img>
+
       <img
         src={posterUrl}
         alt={pelicula.titulo}
