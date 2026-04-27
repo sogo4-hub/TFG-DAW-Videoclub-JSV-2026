@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
 /* ── BASE ── */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -43,8 +45,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 70% 150% at 5% 50%, #4a0e6e60 0%, transparent 60%),
-    radial-gradient(ellipse 40% 80% at 85% 10%, #7b1fa228 0%, transparent 55%);
+    radial-gradient(ellipse 70% 150% at 5% 50%, #cc2244 0%, transparent 60%),
+    radial-gradient(ellipse 40% 80% at 85% 10%, #e03058 0%, transparent 55%);
   pointer-events: none;
 }
 
@@ -60,7 +62,7 @@
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #cc2244;
+  color: #c7002c;
   border-left: 3px solid #cc2244;
   padding-left: 10px;
   margin-bottom: 1.25rem;
@@ -76,7 +78,9 @@
 }
 
 .hero-name {
-  color: #cc2244;
+  background: -webkit-linear-gradient(#c7002c, #7b1fa2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   /* sutil destello morado debajo */
   text-shadow: 0 0 60px #7b1fa244;
 }
@@ -92,7 +96,7 @@
 
 .hero-cta {
   display: inline-block;
-  background: #cc2244;
+  background: #c7002c;
   color: #fff;
   text-decoration: none;
   padding: 0.8rem 2rem;
@@ -105,8 +109,10 @@
 }
 
 .hero-cta:hover {
-  background: #e03058;
+  background: #7b1fa2;
   transform: translateY(-2px);
+  box-shadow: #000 3px 3px 7px 2px;
+  color: #000;
 }
 
 .hero-img {
@@ -125,7 +131,7 @@
   background: #0d0d0f;
   border-top: 1px solid #2a1a3a;
   position: relative;
-   background: #0d0d0f;
+  background: #0d0d0f;
   position: relative;
   overflow: hidden;
 }
@@ -135,10 +141,20 @@
   content: '';
   position: absolute;
   top: 0;
-  left: 6rem;
-  right: 6rem;
+  left: 0rem;
+  right: 0rem;
   height: 1px;
-  background: linear-gradient(to right, #7b1fa2, #cc2244, transparent);
+  background: linear-gradient(to right, #7b1fa2, #c7002c, #7b1fa2);
+}
+
+.schedule::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0rem;
+  right: 0rem;
+  height: 1px;
+  background: linear-gradient(to right, #7b1fa2, #c7002c, #7b1fa2);
 }
 
 .schedule-inner {
@@ -149,8 +165,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 150% at 95% 50%, #4a0e6e50 0%, transparent 60%),
-    radial-gradient(ellipse 30% 80% at 10% 90%, #7b1fa222 0%, transparent 55%);
+    radial-gradient(ellipse 60% 90% at 80% 50%, #80070750 0%, transparent 60%),
+    radial-gradient(ellipse 40% 80% at 10% 60%, #7b1fa222 0%, transparent 55%);
   pointer-events: none;
 }
 
@@ -221,17 +237,21 @@
     padding: 0 2rem 4rem;
     min-height: 90vh;
   }
+
   .schedule {
     padding: 3.5rem 2rem;
   }
+
   .schedule::before {
     left: 2rem;
     right: 2rem;
   }
+
   .schedule-day {
     min-width: 120px;
     font-size: 0.85rem;
   }
+
   .schedule-time {
     font-size: 1rem;
   }

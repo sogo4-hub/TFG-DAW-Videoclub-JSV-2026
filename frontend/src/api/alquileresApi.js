@@ -14,3 +14,9 @@ export const cancelarAlquiler = async (id) => {
   const response = await axiosClient.delete(`/api/alquileres/${id}`);
   return response.data;
 };
+
+// Marca el alquiler como reproducida cuando el usuario empieza a ver la película
+export const marcarReproducida = async (alquilerId) => {
+  const response = await axiosClient.patch(`/api/alquileres/${alquilerId}/reproducida`);
+  return response.data;
+};

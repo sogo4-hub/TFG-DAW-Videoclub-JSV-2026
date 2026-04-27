@@ -9,13 +9,13 @@
     color: #fff;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 0 2rem;
     position: relative;
     top: 0;
     left: 0;
     z-index: 200;
-    gap: 40px;
+    gap: 1.5rem;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.712);
 }
 
@@ -29,7 +29,7 @@
     align-items: center;
     gap: 10px;
     z-index: 4;
-    position: sticky;
+    flex-shrink: 0;
 }
 
 .navbar-logo {
@@ -38,7 +38,7 @@
 
 .navbar-title {
     font-family: "Permanent Marker", cursive;
-    color: red;
+    color: #c7002c;
     font-size: 24px;
     font-weight: 700;
     letter-spacing: -0.5px;
@@ -52,9 +52,10 @@
 .navbar-links {
     list-style: none;
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
     z-index: 4;
-    position: sticky;
+    align-items: center;
+    flex: 1;
 }
 
 .navbar-links a {
@@ -64,7 +65,6 @@
     margin: 0;
     transition: opacity 0.3s ease;
     z-index: 4;
-    position: sticky;
 }
 
 .navbar-links a:hover {
@@ -83,7 +83,6 @@
     display: flex;
     align-items: center;
     z-index: 4;
-    position: sticky;
 }
 
 .navbar-search input {
@@ -96,19 +95,152 @@
     outline: none;
     font-size: 15px;
     z-index: 4;
-    position: sticky;
 }
 
 .navbar-search input:focus {
-    border-color: #ff0000;
+    border-color: #c7002c;
 }
 
 .navbar-search i {
     position: absolute;
     right: 10px;
-    color: #df0000;
+    color: #c7002c;
     z-index: 4;
+}
 
+
+/* =========================================================
+   FILTRO DE GÉNEROS (DESPLEGABLE)
+   ========================================================= */
+
+.navbar-filtro {
+    position: relative;
+    z-index: 300;
+}
+
+.filtro-btn {
+    height: 36px;
+    padding: 0 0.9rem;
+    border-radius: 6px;
+    border: 1px solid hsla(0, 0%, 100%, 0.271);
+    background-color: #0000003c;
+    color: #ebebeb;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: border-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.filtro-btn:hover {
+    border-color: #c7002c;
+}
+
+.filtro-btn-activo {
+    border-color: #c7002c;
+    color: #fff;
+    font-weight: 600;
+}
+
+.filtro-desplegable {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #1a1a2e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 300;
+}
+
+.filtro-opcion {
+    padding: 0.6rem 1rem;
+    background: transparent;
+    border: none;
+    color: #ebebeb;
+    font-size: 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.filtro-opcion:hover {
+    background: rgba(199, 0, 44, 0.2);
+    color: #fff;
+}
+
+.filtro-opcion-activa {
+    background: #c7002c;
+    color: #fff;
+    font-weight: 600;
+}
+
+.filtro-opcion-activa:hover {
+    background: #a80025;
+}
+
+.filtro-opcion-limpiar {
+    color: #aaa;
+    font-size: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.filtro-opcion-limpiar:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+
+/* =========================================================
+   USUARIO (login/registro/cerrar sesión) — pegado a la derecha
+   ========================================================= */
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 4;
+    flex-shrink: 0;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-menu span {
+    color: #ebebeb;
+    font-size: 15px;
+}
+
+/* Estilos compartidos para botón cerrar sesión y links login/registro */
+.user-menu button,
+.navbar-auth-btn {
+    height: 36px;
+    padding: 0 1rem;
+    border-radius: 6px;
+    border: 1px solid hsla(0, 0%, 100%, 0.271);
+    background-color: #0000003c;
+    color: #ebebeb;
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.user-menu button:hover,
+.navbar-auth-btn:hover {
+    border-color: #c7002c;
+    color: #fff;
 }
 
 
@@ -127,8 +259,8 @@
 
     .tape-navbar {
         position: absolute;
-    top: 200px;
-            left: 50%;
+        top: 200px;
+        left: 50%;
         transform: translateX(-50%) rotate(-3deg);
         width: 160px;
         height: 50px;
@@ -137,7 +269,14 @@
 
     .navbar-links {
         margin: 0;
-        margin-bottom:10px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .navbar-user {
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .navbar-search {
@@ -147,14 +286,28 @@
 
     .navbar-search input {
         width: 100%;
-
     }
 }
 
 @media (min-width: 768px) {
     .tape-navbar {
         top: 50px;
+    }
+}
 
+@media (max-width: 768px) {
+    .tape-navbar {
+        top: 120px;
+    }
+}
+@media (max-width: 740px) {
+    .tape-navbar {
+        top:  125px;
+    }
+}
+@media (max-width: 600px) {
+    .tape-navbar {
+        top:  135px;
     }
 }
 
@@ -166,8 +319,6 @@
     height: 50px;
     z-index: 1000;
 }
-
-
 
 .navbar::before {
     content: "";

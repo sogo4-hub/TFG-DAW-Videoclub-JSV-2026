@@ -13,23 +13,40 @@
     background-image: url('/imgs/logo2.png');
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 80%;
+    background-size: 60%;
+}
+
+/* 2. Cuando la pantalla mide 500px o más */
+@media (min-width: 500px) {
+    .login-page {
+        background-size: 460px;
+        /* Un tamaño intermedio */
+    }
+}
+
+/* 3. Cuando la pantalla mide 1024px o más (Desktop) */
+@media (min-width: 1024px) {
+    .login-page {
+        background-size: 650px;
+        /* Tamaño más pequeño para que no se vea gigante en PC */
+    }
 }
 
 .login-titulo {
     position: absolute;
-    top: 21%;
+    top: 13%;
     left: 50%;
     transform: translateX(-50%);
     color: rgb(137, 35, 35);
-    font-size: 3.5rem;
+    font-size: 2.8rem;
     letter-spacing: 2px;
-    font-family: 'Permanent Marker', cursive;}
+    font-family: 'Permanent Marker', cursive;
+}
 
 .login-card {
     padding: 2.5rem;
     width: 100%;
-    max-width: 420px;
+    max-width: 395px;
     color: white;
     margin-top: 5rem;
 }
@@ -46,6 +63,8 @@
     margin-bottom: 0.3rem;
     font-size: 0.9rem;
     color: #ccc;
+    text-shadow: 1px 1px 1px #000;
+    text-align: center;
 }
 
 .login-card input {
