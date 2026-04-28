@@ -11,6 +11,8 @@ import PrivateAdminRoute from "./components/PrivateAdminRoute.jsx";
 import Favoritos from './pages/favoritos/Favoritos';
 import MisAlquileres from './pages/misAlquileres/MisAlquileres';
 
+import GestionPeliculas from "./pages/dashboard/GestionPeliculas.jsx";
+
 function App() {
   return (
     <AuthProvider>
@@ -21,17 +23,29 @@ function App() {
           <Route path="/registro" element={<Registro />} />
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/pelicula/:id" element={<DetallePelicula />} />
-          
 
           <Route path="/favoritos" element={<Favoritos />} />
           <Route path="/mis-alquileres" element={<MisAlquileres />} />
 
-          {/*Ruta protegida */}
+          {/*Rutas protegidas para el admin*/}
+
+          {/* El Menú Principal del Dashboard */}
           <Route path="/dashboard" element={
             <PrivateAdminRoute>
               <Dashboard />
             </PrivateAdminRoute>
           } />
+
+          {/* Panel para gestionar películas */}
+          <Route path="/dashboard/peliculas" element={
+            <PrivateAdminRoute>
+              <GestionPeliculas />
+            </PrivateAdminRoute>
+          } />
+
+          <Route path="/usuarios" element={<div>Panel de Gestión de Usuarios</div>} />
+          <Route path="/stats" element={<div>Panel de Estadísticas</div>} />
+
         </Routes>
       </Layout>
     </AuthProvider>
