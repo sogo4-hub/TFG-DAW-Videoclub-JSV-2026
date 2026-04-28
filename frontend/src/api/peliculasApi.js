@@ -18,3 +18,7 @@ export const getPeliculaById = async (id) => {
   const response = await axiosClient.get(`/api/peliculas/${id}`);
   return response.data;
 };
+
+export const deletePelicula = async (id) => {
+    return await axiosClient.delete(`/api/peliculas/${id}`);
+};

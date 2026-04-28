@@ -16,7 +16,8 @@ export const cancelarAlquiler = async (id) => {
 };
 
 // Marca el alquiler como reproducida cuando el usuario empieza a ver la película
-export const marcarReproducida = async (alquilerId) => {
-  const response = await axiosClient.patch(`/api/alquileres/${alquilerId}/reproducida`);
+// El backend espera PATCH /api/alquileres/{peliculaId}/reproducir
+export const marcarReproducida = async (peliculaId) => {
+  const response = await axiosClient.patch(`/api/alquileres/${peliculaId}/reproducir`);
   return response.data;
 };
