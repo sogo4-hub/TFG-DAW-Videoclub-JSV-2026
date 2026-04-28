@@ -29,4 +29,7 @@ public class Alquiler {
 
     @Column(name = "fecha_fin")
     private LocalDateTime fechaFin;
+
+    @Column(name = "reproducida")
+    private boolean reproducida; // Por defecto será false en Java
 }

@@ -1,5 +1,6 @@
 package es.daw.backend.service;
 
+import es.daw.backend.dto.AlquilerResponseDTO;
 import es.daw.backend.entity.Alquiler;
 import es.daw.backend.entity.Pelicula;
 import es.daw.backend.entity.Usuario;
@@ -24,13 +25,14 @@ public class AlquilerService {
     private final UsuarioRepository usuarioRepository;
     private final PeliculaRepository peliculaRepository;
 
-    public List<Pelicula> listarAlquileresActivos(String email) {
+    public List<AlquilerResponseDTO> listarAlquileresActivos(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
-        // Devolvemos solo los alquileres cuya fecha_fin sea mayor a "ahora"
-        return alquilerRepository.findByUsuario(usuario)
-                .stream()
+        return alquilerRepository.findByUsuario(usuario).stream()
                 .filter(a -> a.getFechaFin().isAfter(LocalDateTime.now()))
-                .map(Alquiler::getPelicula)
+                .map(a -> AlquilerResponseDTO.builder()
+                        .pelicula(a.getPelicula())
+                        .reproducida(a.isReproducida())
+                        .build())
                 .collect(Collectors.toList());
     }
 
@@ -78,13 +80,31 @@ public class AlquilerService {
                 usuario, pelicula, LocalDateTime.now());
 
         if (activo.isPresent()) {
+            if (activo.get().isReproducida()) {
+                throw new AlquilerNoActivoException("No puedes cancelar una película que ya has empezado a ver.");
+            }
             Alquiler alquiler = activo.get();
             // 2. MAGIA DE ARQUITECTURA: En vez de borrar, "caducamos" el alquiler instantáneamente
             alquiler.setFechaFin(LocalDateTime.now());
             alquilerRepository.save(alquiler);
         } else {
-            // ✅ USAMOS NUESTRA EXCEPCIÓN PERSONALIZADA
+            // USAMOS NUESTRA EXCEPCIÓN PERSONALIZADA
             throw new AlquilerNoActivoException("No tienes un alquiler activo para esta película.");
+        }
+    }
+
+    @Transactional
+    public void marcarComoReproducida(String email, Long idPelicula) {
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
+        Pelicula pelicula = peliculaRepository.findById(idPelicula).orElseThrow();
+
+        Optional<Alquiler> activo = alquilerRepository.findByUsuarioAndPeliculaAndFechaFinAfter(
+                usuario, pelicula, LocalDateTime.now());
+
+        if (activo.isPresent()) {
+            Alquiler alquiler = activo.get();
+            alquiler.setReproducida(true);
+            alquilerRepository.save(alquiler);
         }
     }
 
