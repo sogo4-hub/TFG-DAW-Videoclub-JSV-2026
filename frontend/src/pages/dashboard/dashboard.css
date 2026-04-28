@@ -17,7 +17,7 @@
 }
 
 .dashboard-card {
-    background: #242424;
+    background: #111111;
     padding: 20px;
     border-radius: 12px;
     text-align: center;
@@ -37,12 +37,12 @@
     margin-top: 15px;
     padding: 10px 15px;
     border: none;
-    background: #111;
+    background: #232323;
     color: white;
     border-radius: 8px;
     cursor: pointer;
 }
 
 .dashboard-card button:hover {
-    background: #870000;
+    background: #c7002c;
 }
