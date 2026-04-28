@@ -74,7 +74,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(java.util.List.of("http://localhost:5173", "http://localhost:3000"));
 
         // 2. Permitir los métodos HTTP que vais a usar
-        configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        //------julián, te añado patch para cancelación alquileres--------------
+        configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
         // 3. Permitir las cabeceras (¡CRUCIAL para que pase el token JWT!)
         configuration.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type"));

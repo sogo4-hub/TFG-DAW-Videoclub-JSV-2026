@@ -14,8 +14,14 @@ const MisAlquileres = () => {
     const fetchAlquileres = async () => {
       try {
         setLoading(true);
+        // El backend devuelve: { pelicula: { id, titulo, ... }, reproducida: boolean }
         const data = await getMisAlquileres();
-        setAlquileres(data);
+        // Aplanamos el objeto para que el JSX acceda directamente a los campos
+        const aplanados = data.map(item => ({
+          ...item.pelicula,
+          reproducida: item.reproducida,
+        }));
+        setAlquileres(aplanados);
       } catch (err) {
         setError(err.message || 'Error al cargar tus alquileres');
       } finally {
@@ -27,9 +33,9 @@ const MisAlquileres = () => {
 
   const handleCancelar = async (alquiler) => {
     try {
-      // El endpoint de cancelar recibe el id de la PELÍCULA, no del alquiler
+      // El endpoint de cancelar recibe el id de la PELÍCULA
       await cancelarAlquiler(alquiler.id);
-      setAlquileres(prev => prev.filter(a => a.alquilerId !== alquiler.alquilerId));
+      setAlquileres(prev => prev.filter(a => a.id !== alquiler.id));
     } catch (err) {
       alert('Error al cancelar el alquiler: ' + err.message);
     }
@@ -39,11 +45,11 @@ const MisAlquileres = () => {
   // Navegamos a la página de detalle donde el <video> hace streaming con el JWT correcto.
   const handleVerPelicula = async (alquiler) => {
     try {
-      // Marcamos el alquiler como reproducida antes de navegar
-      await marcarReproducida(alquiler.alquilerId);
+      // Marcamos como reproducida — el backend recibe el id de la PELÍCULA
+      await marcarReproducida(alquiler.id);
       // Actualizamos el estado local para ocultar el botón cancelar
       setAlquileres(prev =>
-        prev.map(a => a.alquilerId === alquiler.alquilerId ? { ...a, reproducida: true } : a)
+        prev.map(a => a.id === alquiler.id ? { ...a, reproducida: true } : a)
       );
     } catch (err) {
       // Si falla el marcado no bloqueamos la reproducción
@@ -61,7 +67,7 @@ const MisAlquileres = () => {
       <h1 className="alquileres-title">Mis alquileres</h1>
       <div className="peliculas-grid">
         {alquileres.map((alquiler) => (
-          <div key={alquiler.alquilerId} className="alquiler-card">
+          <div key={alquiler.id} className="alquiler-card">
             <img
               src={getMediaUrl(alquiler.urlImagen, 'w500')}
               alt={`Cartel de ${alquiler.titulo}`}

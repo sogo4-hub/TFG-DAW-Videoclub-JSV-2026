@@ -31,7 +31,7 @@ const cargarPeliculas = async () => {
                 // Filtramos el estado para quitar la borrada sin recargar la página
                 setPeliculas(peliculas.filter(p => p.id !== id));
             } catch (error) {
-                alert("No se pudo eliminar la película");
+                alert("No se pudo eliminar la película"+error);
             }
         }
     };
