@@ -38,12 +38,14 @@ CREATE TABLE favoritos (
 );
 
 -- Tabla para Alquileres
+-- En tu archivo main/resources/schema.sql, actualiza la tabla alquileres:
 CREATE TABLE alquileres (
                             id BIGINT AUTO_INCREMENT PRIMARY KEY,
                             usuario_id BIGINT NOT NULL,
                             pelicula_id BIGINT NOT NULL,
                             fecha_inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                            fecha_fin TIMESTAMP NOT NULL, -- Por ejemplo: fecha_inicio + 48 horas
+                            fecha_fin TIMESTAMP NOT NULL,
+                            reproducida BOOLEAN DEFAULT FALSE, -- <--- AÑADE ESTA LÍNEA
                             FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
                             FOREIGN KEY (pelicula_id) REFERENCES peliculas(id) ON DELETE CASCADE
 );

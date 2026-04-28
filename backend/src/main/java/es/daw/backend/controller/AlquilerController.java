@@ -1,5 +1,6 @@
 package es.daw.backend.controller;
 
+import es.daw.backend.dto.AlquilerResponseDTO;
 import es.daw.backend.entity.Pelicula;
 import es.daw.backend.service.AlquilerService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class AlquilerController {
     private final AlquilerService alquilerService;
 
     @GetMapping
-    public ResponseEntity<List<Pelicula>> misAlquileres() {
+    public ResponseEntity<List<AlquilerResponseDTO>> misAlquileres() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(alquilerService.listarAlquileresActivos(email));
     }
@@ -42,5 +43,12 @@ public class AlquilerController {
         Map<String, String> response = new HashMap<>();
         response.put("mensaje", "Alquiler cancelado correctamente");
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{peliculaId}/reproducir")
+    public ResponseEntity<Void> marcarReproducida(@PathVariable Long peliculaId) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        alquilerService.marcarComoReproducida(email, peliculaId);
+        return ResponseEntity.ok().build();
     }
 }
