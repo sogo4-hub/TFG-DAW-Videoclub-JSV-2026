@@ -6,7 +6,7 @@ import useSearchBar from '../../hooks/useSearchBar'
 
 const GENEROS = [
   'Drama', 'Romance', 'Aventura', 'Ciencia ficción',
-  'Acción', 'Comedia', 'Terror', 'Suspense', 'Misterio', 'Western'
+  'Acción', 'Comedia', 'Terror', 'Suspense', 'Misterio', 'Western', 'Historia'
 ]
 
 const NavBar = () => {

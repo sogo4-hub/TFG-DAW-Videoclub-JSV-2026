@@ -108,3 +108,8 @@
         transform: rotate(360deg);
     }
 }
+
+.catalogo-sin-genero {
+    text-align: center;
+    color: #c64949;
+}
