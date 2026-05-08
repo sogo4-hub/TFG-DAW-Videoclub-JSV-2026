@@ -13,42 +13,55 @@ import MisAlquileres from './pages/misAlquileres/MisAlquileres';
 
 import GestionPeliculas from "./pages/dashboard/GestionPeliculas.jsx";
 
+import ClickSpark from './components/ClickSpark';
+
+
+
 function App() {
   return (
-    <AuthProvider>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registro" element={<Registro />} />
-          <Route path="/catalogo" element={<Catalogo />} />
-          <Route path="/pelicula/:id" element={<DetallePelicula />} />
+    <ClickSpark
+      sparkColor="#ffffff"
+      sparkSize={10}
+      sparkRadius={15}
+      sparkCount={8}
+      duration={400}
+    >
+      < AuthProvider >
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registro" element={<Registro />} />
+            <Route path="/catalogo" element={<Catalogo />} />
+            <Route path="/pelicula/:id" element={<DetallePelicula />} />
 
-          <Route path="/favoritos" element={<Favoritos />} />
-          <Route path="/mis-alquileres" element={<MisAlquileres />} />
+            <Route path="/favoritos" element={<Favoritos />} />
+            <Route path="/mis-alquileres" element={<MisAlquileres />} />
 
-          {/*Rutas protegidas para el admin*/}
+            {/*Rutas protegidas para el admin*/}
 
-          {/* El Menú Principal del Dashboard */}
-          <Route path="/dashboard" element={
-            <PrivateAdminRoute>
-              <Dashboard />
-            </PrivateAdminRoute>
-          } />
+            {/* El Menú Principal del Dashboard */}
+            <Route path="/dashboard" element={
+              <PrivateAdminRoute>
+                <Dashboard />
+              </PrivateAdminRoute>
+            } />
 
-          {/* Panel para gestionar películas */}
-          <Route path="/dashboard/peliculas" element={
-            <PrivateAdminRoute>
-              <GestionPeliculas />
-            </PrivateAdminRoute>
-          } />
+            {/* Panel para gestionar películas */}
+            <Route path="/dashboard/peliculas" element={
+              <PrivateAdminRoute>
+                <GestionPeliculas />
+              </PrivateAdminRoute>
+            } />
 
-          <Route path="/usuarios" element={<div>Panel de Gestión de Usuarios</div>} />
-          <Route path="/stats" element={<div>Panel de Estadísticas</div>} />
+            <Route path="/usuarios" element={<div>Panel de Gestión de Usuarios</div>} />
+            <Route path="/stats" element={<div>Panel de Estadísticas</div>} />
 
-        </Routes>
-      </Layout>
-    </AuthProvider>
+          </Routes>
+        </Layout>
+      </AuthProvider >
+    </ClickSpark >
+
   );
 }
 

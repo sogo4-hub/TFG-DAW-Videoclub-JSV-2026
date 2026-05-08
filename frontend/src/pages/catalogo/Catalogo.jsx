@@ -9,7 +9,7 @@ import './Catalogo.css';
 
 const Catalogo = () => {
   const { loading, error, peliculas } = usePeliculas();
-  const { peliculasFiltradas, searchQuery } = useFiltrarPeliculas(peliculas);
+  const { peliculasFiltradas, searchQuery, generoActivo } = useFiltrarPeliculas(peliculas);
   const { token } = useAuth();
   const isLogged = !!token;
   const [alquiladas, setAlquiladas] = useState([]);
@@ -43,6 +43,10 @@ const Catalogo = () => {
     </div>
   );
 
+    const sinResultadosDeGenero = generoActivo && peliculasFiltradas.length === 0;
+  const peliculasAMostrar = sinResultadosDeGenero ? peliculas : peliculasFiltradas;
+
+
   return (
     <div className="catalogo-container">
       <h1 className="catalogo-titulo">Catálogo de películas</h1>
@@ -52,9 +56,17 @@ const Catalogo = () => {
           {peliculasFiltradas.length === 0 && ' — No se encontraron resultados'}
         </p>
       )}
+
+       {sinResultadosDeGenero && (
+        <p className="catalogo-sin-genero">
+          Wups no hay películas de <strong>{generoActivo}</strong> en el catálogo ahora mismo :v
+        </p>
+      )}
+
+      
       
       <div className="catalogo-grid">
-        {peliculasFiltradas.map((pelicula) => (
+        {peliculasAMostrar.map((pelicula) => (
           <PeliculaCard
             key={`${pelicula.id}-${favoritas.includes(pelicula.id)}-${alquiladas.includes(pelicula.id)}`}
             pelicula={pelicula}
