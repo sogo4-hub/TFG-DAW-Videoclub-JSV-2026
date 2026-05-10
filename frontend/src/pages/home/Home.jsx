@@ -1,6 +1,10 @@
+import { Link } from "react-router-dom";
+import { useAuth } from '../../context/AuthContext'
 import "./Home.css";
 
 export default function Home() {
+  const { rol } = useAuth();
+
   return (
     <div className="home">
 
@@ -21,11 +25,11 @@ export default function Home() {
           <a href="/catalogo" className="hero-cta">Explorar catálogo →</a>
         </div>
         <img className="hero-img" src="/imgs/vhs-fondo.jpg" alt="Fondo" />
-      <img className="hero-side-img" src="/imgs/posters.avif" alt="Videoclub" />
+        <img className="hero-side-img" src="/imgs/posters.avif" alt="Videoclub" />
 
       </section>
 
-      {/* ── HORARIO ── */}
+      {/* ── HORARIO + AYUDA ── */}
       <section className="schedule">
         <div className="schedule-glow" />
 
@@ -55,7 +59,33 @@ export default function Home() {
           <p className="schedule-note">
             * El catálogo online está disponible <strong>24 horas</strong>, todos los días.
           </p>
+
+          
         </div>
+
+        {/*-----chat de ayuda*/}
+          {/*el admin va al panel del dashboard, el usuario al chat normal*/}
+          <p className="schedule-ayuda">
+            {rol === 'ADMIN' ? (
+              <>
+                Gestiona las dudas de los usuarios desde{' '}
+                <Link to="/dashboard/chat" className="ayuda-link">
+                  el panel de ayuda
+                </Link>.
+              </>
+            ) : (
+              <>
+                ¿Tienes alguna duda? 
+                <br></br>Pregunta{' '}
+                <Link to="/ayuda" className="ayuda-link">
+                  aquí
+                </Link>
+                {' '}y un administrador te responderá.
+                <br></br>
+                <p style={{ fontSize: 'large' , color: "darkgray"}}>(debes iniciar sesión para preguntar)</p>
+              </>
+            )}
+          </p>
       </section>
 
     </div>

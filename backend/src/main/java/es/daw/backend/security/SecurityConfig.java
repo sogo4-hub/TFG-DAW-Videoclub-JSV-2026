@@ -40,9 +40,11 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll() // Permiso para la consola H2
                         .requestMatchers("/error").permitAll() // Para ver el error
                         .requestMatchers(HttpMethod.GET, "/api/peliculas/**").permitAll() // Catálogo público
-                        .requestMatchers(HttpMethod.GET, "/api/media/**").permitAll() //AÑADE ESTA LÍNEA PARA LAS IMÁGENES
-                        .anyRequest().authenticated()
-                )
+                        .requestMatchers(HttpMethod.GET, "/api/media/**").permitAll() // AÑADE ESTA LÍNEA PARA LAS
+                                                                                      // IMÁGENES
+                        .requestMatchers("/api/chat/mensaje").permitAll() // lo llama Node.js sin token
+                        .requestMatchers("/api/chat/respuesta").permitAll() // lo llama Node.js sin token
+                        .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -70,11 +72,12 @@ public class SecurityConfig {
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
 
-        // 1. Permitir el puerto donde corre el frontend de Sara (React/Vite suele ser 5173, si usa Create React App es 3000)
+        // 1. Permitir el puerto donde corre el frontend de Sara (React/Vite suele ser
+        // 5173, si usa Create React App es 3000)
         configuration.setAllowedOrigins(java.util.List.of("http://localhost:5173", "http://localhost:3000"));
 
         // 2. Permitir los métodos HTTP que vais a usar
-        //------julián, te añado patch para cancelación alquileres--------------
+        // ------julián, te añado patch para cancelación alquileres--------------
         configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
         // 3. Permitir las cabeceras (¡CRUCIAL para que pase el token JWT!)
