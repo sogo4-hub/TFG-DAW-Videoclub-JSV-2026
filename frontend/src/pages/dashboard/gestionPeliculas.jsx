@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { getPeliculas, deletePelicula } from "../../api/peliculasApi"; 
 import "./dashboard.css"; // Reutilizamos estilos o crea uno nuevo
+import FormularioPelicula from './formularioPeliculas.jsx';
 
 export default function GestionPeliculas() {
     const [peliculas, setPeliculas] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
     // 1. Cargar películas al montar el componente
     useEffect(() => {
@@ -36,13 +38,24 @@ const cargarPeliculas = async () => {
         }
     };
 
+    const handlePeliculaAnadida = () => {
+        setMostrarFormulario(false);
+        cargarPeliculas();
+    };
+
     if (loading) return <p>Cargando catálogo...</p>;
 
     return (
         <div className="gestion-container">
-            <h2>Gestión de Catálogo</h2>
-            <button className="btn-add">Añadir Nueva Película</button>
-            
+            <h2 className="gestionPeliculas">Gestión de Catálogo</h2>
+            <button className="btn-add" onClick={() => setMostrarFormulario(!mostrarFormulario)} >
+                {mostrarFormulario ? "Cerrar Formulario" : "Añadir Nueva Película"}
+            </button>
+            {mostrarFormulario && (
+                <div className="formulario-wrapper">
+                    <FormularioPelicula alFinalizar={handlePeliculaAnadida} />
+                </div>
+            )}
             <table className="gestion-table">
                 <thead>
                     <tr>
@@ -59,9 +72,7 @@ const cargarPeliculas = async () => {
                             <td>{pelicula.titulo}</td>
                             <td>{pelicula.genero}</td>
                             <td>
-                                <button onClick={() => console.log("Editar", pelicula.id)}>
-                                    Editar
-                                </button>
+                                
                                 <button 
                                     className="btn-delete"
                                     onClick={() => handleEliminar(pelicula.id)}
