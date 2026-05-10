@@ -46,3 +46,44 @@
 .dashboard-card button:hover {
     background: #c7002c;
 }
+
+.gestionPeliculas {
+    margin-top: 30px;
+    color: #c7002c;
+    font-size: xx-large;
+}
+
+.btn-add {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    position: relative;
+    left: 50%;
+    top: 15px;
+    transform: translate(-50%, -50%);
+
+}
+
+.btn-add:hover,
+.btn-delete:hover {
+    background: #c7002c;
+    border: 1px solid transparent;
+}
+
+
+
+
+h2 {
+    text-align: center
+}
+
+.gestion-table {
+    padding: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
