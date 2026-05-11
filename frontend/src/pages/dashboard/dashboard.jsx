@@ -46,6 +46,15 @@ export default function Dashboard() {
                     </button>
                 </div>
 
+                {/*------la parte del chat*/}
+                <div className="dashboard-card">
+                    <h2>Chat de Ayuda</h2>
+                    <p>Revisa y responde las dudas de los usuarios.</p>
+                    <button onClick={() => handleNavigation("/dashboard/chat")}>
+                        Ir al Chat
+                    </button>
+                </div>
+
             </div>
         </div>
     );

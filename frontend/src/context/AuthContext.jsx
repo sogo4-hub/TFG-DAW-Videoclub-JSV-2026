@@ -9,17 +9,17 @@ export const AuthProvider = ({ children }) => {
   
   const login = ({ token, rol, nombre }) => {
     setAuthData({ token, rol, nombre })
-    localStorage.setItem('auth', JSON.stringify({ token, rol, nombre }))
+    sessionStorage.setItem('auth', JSON.stringify({ token, rol, nombre }))
   }
   
   const logout = () => {
     setAuthData({ token: null, rol: null, nombre:null })
-    localStorage.removeItem('auth')
+    sessionStorage.removeItem('auth')
   }
 
   
   useEffect(() => {
-    const saved = localStorage.getItem('auth')
+    const saved = sessionStorage.getItem('auth')
     if (saved) {
       setAuthData(JSON.parse(saved))
     }

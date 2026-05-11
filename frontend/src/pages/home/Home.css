@@ -127,13 +127,16 @@
 
 /* ── HORARIO ── */
 .schedule {
-  padding: 5rem 6rem;
+  padding: 5rem 8rem 5rem 6rem;
   background: #0d0d0f;
   border-top: 1px solid #2a1a3a;
   position: relative;
   background: #0d0d0f;
   position: relative;
   overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 /* Línea morada decorativa arriba */
@@ -158,7 +161,8 @@
 }
 
 .schedule-inner {
-  max-width: 680px;
+  max-width: none;
+  width: 35%;
 }
 
 .schedule-glow {
@@ -229,6 +233,24 @@
 .schedule-note strong {
   color: #cc2244;
   font-weight: 500;
+}
+
+/*enlace chat*/
+.schedule-ayuda {
+  margin-right: 4rem;
+  font-size: x-large;
+  margin-top: 9rem;
+}
+
+.ayuda-link {
+  color: #5f85ee;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.ayuda-link:hover {
+  color: #7b1fa2;
 }
 
 /* ── RESPONSIVE ── */

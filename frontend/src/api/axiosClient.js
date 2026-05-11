@@ -5,7 +5,9 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-  const auth = localStorage.getItem('auth');
+  // const auth = localStorage.getItem('auth');
+  const auth = sessionStorage.getItem('auth')
+
   if (auth) {
     const { token } = JSON.parse(auth);
     if (token) {
