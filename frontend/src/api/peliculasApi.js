@@ -39,3 +39,8 @@ export const importarDesdeTmdb = async (tmdbId) => {
   const response = await axiosClient.post(`/api/peliculas/tmdb/import/${tmdbId}`);
   return response.data;
 };
+
+export const subirVideoPelicula = async (idInterno, formData) => {
+    const response = await axiosClient.patch(`/api/peliculas/${idInterno}/upload-video`, formData);
+    return response.data;
+};
