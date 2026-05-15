@@ -161,4 +161,62 @@ public class PeliculaService {
             throw new RuntimeException("Error crítico al subir el archivo a MongoDB Atlas: " + e.getMessage());
         }
     }
+
+    @Transactional
+    public PeliculaResponse importarPeliculaConVideo(Long tmdbId, MultipartFile videoFile) throws java.io.IOException {
+    // 1. Reutilizamos tu lógica de importación actual para obtener la entidad
+    // Ojo: He modificado un poco el flujo para que no se guarde dos veces innecesariamente
+    
+    if (peliculaRepository.existsByTmdbId(tmdbId)) {
+        throw new PeliculaAlreadyExistsException("La película ya existe en nuestro catálogo local.");
+    }
+
+    // Traemos datos de TMDB (reutilizando tu lógica)
+    TmdbMovieDTO tmdbData = tmdbService.getMovieDetails(tmdbId)
+            .orElseThrow(() -> new RuntimeException("Película no encontrada en TMDB."));
+
+    Pelicula pelicula = new Pelicula();
+    pelicula.setTitulo(tmdbData.getTitle());
+    pelicula.setSinopsis(tmdbData.getOverview());
+    pelicula.setUrlImagen(tmdbData.getPosterPath());
+    pelicula.setTmdbId(tmdbId);
+    pelicula.setBackdropPath(tmdbData.getBackdropPath());
+    pelicula.setVoteAverage(tmdbData.getVoteAverage());
+
+    // Año
+    if (tmdbData.getReleaseDate() != null && tmdbData.getReleaseDate().length() >= 4) {
+        pelicula.setAnio(Integer.parseInt(tmdbData.getReleaseDate().substring(0, 4)));
+    }
+
+    // Géneros
+    if (tmdbData.getGenres() != null && !tmdbData.getGenres().isEmpty()) {
+        String generosFormateados = tmdbData.getGenres().stream()
+                .map(TmdbGenreDTO::getName)
+                .reduce((g1, g2) -> g1 + ", " + g2)
+                .orElse("Desconocido");
+        pelicula.setGenero(generosFormateados);
+    }
+
+    // Director
+    if (tmdbData.getCredits() != null && tmdbData.getCredits().getCrew() != null) {
+        String director = tmdbData.getCredits().getCrew().stream()
+                .filter(crewMember -> "Director".equals(crewMember.getJob()))
+                .map(TmdbCrewDTO::getName)
+                .findFirst()
+                .orElse("Desconocido");
+        pelicula.setDirector(director);
+    }
+
+    // 2. PROCESAR EL VIDEO (La parte nueva)
+    if (videoFile != null && !videoFile.isEmpty()) {
+        // Usamos el método que ya tienes en tu service (uploadFile)
+        String gridFsId = mediaService.uploadFile(videoFile);
+        // Usamos tu ruta de stream
+        pelicula.setUrlVideo("/api/media/stream/" + gridFsId);
+    }
+
+    // 3. Guardar todo el conjunto en H2
+    Pelicula guardada = peliculaRepository.save(pelicula);
+    return peliculaMapper.toResponseDTO(guardada);
+}
 }

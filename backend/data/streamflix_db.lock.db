@@ -1,6 +1,6 @@
 #FileLock
-#Fri May 15 02:28:27 CEST 2026
-hostName=LAPTOP-SBPA9LV0
-id=19e2908d4ecdb0878f8c29ca362bbf8160ef8217d1d
+#Fri May 15 21:24:37 CEST 2026
+hostName=LAPTOP-KEQ448AR.home
+id=19e2d19106dce795665b37f08fc85af0c0f489b5e8f
 method=file
-server=192.168.0.14\:65097
+server=192.168.1.25\:33374
