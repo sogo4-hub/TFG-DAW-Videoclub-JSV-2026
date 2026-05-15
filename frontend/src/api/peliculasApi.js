@@ -24,14 +24,18 @@ export const getPeliculaById = async (id) => {
 
 export const savePelicula = async (pelicula) => {
   const response = await axiosClient.post(
-    '/api/peliculas',
-    pelicula
+    `/api/peliculas/tmdb/import/${pelicula.tmdbId}`
   );
-
   return response.data;
 };
 
 
 export const deletePelicula = async (id) => {
     return await axiosClient.delete(`/api/peliculas/${id}`);
+};
+
+//pa importar la peli, pasándole el id de la peli de tmdb
+export const importarDesdeTmdb = async (tmdbId) => {
+  const response = await axiosClient.post(`/api/peliculas/tmdb/import/${tmdbId}`);
+  return response.data;
 };

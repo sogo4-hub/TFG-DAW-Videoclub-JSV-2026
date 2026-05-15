@@ -25,7 +25,11 @@ const Catalogo = () => {
       try {
         const alquileres = await getMisAlquileres();
         const favs = await getFavoritos();
-        const idsAlquiladas = alquileres.map(a => a.id);
+
+        // const idsAlquiladas = alquileres.map(a => a.id);
+        // |--------> cambiamos la estructura, el id ahora está en a.pelicula.id
+        const idsAlquiladas = alquileres.map(a => a.pelicula?.id ?? a.id);
+
         const idsFavoritas = favs.map(f => f.id);
         setAlquiladas(idsAlquiladas);
         setFavoritas(idsFavoritas);
@@ -43,7 +47,7 @@ const Catalogo = () => {
     </div>
   );
 
-    const sinResultadosDeGenero = generoActivo && peliculasFiltradas.length === 0;
+  const sinResultadosDeGenero = generoActivo && peliculasFiltradas.length === 0;
   const peliculasAMostrar = sinResultadosDeGenero ? peliculas : peliculasFiltradas;
 
 
@@ -57,14 +61,14 @@ const Catalogo = () => {
         </p>
       )}
 
-       {sinResultadosDeGenero && (
+      {sinResultadosDeGenero && (
         <p className="catalogo-sin-genero">
           Wups no hay películas de <strong>{generoActivo}</strong> en el catálogo ahora mismo :v
         </p>
       )}
 
-      
-      
+
+
       <div className="catalogo-grid">
         {peliculasAMostrar.map((pelicula) => (
           <PeliculaCard

@@ -28,7 +28,8 @@ function Login() {
         }
     }
 
-    async function pulsarBoton() {
+    async function pulsarBoton(e) {
+        e.preventDefault()
         setLoading(true)
         setErrores({})
 
@@ -76,37 +77,43 @@ function Login() {
                         {errores.general}
                     </div>
                 )}
-                <div>
-                    <label>Nombre o email:</label>
-                    <input
-                        name="email"
-                        type="text"
-                        placeholder="Introduce tu nombre o email"
-                        value={camposLogin.email}
-                        onChange={handleChange}
-                        required
-                    />
-                    {errores.email && <div className="errorMensaje">{errores.email}</div>}
-                </div>
-                <div>
-                    <label>Contraseña:</label>
-                    <input
-                        name="password"
-                        type="password"
-                        placeholder="Introduce tu contraseña"
-                        value={camposLogin.password}
-                        onChange={handleChange}
-                        required
-                    />
-                    {errores.password && <div className="errorMensaje">{errores.password}</div>}
-                </div>
-                <button type="submit" disabled={loading} onClick={pulsarBoton}>
-                    {loading ? 'Enviando...' : 'Iniciar sesión'}
-                </button>
-                <p>
-                    ¿Aún no tienes cuenta? <i className="fa-solid fa-hand-point-right"></i>
-                    <Link to="/registro"> Regístrate</Link>
-                </p>
+
+                <form onSubmit={pulsarBoton}>
+                    <div>
+                        <label>Nombre o email:</label>
+                        <input
+                            name="email"
+                            type="text"
+                            placeholder="Introduce tu nombre o email"
+                            value={camposLogin.email}
+                            onChange={handleChange}
+                            required
+                        />
+                        {errores.email && <div className="errorMensaje">{errores.email}</div>}
+                    </div>
+
+                    <div>
+                        <label>Contraseña:</label>
+                        <input
+                            name="password"
+                            type="password"
+                            placeholder="Introduce tu contraseña"
+                            value={camposLogin.password}
+                            onChange={handleChange}
+                            required
+                        />
+                        {errores.password && <div className="errorMensaje">{errores.password}</div>}
+                    </div>
+
+                    <button type="submit" disabled={loading}>
+                        {loading ? 'Enviando...' : 'Iniciar sesión'}
+                    </button>
+                    
+                    <p>
+                        ¿Aún no tienes cuenta? <i className="fa-solid fa-hand-point-right"></i>
+                        <Link to="/registro"> Regístrate</Link>
+                    </p>
+                </form>
             </div>
         </div>
     )
