@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import './NavBar.css'
@@ -33,6 +33,9 @@ const NavBar = () => {
     } else {
       params.set('genre', genero)
     }
+    //cuando cambie el genero en el filtro, vuelve a la pag 0:
+      params.set('page', '0')
+
     setDesplegableAbierto(false)
     navigate(`/catalogo?${params.toString()}`)
   }
@@ -161,9 +164,9 @@ const NavBar = () => {
         </div>
 
       </nav>
-      <img src="/imgs/masking-tape.png" className='tape-navbar'></img>
+      <img src="/imgs/masking-tape.png" className='tape-navbar' alt=""></img>
     </>
   )
 }
 
-export default NavBar
+export default NavBar;

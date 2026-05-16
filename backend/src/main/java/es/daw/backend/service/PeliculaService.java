@@ -10,11 +10,12 @@ import es.daw.backend.exception.PeliculaAlreadyExistsException;
 import es.daw.backend.mapper.PeliculaMapper;
 import es.daw.backend.repository.PeliculaRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +26,23 @@ public class PeliculaService {
     private final PeliculaMapper peliculaMapper;
     private final MediaService mediaService;
 
-    public List<PeliculaResponse> listarTodas() {
-        return peliculaRepository.findAll().stream()
-                .map(peliculaMapper::toResponseDTO)
-                .toList();
+    // public List<PeliculaResponse> listarTodas() {
+    // return peliculaRepository.findAll().stream()
+    // .map(peliculaMapper::toResponseDTO)
+    // .toList();
+    // }
+
+     public Page<PeliculaResponse> listarPaginadas(String search, String genero, Pageable pageable) {
+        String tituloFiltro = (search == null) ? "" : search.trim();
+        String generoFiltro = (genero == null) ? "" : genero.trim();
+
+        return peliculaRepository
+                .findByTituloContainingIgnoreCaseAndGeneroContainingIgnoreCase(
+                        tituloFiltro,
+                        generoFiltro,
+                        pageable
+                )
+                .map(peliculaMapper::toResponseDTO);
     }
 
     public PeliculaResponse guardar(PeliculaRequest request) {
@@ -57,7 +71,8 @@ public class PeliculaService {
         });
     }
 
-    public PeliculaResponse guardarConImagen(PeliculaRequest request, MultipartFile archivo) throws java.io.IOException {
+    public PeliculaResponse guardarConImagen(PeliculaRequest request, MultipartFile archivo)
+            throws java.io.IOException {
         // 1. Guardamos la imagen en MongoDB y obtenemos su ID
         String mongoId = mediaService.guardarArchivo(archivo);
 
@@ -71,7 +86,8 @@ public class PeliculaService {
         return peliculaMapper.toResponseDTO(guardada);
     }
 
-    public PeliculaResponse guardarConMultimedia(PeliculaRequest request, MultipartFile imagen, MultipartFile video) throws java.io.IOException {
+    public PeliculaResponse guardarConMultimedia(PeliculaRequest request, MultipartFile imagen, MultipartFile video)
+            throws java.io.IOException {
         // 1. Guardamos la imagen en MongoDB
         String imgId = mediaService.guardarArchivo(imagen);
 
@@ -131,7 +147,8 @@ public class PeliculaService {
             pelicula.setDirector(director);
         }
 
-        // OJO: El GridFsId (el vídeo en mongo) estará nulo/vacío hasta que lo subas desde un panel de admin.
+        // OJO: El GridFsId (el vídeo en mongo) estará nulo/vacío hasta que lo subas
+        // desde un panel de admin.
         // pelicula.setGridFsId(null);
 
         // 4. Guardar en H2 y retornar DTO
