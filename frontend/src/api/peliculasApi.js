@@ -4,7 +4,7 @@ const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p';
 
 export const getMediaUrl = (path, size = 'w500') => {
   if (!path) return null;
-    if (path.startsWith('/api/media/')) {
+  if (path.startsWith('/api/media/')) {
     return `http://localhost:8080${path}`;
   }
 
@@ -12,8 +12,34 @@ export const getMediaUrl = (path, size = 'w500') => {
 
 };
 
-export const getPeliculas = async () => {
-  const response = await axiosClient.get('/api/peliculas');
+// export const getPeliculas = async () => {
+//   const response = await axiosClient.get('/api/peliculas');
+//   return response.data;
+// };
+
+
+export const getPeliculas = async (
+  page = 0,
+  size = 16,
+  search = '',
+  genre = ''
+) => {
+  const response = await axiosClient.get('/api/peliculas', {
+    params: {
+      page,
+      size,
+      // sort: 'titulo,asc',
+      search,
+      genre
+    }
+  });
+
+  return response.data;
+};
+
+// Para el dashboard del admin — devuelve todas sin límite de paginación
+export const getPeliculasTodas = async () => {
+  const response = await axiosClient.get('/api/peliculas/todas');
   return response.data;
 };
 
@@ -31,7 +57,7 @@ export const savePelicula = async (pelicula) => {
 
 
 export const deletePelicula = async (id) => {
-    return await axiosClient.delete(`/api/peliculas/${id}`);
+  return await axiosClient.delete(`/api/peliculas/${id}`);
 };
 
 //pa importar la peli, pasándole el id de la peli de tmdb

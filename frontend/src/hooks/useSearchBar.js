@@ -1,22 +1,34 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const useSearch = () => {
-  const [query, setQuery] = useState('')
-  const navigate = useNavigate()
+const useSearchBar = () => {
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setQuery(params.get('search') || '');
+  }, [location.search]);
 
   const handleSearch = (e) => {
-    if (e.key === 'Enter') {
-      if (query.trim()) {
-        navigate(`/catalogo?search=${encodeURIComponent(query.trim())}`)
-      } else {
-        //búsqueda vacía, muestra todo el catálogo
-        navigate('/catalogo')
-      }
+    if (e.key !== 'Enter') return;
+
+    const params = new URLSearchParams(location.search);
+    const value = query.trim();
+
+    if (value) {
+      params.set('search', value);
+    } else {
+      params.delete('search');
     }
-  }
 
-  return { query, setQuery, handleSearch }
-}
+    params.set('page', '0');
 
-export default useSearch
+    navigate(`/catalogo?${params.toString()}`);
+  };
+
+  return { query, setQuery, handleSearch };
+};
+
+export default useSearchBar;

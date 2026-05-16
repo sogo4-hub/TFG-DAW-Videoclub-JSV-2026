@@ -10,6 +10,9 @@ import es.daw.backend.exception.PeliculaAlreadyExistsException;
 import es.daw.backend.mapper.PeliculaMapper;
 import es.daw.backend.repository.PeliculaRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +28,26 @@ public class PeliculaService {
     private final PeliculaMapper peliculaMapper;
     private final MediaService mediaService;
 
-    public List<PeliculaResponse> listarTodas() {
+    // public List<PeliculaResponse> listarTodas() {
+    // return peliculaRepository.findAll().stream()
+    // .map(peliculaMapper::toResponseDTO)
+    // .toList();
+    // }
+
+    public Page<PeliculaResponse> listarPaginadas(String search, String genero, Pageable pageable) {
+        String tituloFiltro = (search == null) ? "" : search.trim();
+        String generoFiltro = (genero == null) ? "" : genero.trim();
+
+        return peliculaRepository
+                .findByTituloContainingIgnoreCaseAndGeneroContainingIgnoreCase(
+                        tituloFiltro,
+                        generoFiltro,
+                        pageable)
+                .map(peliculaMapper::toResponseDTO);
+    }
+
+    // Para el dashboard del admin — devuelve todas sin límite de paginación
+    public List<PeliculaResponse> listarTodasSinPaginar() {
         return peliculaRepository.findAll().stream()
                 .map(peliculaMapper::toResponseDTO)
                 .toList();
@@ -57,7 +79,8 @@ public class PeliculaService {
         });
     }
 
-    public PeliculaResponse guardarConImagen(PeliculaRequest request, MultipartFile archivo) throws java.io.IOException {
+    public PeliculaResponse guardarConImagen(PeliculaRequest request, MultipartFile archivo)
+            throws java.io.IOException {
         // 1. Guardamos la imagen en MongoDB y obtenemos su ID
         String mongoId = mediaService.guardarArchivo(archivo);
 
@@ -71,7 +94,8 @@ public class PeliculaService {
         return peliculaMapper.toResponseDTO(guardada);
     }
 
-    public PeliculaResponse guardarConMultimedia(PeliculaRequest request, MultipartFile imagen, MultipartFile video) throws java.io.IOException {
+    public PeliculaResponse guardarConMultimedia(PeliculaRequest request, MultipartFile imagen, MultipartFile video)
+            throws java.io.IOException {
         // 1. Guardamos la imagen en MongoDB
         String imgId = mediaService.guardarArchivo(imagen);
 
@@ -131,7 +155,8 @@ public class PeliculaService {
             pelicula.setDirector(director);
         }
 
-        // OJO: El GridFsId (el vídeo en mongo) estará nulo/vacío hasta que lo subas desde un panel de admin.
+        // OJO: El GridFsId (el vídeo en mongo) estará nulo/vacío hasta que lo subas
+        // desde un panel de admin.
         // pelicula.setGridFsId(null);
 
         // 4. Guardar en H2 y retornar DTO
@@ -164,59 +189,60 @@ public class PeliculaService {
 
     @Transactional
     public PeliculaResponse importarPeliculaConVideo(Long tmdbId, MultipartFile videoFile) throws java.io.IOException {
-    // 1. Reutilizamos tu lógica de importación actual para obtener la entidad
-    // Ojo: He modificado un poco el flujo para que no se guarde dos veces innecesariamente
-    
-    if (peliculaRepository.existsByTmdbId(tmdbId)) {
-        throw new PeliculaAlreadyExistsException("La película ya existe en nuestro catálogo local.");
+        // 1. Reutilizamos tu lógica de importación actual para obtener la entidad
+        // Ojo: He modificado un poco el flujo para que no se guarde dos veces
+        // innecesariamente
+
+        if (peliculaRepository.existsByTmdbId(tmdbId)) {
+            throw new PeliculaAlreadyExistsException("La película ya existe en nuestro catálogo local.");
+        }
+
+        // Traemos datos de TMDB (reutilizando tu lógica)
+        TmdbMovieDTO tmdbData = tmdbService.getMovieDetails(tmdbId)
+                .orElseThrow(() -> new RuntimeException("Película no encontrada en TMDB."));
+
+        Pelicula pelicula = new Pelicula();
+        pelicula.setTitulo(tmdbData.getTitle());
+        pelicula.setSinopsis(tmdbData.getOverview());
+        pelicula.setUrlImagen(tmdbData.getPosterPath());
+        pelicula.setTmdbId(tmdbId);
+        pelicula.setBackdropPath(tmdbData.getBackdropPath());
+        pelicula.setVoteAverage(tmdbData.getVoteAverage());
+
+        // Año
+        if (tmdbData.getReleaseDate() != null && tmdbData.getReleaseDate().length() >= 4) {
+            pelicula.setAnio(Integer.parseInt(tmdbData.getReleaseDate().substring(0, 4)));
+        }
+
+        // Géneros
+        if (tmdbData.getGenres() != null && !tmdbData.getGenres().isEmpty()) {
+            String generosFormateados = tmdbData.getGenres().stream()
+                    .map(TmdbGenreDTO::getName)
+                    .reduce((g1, g2) -> g1 + ", " + g2)
+                    .orElse("Desconocido");
+            pelicula.setGenero(generosFormateados);
+        }
+
+        // Director
+        if (tmdbData.getCredits() != null && tmdbData.getCredits().getCrew() != null) {
+            String director = tmdbData.getCredits().getCrew().stream()
+                    .filter(crewMember -> "Director".equals(crewMember.getJob()))
+                    .map(TmdbCrewDTO::getName)
+                    .findFirst()
+                    .orElse("Desconocido");
+            pelicula.setDirector(director);
+        }
+
+        // 2. PROCESAR EL VIDEO (La parte nueva)
+        if (videoFile != null && !videoFile.isEmpty()) {
+            // Usamos el método que ya tienes en tu service (uploadFile)
+            String gridFsId = mediaService.uploadFile(videoFile);
+            // Usamos tu ruta de stream
+            pelicula.setUrlVideo("/api/media/stream/" + gridFsId);
+        }
+
+        // 3. Guardar todo el conjunto en H2
+        Pelicula guardada = peliculaRepository.save(pelicula);
+        return peliculaMapper.toResponseDTO(guardada);
     }
-
-    // Traemos datos de TMDB (reutilizando tu lógica)
-    TmdbMovieDTO tmdbData = tmdbService.getMovieDetails(tmdbId)
-            .orElseThrow(() -> new RuntimeException("Película no encontrada en TMDB."));
-
-    Pelicula pelicula = new Pelicula();
-    pelicula.setTitulo(tmdbData.getTitle());
-    pelicula.setSinopsis(tmdbData.getOverview());
-    pelicula.setUrlImagen(tmdbData.getPosterPath());
-    pelicula.setTmdbId(tmdbId);
-    pelicula.setBackdropPath(tmdbData.getBackdropPath());
-    pelicula.setVoteAverage(tmdbData.getVoteAverage());
-
-    // Año
-    if (tmdbData.getReleaseDate() != null && tmdbData.getReleaseDate().length() >= 4) {
-        pelicula.setAnio(Integer.parseInt(tmdbData.getReleaseDate().substring(0, 4)));
-    }
-
-    // Géneros
-    if (tmdbData.getGenres() != null && !tmdbData.getGenres().isEmpty()) {
-        String generosFormateados = tmdbData.getGenres().stream()
-                .map(TmdbGenreDTO::getName)
-                .reduce((g1, g2) -> g1 + ", " + g2)
-                .orElse("Desconocido");
-        pelicula.setGenero(generosFormateados);
-    }
-
-    // Director
-    if (tmdbData.getCredits() != null && tmdbData.getCredits().getCrew() != null) {
-        String director = tmdbData.getCredits().getCrew().stream()
-                .filter(crewMember -> "Director".equals(crewMember.getJob()))
-                .map(TmdbCrewDTO::getName)
-                .findFirst()
-                .orElse("Desconocido");
-        pelicula.setDirector(director);
-    }
-
-    // 2. PROCESAR EL VIDEO (La parte nueva)
-    if (videoFile != null && !videoFile.isEmpty()) {
-        // Usamos el método que ya tienes en tu service (uploadFile)
-        String gridFsId = mediaService.uploadFile(videoFile);
-        // Usamos tu ruta de stream
-        pelicula.setUrlVideo("/api/media/stream/" + gridFsId);
-    }
-
-    // 3. Guardar todo el conjunto en H2
-    Pelicula guardada = peliculaRepository.save(pelicula);
-    return peliculaMapper.toResponseDTO(guardada);
-}
 }

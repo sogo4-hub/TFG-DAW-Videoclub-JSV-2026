@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getPeliculas, deletePelicula } from "../../api/peliculasApi"; 
+import { getPeliculasTodas, deletePelicula } from "../../api/peliculasApi";
 import "./dashboard.css"; // Reutilizamos estilos o crea uno nuevo
 import FormularioPelicula from './formularioPeliculas.jsx';
 
@@ -13,18 +13,31 @@ export default function GestionPeliculas() {
         cargarPeliculas();
     }, []);
 
-const cargarPeliculas = async () => {
-    try {
-        const data = await getPeliculas();
-        // Intentamos sacar los datos de .content si existe, si no, usamos data
-        const listaPeliculas = data.content ? data.content : data;
-        setPeliculas(Array.isArray(listaPeliculas) ? listaPeliculas : []);
-    } catch (error) {
-        console.error("Error al obtener películas:", error);
-    } finally {
-        setLoading(false);
-    }
-};
+    // const cargarPeliculas = async () => {
+    //     try {
+    //         const data = await getPeliculas();
+    //         // Intentamos sacar los datos de .content si existe, si no, usamos data
+    //         const listaPeliculas = data.content ? data.content : data;
+    //         setPeliculas(Array.isArray(listaPeliculas) ? listaPeliculas : []);
+    //     } catch (error) {
+    //         console.error("Error al obtener películas:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    //-----cargar en una lista sin tener en cuenta paginacion:
+    const cargarPeliculas = async () => {
+        try {
+            // Usamos getPeliculasTodas que llama a /api/peliculas/todas sin paginación
+            const listaPeliculas = await getPeliculasTodas();
+            setPeliculas(listaPeliculas);
+        } catch (error) {
+            console.error("Error al obtener películas:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
     // 2. Función para eliminar
     const handleEliminar = async (id) => {
         if (window.confirm("¿Estás seguro de eliminar esta película?")) {
@@ -33,7 +46,7 @@ const cargarPeliculas = async () => {
                 // Filtramos el estado para quitar la borrada sin recargar la página
                 setPeliculas(peliculas.filter(p => p.id !== id));
             } catch (error) {
-                alert("No se pudo eliminar la película"+error);
+                alert("No se pudo eliminar la película" + error);
             }
         }
     };
@@ -76,8 +89,8 @@ const cargarPeliculas = async () => {
                             <td>{pelicula.titulo}</td>
                             <td>{pelicula.genero}</td>
                             <td>
-                                
-                                <button 
+
+                                <button
                                     className="btn-delete"
                                     onClick={() => handleEliminar(pelicula.id)}
                                 >

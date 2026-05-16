@@ -6,13 +6,17 @@ import es.daw.backend.dto.tmdb.TmdbMovieDTO;
 import es.daw.backend.service.PeliculaService;
 import es.daw.backend.service.TmdbService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
-import org.springframework.web.multipart.MultipartFile;
+// import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -24,9 +28,29 @@ public class PeliculaController {
     private final PeliculaService peliculaService;
     private final TmdbService tmdbService;
 
-    @GetMapping
-    public ResponseEntity<List<PeliculaResponse>> listarTodas() {
-        return ResponseEntity.ok(peliculaService.listarTodas());
+    //-----cambio endpoint para paginación
+    // lo dejo en 16 por ahora...
+
+    // @GetMapping
+    // public ResponseEntity<List<PeliculaResponse>> listarTodas() {
+    //     return ResponseEntity.ok(peliculaService.listarTodas());
+    // }
+
+   @GetMapping
+    public ResponseEntity<Page<PeliculaResponse>> listarTodas(
+            @RequestParam(required = false, defaultValue = "") String search,
+            @RequestParam(required = false, defaultValue = "") String genre,
+            @PageableDefault(page = 0, size = 16)
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(peliculaService.listarPaginadas(search, genre, pageable));
+    }
+
+    // Endpoint exclusivo para el admin — devuelve todas sin paginación
+    @GetMapping("/todas")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<List<PeliculaResponse>> listarTodasSinPaginar() {
+        return ResponseEntity.ok(peliculaService.listarTodasSinPaginar());
     }
 
     @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
