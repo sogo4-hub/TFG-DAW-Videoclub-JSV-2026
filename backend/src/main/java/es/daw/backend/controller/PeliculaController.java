@@ -50,7 +50,7 @@ public class PeliculaController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PeliculaResponse> crear(
             @RequestPart("datos") PeliculaRequest request, // El JSON de la película
-            @RequestPart("archivo") MultipartFile archivo,  // La imagen real
+            @RequestPart("archivo") MultipartFile archivo, // La imagen real
             @RequestPart("video") MultipartFile video // ARCHIVO DE VIDEO
     ) throws java.io.IOException {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -82,17 +82,13 @@ public class PeliculaController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<PeliculaResponse> uploadVideo(
             @PathVariable Long id,
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam("file") MultipartFile file) { // El enunciado exige que se llame "file"
 
         if (file.isEmpty()) {
-            return ResponseEntity.badRequest().build(); // 400 Bad Request si no hay archivo
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(peliculaService.subirVideo(id, file));
     }
-
-
-
-
 
 }

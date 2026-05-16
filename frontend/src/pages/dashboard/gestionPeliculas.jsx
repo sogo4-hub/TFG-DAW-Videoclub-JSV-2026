@@ -60,6 +60,7 @@ const cargarPeliculas = async () => {
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>ID TMDB</th>
                         <th>Título</th>
                         <th>Género</th>
                         <th>Acciones</th>
@@ -69,6 +70,9 @@ const cargarPeliculas = async () => {
                     {peliculas.map((pelicula) => (
                         <tr key={pelicula.id}>
                             <td>{pelicula.id}</td>
+                            <td style={{ color: '#888', fontSize: '0.9em' }}>
+                                {pelicula.tmdbId}
+                            </td>
                             <td>{pelicula.titulo}</td>
                             <td>{pelicula.genero}</td>
                             <td>
