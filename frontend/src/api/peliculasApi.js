@@ -37,6 +37,12 @@ export const getPeliculas = async (
   return response.data;
 };
 
+// Para el dashboard del admin — devuelve todas sin límite de paginación
+export const getPeliculasTodas = async () => {
+  const response = await axiosClient.get('/api/peliculas/todas');
+  return response.data;
+};
+
 export const getPeliculaById = async (id) => {
   const response = await axiosClient.get(`/api/peliculas/${id}`);
   return response.data;

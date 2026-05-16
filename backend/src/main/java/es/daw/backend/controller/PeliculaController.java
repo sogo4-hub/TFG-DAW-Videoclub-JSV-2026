@@ -46,6 +46,13 @@ public class PeliculaController {
         return ResponseEntity.ok(peliculaService.listarPaginadas(search, genre, pageable));
     }
 
+    // Endpoint exclusivo para el admin — devuelve todas sin paginación
+    @GetMapping("/todas")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<List<PeliculaResponse>> listarTodasSinPaginar() {
+        return ResponseEntity.ok(peliculaService.listarTodasSinPaginar());
+    }
+
     @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PeliculaResponse> crear(
