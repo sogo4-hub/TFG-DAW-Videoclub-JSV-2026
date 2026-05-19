@@ -32,7 +32,7 @@
     height: 320px;
     border-radius: 8px;
     display: block;
-    object-fit: cover;
+    object-fit: contain;
     flex-shrink: 0;
 }
 
@@ -58,7 +58,7 @@
 
 .pelicula-meta {
     margin: 0;
-    color: #863838;
+    color: #b57575;
     font-size: 0.9rem;
 }
 
@@ -66,7 +66,7 @@
 
 .pelicula-genero {
     margin: 0;
-    color: #aea1a1;
+    color: #c6bcdb;
     font-size: 0.82rem;
 }
 
@@ -75,7 +75,7 @@
 .pelicula-sinopsis {
     flex-grow: 1;
     margin: 0;
-    color: #c3b7b7;
+    color: #e7d3d3;
     font-size: 0.9rem;
     line-height: 1.5;
     overflow: visible;
@@ -152,7 +152,7 @@
 
 .btn-alquilada:hover:not(.btn-loading) {
     box-shadow: none;
-        transform: none;
+    transform: none;
 
 }
 
@@ -173,7 +173,7 @@
 
 .pelicula-no-logged p {
     font-size: 0.82rem;
-    color: #888;
+    color: #7c1515;
     margin: 0;
 }
 

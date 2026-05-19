@@ -10,8 +10,9 @@
 }
 
 .detalle-video {
-    width: 90%;
+    width: auto;
     max-width: 1000px;
+    max-height: 90vh;
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(75, 50, 80, 0.8);
     background: #070309;
