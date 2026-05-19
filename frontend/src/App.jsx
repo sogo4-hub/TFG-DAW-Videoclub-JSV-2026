@@ -22,83 +22,86 @@ import ChatAdmin from './pages/dashboard/ChatAdmin.jsx';
 function App() {
   return (
     <>
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        zIndex: 0,
-        pointerEvents: 'none', //---no bloquear los clicks
-      }}>
-        <LightRays
-          raysOrigin="top-center"
-          raysColor="#ffffff"
-          raysSpeed={1}
-          lightSpread={0.5}
-          rayLength={3}
-          followMouse={true}
-          mouseInfluence={0.1}
-          noiseAmount={0}
-          distortion={0}
-          pulsating={false}
-          fadeDistance={1}
-          saturation={1}
-        />
-      </div>
-      <div style={{ position: 'relative', zIndex: 1 }}>
-
-        <ClickSpark
-          sparkColor="#ffffff"
-          sparkSize={10}
-          sparkRadius={15}
-          sparkCount={8}
-          duration={400}
+      <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 0,
+            pointerEvents: 'none',
+            overflow: 'hidden'
+          }}
         >
-          < AuthProvider >
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/registro" element={<Registro />} />
-                <Route path="/catalogo" element={<Catalogo />} />
-                <Route path="/pelicula/:id" element={<DetallePelicula />} />
+          <LightRays
+            raysOrigin="top-center"
+            raysColor="#ffffff"
+            raysSpeed={1}
+            lightSpread={0.5}
+            rayLength={3}
+            followMouse={true}
+            mouseInfluence={0.1}
+            noiseAmount={0}
+            distortion={0}
+            pulsating={false}
+            fadeDistance={1}
+            saturation={1}
+          />
 
-                <Route path="/favoritos" element={<Favoritos />} />
-                <Route path="/mis-alquileres" element={<MisAlquileres />} />
+        </div>
+        <div style={{ position: 'relative', zIndex: 1 }}>
 
-                <Route path="/ayuda" element={<Chat />} />
+          <ClickSpark
+            sparkColor="#ffffff"
+            sparkSize={10}
+            sparkRadius={15}
+            sparkCount={8}
+            duration={400}
+          >
+            < AuthProvider >
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/registro" element={<Registro />} />
+                  <Route path="/catalogo" element={<Catalogo />} />
+                  <Route path="/pelicula/:id" element={<DetallePelicula />} />
 
-                {/*Rutas protegidas para el admin*/}
+                  <Route path="/favoritos" element={<Favoritos />} />
+                  <Route path="/mis-alquileres" element={<MisAlquileres />} />
 
-                {/* El Menú Principal del Dashboard */}
-                <Route path="/dashboard" element={
-                  <PrivateAdminRoute>
-                    <Dashboard />
-                  </PrivateAdminRoute>
-                } />
+                  <Route path="/ayuda" element={<Chat />} />
 
-                {/* Panel para gestionar películas */}
-                <Route path="/dashboard/peliculas" element={
-                  <PrivateAdminRoute>
-                    <GestionPeliculas />
-                  </PrivateAdminRoute>
-                } />
+                  {/*Rutas protegidas para el admin*/}
 
-                {/*-------panel de chat */}
-                <Route path="/dashboard/chat" element={
-                  <PrivateAdminRoute>
-                    <ChatAdmin />
-                  </PrivateAdminRoute>
-                } />
+                  {/* El Menú Principal del Dashboard */}
+                  <Route path="/dashboard" element={
+                    <PrivateAdminRoute>
+                      <Dashboard />
+                    </PrivateAdminRoute>
+                  } />
 
-                <Route path="/usuarios" element={<div>Panel de Gestión de Usuarios</div>} />
-                <Route path="/stats" element={<div>Panel de Estadísticas</div>} />
+                  {/* Panel para gestionar películas */}
+                  <Route path="/dashboard/peliculas" element={
+                    <PrivateAdminRoute>
+                      <GestionPeliculas />
+                    </PrivateAdminRoute>
+                  } />
 
-              </Routes>
-            </Layout>
-          </AuthProvider >
-        </ClickSpark >
+                  {/*-------panel de chat */}
+                  <Route path="/dashboard/chat" element={
+                    <PrivateAdminRoute>
+                      <ChatAdmin />
+                    </PrivateAdminRoute>
+                  } />
+
+                  <Route path="/usuarios" element={<div>Panel de Gestión de Usuarios</div>} />
+                  <Route path="/stats" element={<div>Panel de Estadísticas</div>} />
+
+                </Routes>
+              </Layout>
+            </AuthProvider >
+          </ClickSpark >
+        </div>
       </div>
 
     </>
