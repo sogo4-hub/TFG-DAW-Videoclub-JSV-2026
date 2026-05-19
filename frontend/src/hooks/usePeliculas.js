@@ -10,6 +10,7 @@ const usePeliculas = () => {
 
   const search = searchParams.get('search') || '';
   const genre = searchParams.get('genre') || '';
+  const sort = searchParams.get('sort') || '';
   const pageFromUrl = parseInt(searchParams.get('page') || '0', 10);
   const page = Number.isNaN(pageFromUrl) ? 0 : pageFromUrl;
 
@@ -32,7 +33,8 @@ const usePeliculas = () => {
         setLoading(true);
         setError(null);
 
-        const data = await getPeliculas(page, size, search, genre);
+        // Pasamos sort al api — Spring Boot lo interpreta como ?sort=titulo,asc
+        const data = await getPeliculas(page, size, search, genre, sort);
 
         setPeliculas(data.content || []);
         setTotalPages(data.totalPages || 0);
@@ -45,7 +47,7 @@ const usePeliculas = () => {
     };
 
     fetchPeliculas();
-  }, [page, size, search, genre]);
+  }, [page, size, search, genre, sort]);
 
   return {
     peliculas,
@@ -57,7 +59,8 @@ const usePeliculas = () => {
     totalPages,
     totalElements,
     search,
-    genre
+    genre,
+    sort
   };
 };
 
