@@ -70,7 +70,7 @@ function Login() {
 
     return (
         <div className="login-page">
-            <h1 className="login-titulo">Inicio de sesión</h1>
+            {/* <h1 className="login-titulo">Inicio de sesión</h1> */}
             <div className="login-card">
                 {errores.general && (
                     <div className="login-error-general">

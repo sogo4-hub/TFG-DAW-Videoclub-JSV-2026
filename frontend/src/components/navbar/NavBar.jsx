@@ -9,16 +9,26 @@ const GENEROS = [
   'Acción', 'Comedia', 'Terror', 'Suspense', 'Misterio', 'Western', 'Historia', 'Fantasía'
 ]
 
+const ORDENACION = [
+  { label: 'Título A-Z', value: 'titulo,asc' },
+  { label: 'Título Z-A', value: 'titulo,desc' },
+  { label: 'Año más reciente', value: 'anio,desc' },
+  { label: 'Año más antiguo', value: 'anio,asc' },
+]
+
 const NavBar = () => {
   const { token, rol, nombre, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const { query, setQuery, handleSearch } = useSearchBar()
   const [desplegableAbierto, setDesplegableAbierto] = useState(false)
+  const [ordenAbierto, setOrdenAbierto] = useState(false)
   const desplegableRef = useRef(null)
+  const ordenRef = useRef(null)
 
   const searchParams = new URLSearchParams(location.search)
   const generoActivo = searchParams.get('genre') || ''
+  const sortActivo = searchParams.get('sort') || ''
 
   const handleLogout = () => {
     logout()
@@ -28,23 +38,40 @@ const NavBar = () => {
   const handleGenero = (genero) => {
     const params = new URLSearchParams(location.search)
     if (generoActivo === genero) {
-      // Si ya está activo, lo deselecciona
       params.delete('genre')
     } else {
       params.set('genre', genero)
     }
-    //cuando cambie el genero en el filtro, vuelve a la pag 0:
-      params.set('page', '0')
-
+    // cuando cambie el genero en el filtro, vuelve a la pag 0:
+    params.set('page', '0')
     setDesplegableAbierto(false)
     navigate(`/catalogo?${params.toString()}`)
   }
 
-  // Cierra el desplegable si se hace clic fuera
+  const handleOrden = (valor) => {
+    const params = new URLSearchParams(location.search)
+    if (sortActivo === valor) {
+      // Si ya está activo, lo quita
+      params.delete('sort')
+    } else {
+      params.set('sort', valor)
+    }
+    params.set('page', '0')
+    setOrdenAbierto(false)
+    navigate(`/catalogo?${params.toString()}`)
+  }
+
+  // Etiqueta del botón de ordenar — muestra la opción activa o el texto por defecto
+  const labelOrdenActivo = ORDENACION.find(o => o.value === sortActivo)?.label || 'Ordenar'
+
+  // Cierra el desplegable de genero si se hace clic fuera
   useEffect(() => {
     const handleClickFuera = (e) => {
       if (desplegableRef.current && !desplegableRef.current.contains(e.target)) {
         setDesplegableAbierto(false)
+      }
+      if (ordenRef.current && !ordenRef.current.contains(e.target)) {
+        setOrdenAbierto(false)
       }
     }
     document.addEventListener('mousedown', handleClickFuera)
@@ -64,7 +91,7 @@ const NavBar = () => {
           <h3 className="navbar-title">StreamFlix</h3>
         </div>
 
-        {/* CENTRO: LINKS + BUSCADOR + FILTRO */}
+        {/* CENTRO: LINKS + BUSCADOR + FILTROS */}
         <div className="navbar-links">
           {/*pags públicas */}
           {!token && (
@@ -107,40 +134,77 @@ const NavBar = () => {
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
 
-          {/* FILTRO DE GÉNEROS — solo visible en el catálogo */}
+          {/* FILTROS — solo visibles en el catálogo */}
           {enCatalogo && (
-            <div className="navbar-filtro" ref={desplegableRef}>
-              <button
-                className={`filtro-btn ${generoActivo ? 'filtro-btn-activo' : ''}`}
-                onClick={() => setDesplegableAbierto(prev => !prev)}
-              >
-                {generoActivo || 'Filtrar'}
-                <i className={`fa-solid fa-chevron-${desplegableAbierto ? 'up' : 'down'}`}></i>
-              </button>
+            <>
+              {/* FILTRO DE GÉNEROS */}
+              <div className="navbar-filtro" ref={desplegableRef}>
+                <button
+                  className={`filtro-btn ${generoActivo ? 'filtro-btn-activo' : ''}`}
+                  onClick={() => setDesplegableAbierto(prev => !prev)}
+                >
+                  {generoActivo || 'Filtrar'}
+                  <i className={`fa-solid fa-chevron-${desplegableAbierto ? 'up' : 'down'}`}></i>
+                </button>
 
-              {desplegableAbierto && (
-                <div className="filtro-desplegable">
-                  {/* Opción para quitar el filtro */}
-                  {generoActivo && (
-                    <button
-                      className="filtro-opcion filtro-opcion-limpiar"
-                      onClick={() => handleGenero(generoActivo)}
-                    >
-                      ✕ Quitar filtro
-                    </button>
-                  )}
-                  {GENEROS.map(genero => (
-                    <button
-                      key={genero}
-                      className={`filtro-opcion ${generoActivo === genero ? 'filtro-opcion-activa' : ''}`}
-                      onClick={() => handleGenero(genero)}
-                    >
-                      {genero}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+                {desplegableAbierto && (
+                  <div className="filtro-desplegable">
+                    {/* Opción para quitar el filtro */}
+                    {generoActivo && (
+                      <button
+                        className="filtro-opcion filtro-opcion-limpiar"
+                        onClick={() => handleGenero(generoActivo)}
+                      >
+                        ✕ Quitar filtro
+                      </button>
+                    )}
+                    {GENEROS.map(genero => (
+                      <button
+                        key={genero}
+                        className={`filtro-opcion ${generoActivo === genero ? 'filtro-opcion-activa' : ''}`}
+                        onClick={() => handleGenero(genero)}
+                      >
+                        {genero}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* ORDENAR */}
+              <div className="navbar-filtro" ref={ordenRef}>
+                <button
+                  className={`filtro-btn ${sortActivo ? 'filtro-btn-activo' : ''}`}
+                  onClick={() => setOrdenAbierto(prev => !prev)}
+                >
+                  {labelOrdenActivo}
+                  <i className={`fa-solid fa-chevron-${ordenAbierto ? 'up' : 'down'}`}></i>
+                </button>
+
+                {ordenAbierto && (
+                  <div className="filtro-desplegable">
+                    {/* Opción para quitar la ordenacion */}
+                    {sortActivo && (
+                      <button
+                        className="filtro-opcion filtro-opcion-limpiar"
+                        onClick={() => handleOrden(sortActivo)}
+                      >
+                        ✕ Quitar orden
+                      </button>
+                    )}
+                    {ORDENACION.map(opcion => (
+                      <button
+                        key={opcion.value}
+                        className={`filtro-opcion ${sortActivo === opcion.value ? 'filtro-opcion-activa' : ''}`}
+                        onClick={() => handleOrden(opcion.value)}
+                      >
+                        {opcion.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
           )}
         </div>
 

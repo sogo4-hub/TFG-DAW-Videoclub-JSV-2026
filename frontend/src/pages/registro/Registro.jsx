@@ -201,7 +201,7 @@ function Registro() {
 
     return (
         <div className="registro-page">
-            <h1 className="registro-titulo">¡ Únete a StreamFlix !</h1>
+            {/* <h1 className="registro-titulo">¡ Únete a StreamFlix !</h1> */}
             <div className="registro-card">
                 <div>
                     <label htmlFor="nombre">Nombre:</label>
