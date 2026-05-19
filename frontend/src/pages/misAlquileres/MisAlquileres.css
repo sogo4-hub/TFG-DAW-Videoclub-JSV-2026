@@ -1,3 +1,6 @@
+/* =========================================================
+   ESTRUCTURA CONTENEDORA (ESTILO OSCURO UNIFICADO)
+   ========================================================= */
 .alquileres-container {
   padding: 2rem;
   max-width: 1600px;
@@ -18,82 +21,161 @@
   padding: 2rem 0;
 }
 
+/* =========================================================
+   TARJETA DE ALQUILER (CONVERTIDA AL ESTILO DE TU CATÁLOGO)
+   ========================================================= */
 .alquiler-card {
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 1.5rem;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  height: 100%;
+  padding: 1.25rem;
+  background: #111;
+  /* Fondo oscuro idéntico */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
+  margin: 20px auto 0;
+  width: 100%;
+
+  /* 🛑 EL FRENO MAESTRO: La tarjeta y la foto no se agrandarán de forma fea */
+  max-width: 320px;
+  position: relative;
 }
 
+/* Imagen ajustada para que no pierda su proporción */
 .alquiler-imagen {
   width: 100%;
-  height: 300px;
+  height: 320px;
   border-radius: 8px;
-  object-fit: contain;
-  margin-bottom: 1rem;
+  display: block;
+  object-fit: cover;
+  /* Cambiado de contain a cover para rellenar estéticamente sin deformar */
+  flex-shrink: 0;
 }
 
 .alquiler-titulo {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  margin: 0 0 0.75rem 0;
-  color: #333;
+  margin: 0;
+  color: #ede5e5;
+  line-height: 1.3;
 }
 
 .alquiler-meta {
-  margin: 0 0 0.5rem 0;
-  color: #666;
-  font-size: 0.95rem;
+  margin: 0;
+  color: #863838;
+  /* Rojo apagado para la metadata */
+  font-size: 0.9rem;
 }
 
 .alquiler-genero {
-  margin: 0 0 1rem 0;
-  color: #888;
-  font-size: 0.85rem;
+  margin: 0;
+  color: #aea1a1;
+  font-size: 0.82rem;
 }
 
-.alquiler-boton {
-  margin-top: auto;
-  padding: 0.75rem 1rem;
-  background: #007bff;
+/* Ajuste de la pegatina decorativa (por si usas el masking-tape en el JSX) */
+.tape-film {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  z-index: 5;
+  width: 100px;
+  height: auto;
+  pointer-events: none;
+}
+
+/* =========================================================
+   BOTONES Y ACCIONES (CON LOS COLORES DE TU PLATAFORMA)
+   ========================================================= */
+.alquiler-boton,
+.alquiler-boton-cancelar {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
   color: white;
   border: none;
   border-radius: 6px;
   font-weight: 500;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-align: center;
+  margin-top: auto;
+  /* Empuja el primer botón al fondo */
 }
 
-.alquiler-boton:hover {
-  background: #0056b3;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+/* Botón principal azul: "Ver película" */
+.alquiler-boton {
+  background: #7b1fa2
 }
 
+.alquiler-boton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(179, 0, 255, 0.3);
+}
+
+/* Botón secundario rojo: "Cancelar alquiler" */
+.alquiler-boton-cancelar {
+  background: #ff4444;
+  margin-top: 0.5rem;
+  /* Separación si aparecen ambos botones */
+}
+
+.alquiler-boton-cancelar:hover {
+  transform: translateY(-2px);
+  background: #ff4444;
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+}
+
+/* Estado bloqueado si el vídeo no está listo */
+.alquiler-boton:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Aviso informativo verde: "Ya has empezado a ver..." */
+.alquiler-reproducida {
+  margin-top: 0.75rem;
+  padding: 0.65rem;
+  background: rgba(40, 167, 69, 0.1);
+  border: 1px solid rgba(40, 167, 69, 0.2);
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #28a745;
+  font-weight: 500;
+}
+
+/* =========================================================
+   MEDIA QUERIES (RESPONSIVE SEGURO MÓVIL Y TABLET)
+   ========================================================= */
 @media (max-width: 768px) {
   .alquileres-container {
     padding: 1rem;
   }
-  
+
   .alquileres-title {
     font-size: 2rem;
   }
-  
+
   .peliculas-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 2.5rem;
   }
-  
+
   .alquiler-card {
-    padding: 1rem;
+    max-width: 280px;
+    /* Reducción proporcional en móviles */
+    margin: 0 auto;
   }
-  
+
   .alquiler-imagen {
-    height: 250px;
+    height: 260px;
+    /* Escalado perfecto de la imagen en móvil */
   }
 }
 
@@ -102,4 +184,17 @@
     grid-template-columns: 1fr;
     gap: 2rem;
   }
+}
+
+.sinAlquileres {
+  font-weight: bold;
+  color: #ff4444;
+  font-size: 1.2rem;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  width: 100%;
+  margin: 0 auto;
 }

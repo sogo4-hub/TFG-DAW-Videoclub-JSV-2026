@@ -1,7 +1,7 @@
 .peliculas-grid,
 .peliculas-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 4rem;
     padding: 2.5rem 3rem;
     max-width: 1400px;
@@ -19,11 +19,10 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    margin: 0;
-    margin-top: 20px;
-    /* Espacio para que la pegatina no choque con la de arriba */
+    margin: 20px auto 0;
+    width: 100%;
+    max-width: 320px;
     position: relative;
-    /* CRUCIAL: Esto ancla la pegatina a la tarjeta */
 }
 
 
@@ -79,7 +78,7 @@
     color: #c3b7b7;
     font-size: 0.9rem;
     line-height: 1.5;
-    overflow: hidden;
+    overflow: visible;
 }
 
 
@@ -109,15 +108,34 @@
 
 
 .btn-favorito {
-    background: #007bff;
+    background: #7b1fa2;
 }
 
+.btn-alquilar:hover:not(.btn-loading) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.35);
+}
 
+.btn-favorito:hover:not(.btn-loading) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(179, 0, 255, 0.4);
+}
+
+.btn-favorito:disabled {
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    background: #3e1053;
+    opacity: 1;
+}
 
 .btn-favorito-activo {
     background: #ff4444;
 }
 
+.btn-favorito-activo:hover:not(.btn-loading) {
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+}
 
 
 .btn-alquilar {
@@ -132,21 +150,17 @@
     opacity: 0.6;
 }
 
+.btn-alquilada:hover:not(.btn-loading) {
+    box-shadow: none;
+        transform: none;
+
+}
 
 
 .btn-loading {
     cursor: not-allowed;
     opacity: 0.7;
 }
-
-
-
-.btn-favorito:hover:not(.btn-loading),
-.btn-alquilar:hover:not(.btn-loading) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-}
-
 
 
 .pelicula-no-logged {
@@ -156,8 +170,6 @@
     border-radius: 6px;
     text-align: center;
 }
-
-
 
 .pelicula-no-logged p {
     font-size: 0.82rem;
@@ -169,22 +181,22 @@
 
 @media (max-width: 768px) {
 
-
-
     .peliculas-grid,
     .peliculas-container {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(240px));
+        justify-content: center;
         gap: 1.5rem;
         padding: 1.5rem 1.25rem;
     }
 
-
+    .pelicula-card {
+        max-width: 280px;
+        margin: 0 auto;
+    }
 
     .pelicula-imagen {
         height: 260px;
     }
-
-
 
     .pelicula-botones {
         flex-direction: column;
@@ -204,7 +216,24 @@
     pointer-events: none;
 }
 
+.btn-ver-mas {
+    background: none;
+    border: none;
+    color: #c7002c;
+    /* Tu color rojo corporativo */
+    font-weight: bold;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 5px;
+    display: inline;
+    transition: opacity 0.2s ease;
+}
 
+.btn-ver-mas:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
 
 /* =========================
    MODAL / FORMULARIO PAGO

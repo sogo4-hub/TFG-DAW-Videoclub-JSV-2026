@@ -16,6 +16,13 @@
   min-height: 100vh;
 }
 
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 /* ── HERO ── */
 .hero {
   position: relative;
@@ -33,7 +40,7 @@
   position: relative;
   z-index: 1;
   width: 40%;
-  max-width: 500px;
+  max-width: 422px;
   height: 70%;
   object-fit: cover;
   border-radius: 4px;
@@ -52,13 +59,14 @@
 
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  flex: 1;
   max-width: 580px;
 }
 
 .hero-eyebrow {
   display: inline-block;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -70,10 +78,10 @@
 
 .hero-title {
   font-family: 'Bebas Neue';
-  font-size: 7rem;
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
   line-height: 0.9;
   letter-spacing: 0.02em;
-  color: #ede8f0;
+  color: #ffffff;
   margin-bottom: 1.25rem;
 }
 
@@ -86,10 +94,10 @@
 }
 
 .hero-desc {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 300;
   line-height: 1.75;
-  color: #9a90a8;
+  color: #ffffff;
   margin-bottom: 2.25rem;
   max-width: 400px;
 }
@@ -127,7 +135,7 @@
 
 /* ── HORARIO ── */
 .schedule {
-  padding: 5rem 8rem 5rem 6rem;
+  padding: 4rem 8rem 4rem 8rem;
   background: #0d0d0f;
   border-top: 1px solid #2a1a3a;
   position: relative;
@@ -137,6 +145,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  min-height: 480px;
 }
 
 /* Línea morada decorativa arriba */
@@ -163,6 +172,7 @@
 .schedule-inner {
   max-width: none;
   width: 35%;
+  margin: 1rem;
 }
 
 .schedule-glow {
@@ -176,9 +186,9 @@
 
 .schedule-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2.4rem, 4vw, 4rem);
   letter-spacing: 0.04em;
-  color: #ede8f0;
+  color: #ffffff;
   margin-bottom: 2.5rem;
   line-height: 1;
 }
@@ -204,7 +214,7 @@
 .schedule-day {
   font-size: 1.2rem;
   font-weight: 400;
-  color: #b8b2c0;
+  color: #ffffff;
   min-width: 160px;
 }
 
@@ -216,18 +226,19 @@
 
 .schedule-time {
   font-family: 'Lora', serif;
-  font-size: 1.1rem;
+    font-size: clamp(0.9rem, 3vw, 0.9rem);
   font-weight: 600;
-  color: #ede8f0;
+  color: #ffffff;
   letter-spacing: 0.02em;
 }
 
 .schedule-note {
-  margin-top: 2rem;
+  margin-top: 1rem;
   font-size: 0.88rem;
   font-weight: 300;
-  color: #aba4b3;
+  color: #ffffff;
   line-height: 1.6;
+  text-align: center;
 }
 
 .schedule-note strong {
@@ -237,13 +248,20 @@
 
 /*enlace chat*/
 .schedule-ayuda {
-  margin-right: 4rem;
-  font-size: x-large;
-  margin-top: 9rem;
+  width: 50%;
+  font-size: clamp(1.2rem, 3vw, 2.5rem);
+  margin: 2rem;
+  text-align: center;
 }
 
+.nota-login {
+  margin-top: 20px;
+  font-size: large;
+}
+
+
 .ayuda-link {
-  color: #5f85ee;
+  color: #ff0000;
   text-decoration: underline;
   font-weight: 500;
   transition: color 0.2s;
@@ -264,10 +282,7 @@
     padding: 3.5rem 2rem;
   }
 
-  .schedule::before {
-    left: 2rem;
-    right: 2rem;
-  }
+
 
   .schedule-day {
     min-width: 120px;
@@ -276,5 +291,31 @@
 
   .schedule-time {
     font-size: 1rem;
+  }
+}
+
+@media (min-width: 500px) {
+  .schedule {
+    height: 600px;
+    align-items: center;
+  }
+
+  .schedule-ayuda {
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    width: 25%;
+    font-size: clamp(0.4rem, calc(0.66rem + 1.1vw), 2.2rem);
+    margin-bottom: 10px;
+  }
+
+  .nota-login {
+    color: #ffffff;
+    margin-top: 20px;
+    font-size: clamp(0.7rem, 2vw, 1.0rem);
+  }
+
+  .schedule-time {
+    width: 0%;
   }
 }

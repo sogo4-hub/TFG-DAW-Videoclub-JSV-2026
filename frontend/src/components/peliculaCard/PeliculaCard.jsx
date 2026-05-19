@@ -9,6 +9,8 @@ const PeliculaCard = ({ pelicula, isLogged, initialFavorito = false, yaAlquilada
   const [loading, setLoading] = useState(false);
   const [mostrarPago, setMostrarPago] = useState(false);
 
+  const [verMas, setVerMas] = useState(false);
+
   const [datosTarjeta, setDatosTarjeta] = useState({
     nombre: '',
     numero: '',
@@ -112,6 +114,13 @@ const PeliculaCard = ({ pelicula, isLogged, initialFavorito = false, yaAlquilada
 
   // urlImagen puede ser ruta relativa TMDB (/xxx.jpg) o interna (/api/media/...)
   const posterUrl = getMediaUrl(pelicula.urlImagen, 'w500');
+  const sinopsisTexto = pelicula.sinopsis || 'Sinopsis no disponible';
+  const limiteCaracteres = 110;
+  const esTextoLargo = sinopsisTexto.length > limiteCaracteres;
+
+  const textoAMostrar = verMas || !esTextoLargo 
+    ? sinopsisTexto 
+    : `${sinopsisTexto.slice(0, limiteCaracteres)}...`;
 
   return (
     <>
@@ -138,7 +147,16 @@ const PeliculaCard = ({ pelicula, isLogged, initialFavorito = false, yaAlquilada
         </div>
 
         <p className="pelicula-sinopsis">
-          {pelicula.sinopsis || 'Sinopsis no disponible'}
+          {textoAMostrar}
+          {esTextoLargo && (
+            <button 
+              type="button" 
+              className="btn-ver-mas" 
+              onClick={() => setVerMas(!verMas)}
+            >
+              {verMas ? ' Ver menos' : ' Ver más'}
+            </button>
+          )}
         </p>
 
         {isLogged && (
