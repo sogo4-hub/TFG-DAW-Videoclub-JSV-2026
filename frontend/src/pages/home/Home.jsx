@@ -60,32 +60,30 @@ export default function Home() {
             * El catálogo online está disponible <strong>24 horas</strong>, todos los días.
           </p>
 
-          
+
         </div>
 
         {/*-----chat de ayuda*/}
-          {/*el admin va al panel del dashboard, el usuario al chat normal*/}
-          <p className="schedule-ayuda">
-            {rol === 'ADMIN' ? (
-              <>
-                Gestiona las dudas de los usuarios desde{' '}
-                <Link to="/dashboard/chat" className="ayuda-link">
-                  el panel de ayuda
-                </Link>.
-              </>
-            ) : (
-              <>
-                ¿Tienes alguna duda? 
-                <br></br>Pregunta{' '}
-                <Link to="/ayuda" className="ayuda-link">
-                  aquí
-                </Link>
-                {' '}y un administrador te responderá.
-                <br></br>
-                <p style={{ fontSize: 'large' , color: "darkgray"}}>(debes iniciar sesión para preguntar)</p>
-              </>
-            )}
-          </p>
+        {/*el admin va al panel del dashboard, el usuario al chat normal*/}
+        <p className="schedule-ayuda">
+          {rol === 'ADMIN' ? (
+            <>
+              Gestiona las dudas de los usuarios desde{' '}
+              <Link to="/dashboard/chat" className="ayuda-link">
+                el panel de ayuda
+              </Link>.
+            </>
+          ) : (
+            <>
+              ¿Tienes alguna duda?
+              <br />Pregunta{' '}
+              <Link to="/ayuda" className="ayuda-link">aquí</Link>
+              {' '}y un administrador te responderá.
+              <br />
+              <p class="nota-login">* Debes iniciar sesión para preguntar</p>
+            </>
+          )}
+        </p>
       </section>
 
     </div>

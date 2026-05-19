@@ -42,7 +42,6 @@ const NavBar = () => {
     } else {
       params.set('genre', genero)
     }
-    // cuando cambie el genero en el filtro, vuelve a la pag 0:
     params.set('page', '0')
     setDesplegableAbierto(false)
     navigate(`/catalogo?${params.toString()}`)
@@ -51,7 +50,6 @@ const NavBar = () => {
   const handleOrden = (valor) => {
     const params = new URLSearchParams(location.search)
     if (sortActivo === valor) {
-      // Si ya está activo, lo quita
       params.delete('sort')
     } else {
       params.set('sort', valor)
@@ -61,10 +59,8 @@ const NavBar = () => {
     navigate(`/catalogo?${params.toString()}`)
   }
 
-  // Etiqueta del botón de ordenar — muestra la opción activa o el texto por defecto
   const labelOrdenActivo = ORDENACION.find(o => o.value === sortActivo)?.label || 'Ordenar'
 
-  // Cierra el desplegable de genero si se hace clic fuera
   useEffect(() => {
     const handleClickFuera = (e) => {
       if (desplegableRef.current && !desplegableRef.current.contains(e.target)) {
@@ -79,21 +75,19 @@ const NavBar = () => {
   }, [])
 
   const enCatalogo = location.pathname === '/catalogo'
-  //-----
 
   return (
     <>
       <nav className="navbar">
 
-        {/* IZQUIERDA: LOGO + TEXTO */}
+        {/* 1. IZQUIERDA: LOGO + TEXTO */}
         <div className="navbar-left">
           <img src="/imgs/logo.png" alt="StreamFlix Logo" className="navbar-logo" />
           <h3 className="navbar-title">StreamFlix</h3>
         </div>
 
-        {/* CENTRO: LINKS + BUSCADOR + FILTROS */}
+        {/* 2. ENLACES DE NAVEGACIÓN PRINCIPALES */}
         <div className="navbar-links">
-          {/*pags públicas */}
           {!token && (
             <>
               <Link to="/">Inicio</Link>
@@ -101,7 +95,6 @@ const NavBar = () => {
             </>
           )}
 
-          {/*users*/}
           {token && (
             <>
               <Link to="/">Inicio</Link>
@@ -111,106 +104,97 @@ const NavBar = () => {
             </>
           )}
 
-          {/*admins ---tmb tienen lo de users*/}
           {token && rol === 'ADMIN' && (
-            <>
-              <Link to="/dashboard">Dashboard</Link>
-              {/* <Link to="/admin/catalogo">Gestión de catálogo</Link>
-              <Link to="/admin/usuarios">Gestión de usuarios</Link>
-              <Link to="/admin/estadisticas">Estadísticas</Link> */}
-            </>
-          )}
-
-          {/* BUSCADOR ---público*/}
-          <div className="navbar-search">
-            <input
-              type="text"
-              placeholder="Buscar en catálogo..."
-              aria-label="Buscar en StreamFlix"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={handleSearch}
-            />
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </div>
-
-          {/* FILTROS — solo visibles en el catálogo */}
-          {enCatalogo && (
-            <>
-              {/* FILTRO DE GÉNEROS */}
-              <div className="navbar-filtro" ref={desplegableRef}>
-                <button
-                  className={`filtro-btn ${generoActivo ? 'filtro-btn-activo' : ''}`}
-                  onClick={() => setDesplegableAbierto(prev => !prev)}
-                >
-                  {generoActivo || 'Filtrar'}
-                  <i className={`fa-solid fa-chevron-${desplegableAbierto ? 'up' : 'down'}`}></i>
-                </button>
-
-                {desplegableAbierto && (
-                  <div className="filtro-desplegable">
-                    {/* Opción para quitar el filtro */}
-                    {generoActivo && (
-                      <button
-                        className="filtro-opcion filtro-opcion-limpiar"
-                        onClick={() => handleGenero(generoActivo)}
-                      >
-                        ✕ Quitar filtro
-                      </button>
-                    )}
-                    {GENEROS.map(genero => (
-                      <button
-                        key={genero}
-                        className={`filtro-opcion ${generoActivo === genero ? 'filtro-opcion-activa' : ''}`}
-                        onClick={() => handleGenero(genero)}
-                      >
-                        {genero}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* ORDENAR */}
-              <div className="navbar-filtro" ref={ordenRef}>
-                <button
-                  className={`filtro-btn ${sortActivo ? 'filtro-btn-activo' : ''}`}
-                  onClick={() => setOrdenAbierto(prev => !prev)}
-                >
-                  {labelOrdenActivo}
-                  <i className={`fa-solid fa-chevron-${ordenAbierto ? 'up' : 'down'}`}></i>
-                </button>
-
-                {ordenAbierto && (
-                  <div className="filtro-desplegable">
-                    {/* Opción para quitar la ordenacion */}
-                    {sortActivo && (
-                      <button
-                        className="filtro-opcion filtro-opcion-limpiar"
-                        onClick={() => handleOrden(sortActivo)}
-                      >
-                        ✕ Quitar orden
-                      </button>
-                    )}
-                    {ORDENACION.map(opcion => (
-                      <button
-                        key={opcion.value}
-                        className={`filtro-opcion ${sortActivo === opcion.value ? 'filtro-opcion-activa' : ''}`}
-                        onClick={() => handleOrden(opcion.value)}
-                      >
-                        {opcion.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </>
+            <Link to="/dashboard">Dashboard</Link>
           )}
         </div>
 
-        {/* DERECHA: LOGIN / REGISTRO / CERRAR SESIÓN — pegado a la derecha */}
+        {/* 3. BUSCADOR (Separado de los links para poder moverlo dinámicamente) */}
+        <div className="navbar-search">
+          <input
+            type="text"
+            placeholder="Buscar en catálogo..."
+            aria-label="Buscar en StreamFlix"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleSearch}
+          />
+          <i className="fa-solid fa-magnifying-glass"></i>
+        </div>
+
+        {/* 4. FILTROS (Filtro + Ordenar - Agrupados en una sola caja) */}
+        {enCatalogo && (
+          <div className="navbar-filtros-container">
+            {/* FILTRO DE GÉNEROS */}
+            <div className="navbar-filtro" ref={desplegableRef}>
+              <button
+                className={`filtro-btn ${generoActivo ? 'filtro-btn-activo' : ''}`}
+                onClick={() => setDesplegableAbierto(prev => !prev)}
+              >
+                {generoActivo || 'Filtrar'}
+                <i className={`fa-solid fa-chevron-${desplegableAbierto ? 'up' : 'down'}`}></i>
+              </button>
+
+              {desplegableAbierto && (
+                <div className="filtro-desplegable">
+                  {generoActivo && (
+                    <button
+                      className="filtro-opcion filtro-opcion-limpiar"
+                      onClick={() => handleGenero(generoActivo)}
+                    >
+                      ✕ Quitar filtro
+                    </button>
+                  )}
+                  {GENEROS.map(genero => (
+                    <button
+                      key={genero}
+                      className={`filtro-opcion ${generoActivo === genero ? 'filtro-opcion-activa' : ''}`}
+                      onClick={() => handleGenero(genero)}
+                    >
+                      {genero}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* ORDENAR */}
+            <div className="navbar-filtro" ref={ordenRef}>
+              <button
+                className={`filtro-btn ${sortActivo ? 'filtro-btn-activo' : ''}`}
+                onClick={() => setOrdenAbierto(prev => !prev)}
+              >
+                {labelOrdenActivo}
+                <i className={`fa-solid fa-chevron-${ordenAbierto ? 'up' : 'down'}`}></i>
+              </button>
+
+              {ordenAbierto && (
+                <div className="filtro-desplegable">
+                  {sortActivo && (
+                    <button
+                      className="filtro-opcion filtro-opcion-limpiar"
+                      onClick={() => handleOrden(sortActivo)}
+                    >
+                      ✕ Quitar orden
+                    </button>
+                  )}
+                  {ORDENACION.map(opcion => (
+                    <button
+                      key={opcion.value}
+                      className={`filtro-opcion ${sortActivo === opcion.value ? 'filtro-opcion-activa' : ''}`}
+                      onClick={() => handleOrden(opcion.value)}
+                    >
+                      {opcion.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* 5. DERECHA: LOGIN / REGISTRO / CERRAR SESIÓN */}
         <div className="navbar-user">
-          {/*pags públicas */}
           {!token && (
             <>
               <Link to="/login" className="navbar-auth-btn">Iniciar Sesión</Link>
@@ -218,7 +202,6 @@ const NavBar = () => {
             </>
           )}
 
-          {/*el user logueado*/}
           {token && (
             <div className="user-menu">
               <span>{nombre || rol}</span>
@@ -228,7 +211,6 @@ const NavBar = () => {
         </div>
 
       </nav>
-      <img src="/imgs/masking-tape.png" className='tape-navbar' alt=""></img>
     </>
   )
 }

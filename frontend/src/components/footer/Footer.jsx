@@ -5,7 +5,6 @@ const Footer = () => {
     return (
         <>
             <div className="tape-footer">
-                <img src="/imgs/masking-tape.png" alt='tape' />
             </div>
 
             <footer>
