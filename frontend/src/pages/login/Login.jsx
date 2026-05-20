@@ -11,7 +11,7 @@ function Login() {
     const navigate = useNavigate()
 
     const [camposLogin, setCamposLogin] = useState({
-        email: '',
+        nombreOemail: '',
         password: ''
     })
 
@@ -33,9 +33,9 @@ function Login() {
         setLoading(true)
         setErrores({})
 
-        if (!camposLogin.email.trim() || !camposLogin.password.trim()) {
+        if (!camposLogin.nombreOemail.trim() || !camposLogin.password.trim()) {
             setErrores({
-                email: !camposLogin.email.trim() ? 'Nombre o email requerido' : '',
+                nombreOemail: !camposLogin.nombreOemail.trim() ? 'Nombre o email requerido' : '',
                 password: !camposLogin.password.trim() ? 'Contraseña requerida' : ''
             })
             setLoading(false)
@@ -82,14 +82,14 @@ function Login() {
                     <div>
                         <label>Nombre o email:</label>
                         <input
-                            name="email"
+                            name="nombreOemail"
                             type="text"
                             placeholder="Introduce tu nombre o email"
-                            value={camposLogin.email}
+                            value={camposLogin.nombreOemail}
                             onChange={handleChange}
                             required
                         />
-                        {errores.email && <div className="errorMensaje">{errores.email}</div>}
+                        {errores.nombreOemail && <div className="errorMensaje">{errores.nombreOemail}</div>}
                     </div>
 
                     <div>

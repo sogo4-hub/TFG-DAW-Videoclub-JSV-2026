@@ -204,7 +204,10 @@ const NavBar = () => {
 
           {token && (
             <div className="user-menu">
-              <span>{nombre || rol}</span>
+              <span>
+                {/* {nombre || rol} */}
+                {rol === 'ADMIN' ? 'ADMIN' : nombre}
+              </span>
               <button onClick={handleLogout}>Cerrar Sesión</button>
             </div>
           )}
