@@ -1,0 +1,222 @@
+/* ==========================================================================
+   Estilos Base e Integración de Fuentes (Inspirado en Favoritos)
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Poppins:wght@300;400;600&display=swap');
+
+.form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+/* ==========================================================================
+   Contenedor Principal (Tarjeta del Formulario)
+   ========================================================================== */
+.form-card {
+    background-color: #141414;
+    /* Fondo oscuro a juego con el cine */
+    border: 2px solid #ff4444;
+    /* Borde rojo característico */
+    border-radius: 12px;
+    padding: 1rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 0 20px rgba(213, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Todo centrado en columna */
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+}
+
+/* Título estilo Favoritos: Rojo, centrado y con sombreado */
+.form-card h3 {
+    font-size: 2.2rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    color: #ff4444;
+    text-shadow: 0 1px 10px #ff4444;
+    font-family: "Permanent Marker", cursive;
+    text-align: center;
+}
+
+/* ==========================================================================
+   Formulario y Campos de Entrada
+   ========================================================================== */
+.form-card form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    /* Separación constante entre filas */
+    align-items: center;
+}
+
+.field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Inputs y etiquetas alineados al centro */
+    gap: 0.5rem;
+}
+
+.field label {
+    font-weight: 600;
+    color: #ffffff;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Estilo para los inputs de número y de archivos */
+.field input[type="number"],
+.field input[type="file"] {
+    width: 100%;
+    max-width: 360px;
+    /* Evita que se estiren demasiado en pantallas grandes */
+    padding: 0.8rem 1rem;
+    background-color: #222222;
+    border: 1px solid #444444;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    /* Texto de entrada centrado */
+}
+
+/* Efecto foco en los inputs utilizando el morado/rojo del tema */
+.field input[type="number"]:focus {
+    outline: none;
+    border-color: #7b1fa2;
+    box-shadow: 0 0 8px rgba(123, 31, 162, 0.6);
+}
+
+/* Input tipo File personalizado de forma sutil */
+.field input[type="file"]::-webkit-file-upload-button {
+    background-color: #ff4444;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    margin-right: 10px;
+    transition: background 0.2s;
+}
+
+.field input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #cc1111;
+}
+
+/* ==========================================================================
+   Texto de Ayuda / Enlace de Búsqueda de ID
+   ========================================================================== */
+.buscarId {
+    margin: -0.5rem 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: #aaaaaa;
+    text-align: center;
+}
+
+.buscarId a {
+    color: #7b1fa2;
+    /* Morado a juego con .cargandoFavoritos */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+.buscarId a:hover {
+    color: #ff4444;
+    /* Cambia a rojo al pasar el cursor */
+    text-shadow: 0 0 5px #ff4444;
+}
+
+/* ==========================================================================
+   Botones de Acción
+   ========================================================================== */
+.form-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* Botones apilados y centrados */
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-save,
+.btn-cancel {
+    width: 100%;
+    max-width: 360px;
+    padding: 0.9rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Botón de Guardar/Importar (Estilo Rojo de Acción) */
+.btn-save {
+    background-color: #ff4444;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 10px rgba(255, 68, 68, 0.3);
+}
+
+.btn-save:hover:not(:disabled) {
+    background-color: #e53935;
+    box-shadow: 0 4px 15px #ff4444;
+    transform: translateY(-2px);
+}
+
+.btn-save:disabled {
+    background-color: #555555;
+    color: #aaaaaa;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Botón de Cancelar (Estilo secundario discreto) */
+.btn-cancel {
+    background-color: transparent;
+    color: #aaaaaa;
+    border: 1px solid #444444;
+}
+
+.btn-cancel:hover {
+    color: #ffffff;
+    background-color: #222222;
+    border-color: #888888;
+}
+
+/* ==========================================================================
+   Adaptabilidad para Pantallas Pequeñas (Responsive)
+   ========================================================================== */
+@media (max-width: 480px) {
+    .form-card {
+        padding: 1.5rem;
+    }
+
+    .form-card h3 {
+        font-size: 1.8rem;
+    }
+}

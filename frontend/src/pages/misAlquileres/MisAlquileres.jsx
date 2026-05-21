@@ -58,9 +58,9 @@ const MisAlquileres = () => {
     navigate(`/pelicula/${alquiler.id}`, { state: { pelicula: alquiler } });
   };
 
-  if (loading) return <p>Cargando tus alquileres...</p>;
+  if (loading) return <p className="cargandoAlquileres">Cargando tus alquileres...</p>;
   if (error) return <p>Error: {error}</p>;
-  if (!alquileres.length) return <p className='sinAlquileres'>Aún no has alquilado nada.</p>;
+  if (!alquileres.length) return <p className="sinAlquileres">Aún no has alquilado nada</p>;
 
   return (
     <div className="alquileres-container">

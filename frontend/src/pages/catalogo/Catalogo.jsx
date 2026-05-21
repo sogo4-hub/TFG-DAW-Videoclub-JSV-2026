@@ -80,7 +80,7 @@ const Catalogo = () => {
         </button>
 
         <span>
-          Página {totalPages === 0 ? 0 : page + 1} de {totalPages} · {totalElements} resultados
+          Página {totalPages === 0 ? 0 : page + 1} de {totalPages} — {totalElements} resultados
         </span>
 
         <button onClick={() => setPage(page + 1)} disabled={page + 1 >= totalPages}>

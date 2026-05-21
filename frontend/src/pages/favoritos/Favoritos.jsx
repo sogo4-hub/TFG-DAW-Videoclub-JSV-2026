@@ -36,9 +36,9 @@ const Favoritos = () => {
     fetchFavoritos();
   }, []);
 
-  if (loading) return <p>Cargando tus favoritos...</p>;
+  if (loading) return <p className="cargandoFavoritos">Cargando tus favoritos...</p>;
   if (error) return <p>Error: {error}</p>;
-  if (!peliculas.length) return <p>Aún no tienes nada en favoritos.</p>;
+  if (!peliculas.length) return <p className="sinFavoritos">Aún no tienes nada en favoritos.</p>;
 
   return (
     <div className="favoritos-container">

@@ -5,9 +5,39 @@
 }
 
 .favoritos-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ff4444;
+  text-shadow: 0 1px 10px #ff4444;
+  font-family: "Permanent Marker", cursive;
+  text-align: center;
+}
+
+.cargandoFavoritos {
+  font-weight: bold;
+  color: #7b1fa2;
+  font-size: 1.2rem;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.sinFavoritos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  width: 100%;
   font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: white;
+  font-weight: bold;
+  font-family: "Permanent Marker", cursive;
+  color: #ff4444;
+  text-shadow: 0 1px 10px #ff4444ac;
+  margin: 0 0 2rem 0;
   text-align: center;
 }
 
@@ -22,11 +52,11 @@
   .favoritos-container {
     padding: 1rem;
   }
-  
+
   .favoritos-title {
     font-size: 2rem;
   }
-  
+
   .peliculas-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2.5rem;
