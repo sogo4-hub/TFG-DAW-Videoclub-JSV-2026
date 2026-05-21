@@ -7,9 +7,7 @@ import './formularioPeliculas.css';
 const FormularioPelicula = ({ alFinalizar }) => {
 
     // const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p';
-
     // const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-
     // const FormularioPelicula = ({ alFinalizar }) => {
 
     const [tmdbId, setTmdbId] = useState("");

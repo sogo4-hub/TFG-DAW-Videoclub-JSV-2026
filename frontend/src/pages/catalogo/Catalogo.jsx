@@ -8,7 +8,7 @@ import './Catalogo.css';
 
 const Catalogo = () => {
   const { loading, error, peliculas, page, setPage, totalPages, totalElements } = usePeliculas();
-  const { token } = useAuth();
+  const { token, rol } = useAuth();
   const isLogged = !!token;
 
   const [alquiladas, setAlquiladas] = useState([]);
@@ -17,8 +17,6 @@ const Catalogo = () => {
   const handleAlquilarExito = (peliculaId) => {
     setAlquiladas(prev => [...prev, peliculaId]);
   };
-
-
 
   useEffect(() => {
     if (!isLogged) return;
@@ -66,6 +64,7 @@ const Catalogo = () => {
               key={`${pelicula.id}-${favoritas.includes(pelicula.id)}-${alquiladas.includes(pelicula.id)}`}
               pelicula={pelicula}
               isLogged={isLogged}
+              rol={rol}
               yaAlquilada={alquiladas.includes(pelicula.id)}
               initialFavorito={favoritas.includes(pelicula.id)}
               onAlquilar={handleAlquilarExito}

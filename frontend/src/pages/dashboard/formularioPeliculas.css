@@ -219,4 +219,26 @@
     .form-card h3 {
         font-size: 1.8rem;
     }
+
+}
+
+@media (max-width: 1072px) {
+    .form-overlay {
+        padding-top: 190px; /* ajusta según la altura del navbar en tablet */
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 750px) {
+    .form-overlay {
+        padding-top: 180px; /* el navbar ocupa más altura en móvil */
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 499px) {
+    .form-overlay {
+        padding-top: 200px; /* aún más alto en pantallas muy pequeñas */
+        align-items: flex-start;
+    }
 }

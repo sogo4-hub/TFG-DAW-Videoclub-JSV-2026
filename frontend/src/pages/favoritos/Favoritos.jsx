@@ -10,8 +10,8 @@ const Favoritos = () => {
   const [alquiladas, setAlquiladas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { token } = useAuth(); //---del context q guarda el estado del user
-  const isLogged = !!token; //---se pasa a booleano
+  const { token, rol } = useAuth(); // <-- añadido rol
+  const isLogged = !!token;
 
   const handleAlquilarExito = (peliculaId) => {
     setAlquiladas(prev => [...prev, peliculaId]);
@@ -22,11 +22,10 @@ const Favoritos = () => {
       try {
         setLoading(true);
         const data = await getFavoritos();
-        const alquileres = await getMisAlquileres(); //----añadido para q se carguen los alquileres
+        const alquileres = await getMisAlquileres();
         setPeliculas(data);
-        // El id de la pelicula esta en a.pelicula.id por la estructura del AlquilerResponseDTO
-        const idsAlquiladas = alquileres.map(a => a.pelicula?.id ?? a.id); //--pilla los ids
-        setAlquiladas(idsAlquiladas);//--guardar los ids
+        const idsAlquiladas = alquileres.map(a => a.pelicula?.id ?? a.id);
+        setAlquiladas(idsAlquiladas);
       } catch (err) {
         setError(err.message || 'Error al cargar favoritos ;(');
       } finally {
@@ -49,9 +48,10 @@ const Favoritos = () => {
             key={`${pelicula.id}-${alquiladas.includes(pelicula.id)}`}
             pelicula={pelicula}
             isLogged={isLogged}
+            rol={rol}
             initialFavorito={true}
-            yaAlquilada={alquiladas.includes(pelicula.id)} //----bug arrelagito de comprobar si está alquilada
-            onAlquilar={handleAlquilarExito}//--cambiar si esta alquilada o no
+            yaAlquilada={alquiladas.includes(pelicula.id)}
+            onAlquilar={handleAlquilarExito}
           />
         ))}
       </div>
