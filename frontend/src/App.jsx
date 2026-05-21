@@ -18,6 +18,10 @@ import LightRays from './components/LightRays.jsx';
 import Chat from './pages/chat/Chat.jsx';
 import ChatAdmin from './pages/dashboard/ChatAdmin.jsx';
 
+import GestionUsuarios from "./pages/dashboard/GestionUsuarios.jsx";
+import EstadisticasPeliculas from "./pages/dashboard/EstadisticasPeliculas.jsx";
+
+import GestionAlquileres from "./pages/dashboard/GestionAlquileres.jsx";
 
 function App() {
   return (
@@ -94,18 +98,28 @@ function App() {
                     </PrivateAdminRoute>
                   } />
 
-                  <Route path="/usuarios" element={<div>Panel de Gestión de Usuarios</div>} />
-                  <Route path="/stats" element={<div>Panel de Estadísticas</div>} />
+                  <Route path="/dashboard/usuarios" element={
+                    <PrivateAdminRoute>
+                      <GestionUsuarios />
+                    </PrivateAdminRoute>
+                  } />
 
+                  <Route path="/dashboard/alquileres" element={<PrivateAdminRoute>
+                    <GestionAlquileres />
+                  </PrivateAdminRoute>
+                  } />
+
+                  <Route path="/dashboard/estadisticas" element={<PrivateAdminRoute>
+                    <EstadisticasPeliculas />
+                  </PrivateAdminRoute>
+                  } />
                 </Routes>
               </Layout>
             </AuthProvider >
           </ClickSpark >
         </div>
       </div>
-
     </>
-
   );
 }
 

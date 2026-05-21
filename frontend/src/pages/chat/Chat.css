@@ -33,7 +33,7 @@
     flex-direction: column;
     gap: 1rem;
     padding: 1rem;
-    background: #1a1a2e;
+    background: #111111b3;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     margin-bottom: 1rem;
@@ -66,7 +66,7 @@
 /* Mensaje del admin — izquierda */
 .chat-mensaje-admin {
     align-self: flex-start;
-    background: #2a2a4a;
+    background: #7b1fa2;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom-left-radius: 2px;
 }

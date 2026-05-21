@@ -3,7 +3,7 @@ import { importarDesdeTmdb, subirVideoPelicula } from "../../api/peliculasApi";
 //-------- cambio el código para poner el env en la raíz
 //así el back llama al tmdb pa q se importe la peli desde ahí
 //dejo comentado el código antiguo
-
+import './formularioPeliculas.css';
 const FormularioPelicula = ({ alFinalizar }) => {
 
     // const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p';
@@ -123,6 +123,8 @@ const FormularioPelicula = ({ alFinalizar }) => {
                             required
                         />
                     </div>
+                    <div>
+                        <p className="buscarId">Buscar <a href="https://www.themoviedb.org/?language=es" target="_blank" rel="noopener noreferrer">ID</a>.</p>                    </div>
                     <div className="field">
                         <label>Archivo de Video Local</label>
                         <input

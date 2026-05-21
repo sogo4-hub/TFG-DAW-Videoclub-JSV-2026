@@ -5,9 +5,17 @@
 }
 
 .dashboard-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 2.5rem;
+    font-weight: bold;
+    font-family: "Permanent Marker", cursive;
+    color: #ff4444;
+    text-shadow: 0 1px 10px #ff4444ac;
+    margin: 0 0 2rem 0;
     text-align: center;
-    font-size: 2.2rem;
-    margin-bottom: 30px;
 }
 
 .dashboard-grid {
@@ -45,6 +53,8 @@
 
 .dashboard-card button:hover {
     background: #c7002c;
+    box-shadow: 0 1px 10px #ff4444ac;
+    ;
 }
 
 .gestionPeliculas {
@@ -69,14 +79,29 @@
 .btn-add:hover,
 .btn-delete:hover {
     background: #c7002c;
+    
     border: 1px solid transparent;
+    box-shadow: 0 1px 10px #ff4444ac;
+
 }
 
-
-
-
 h2 {
-    text-align: center
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 2.5rem;
+    font-weight: bold;
+    font-family: "Permanent Marker", cursive;
+    color: #7b1fa2;
+    text-shadow: 0 4px 12px rgba(179, 0, 255, 0.3);
+    text-align: center;
+}
+
+.gestionPeliculas {
+    color: #ff4444;
+    text-shadow: 0 1px 10px #ff4444ac;
+
 }
 
 .gestion-table {
