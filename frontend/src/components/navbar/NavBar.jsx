@@ -99,8 +99,8 @@ const NavBar = () => {
             <>
               <Link to="/">Inicio</Link>
               <Link to="/catalogo">Catálogo</Link>
-              <Link to="/mis-alquileres">Mis Alquileres</Link>
-              <Link to="/favoritos">Favoritos</Link>
+              {rol !== 'ADMIN' && <Link to="/mis-alquileres">Mis Alquileres</Link>}
+              {rol !== 'ADMIN' && <Link to="/favoritos">Favoritos</Link>}
             </>
           )}
 

@@ -177,8 +177,8 @@ function Registro() {
                 //autologin y redirección:
                 login({
                     token: data.token,
-                    rol: data.rol
-                    //nombre: data.nombre
+                    rol: data.rol,
+                    nombre: data.nombre
                 });
 
                 navigate('/', { replace: true });

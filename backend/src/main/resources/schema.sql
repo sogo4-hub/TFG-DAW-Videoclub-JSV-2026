@@ -1,5 +1,6 @@
 -- Borramos la tabla si ya existe para evitar errores al reiniciar
-DROP TABLE IF EXISTS usuarios, peliculas, favoritos, alquileres;
+----para borrar al revés por las fk 
+DROP TABLE IF EXISTS mensajes_chat, alquileres, favoritos, peliculas, usuarios;
 
 -- Creación de la tabla usuarios basada en la entidad Usuario.java
 CREATE TABLE usuarios (
@@ -48,4 +49,14 @@ CREATE TABLE alquileres (
                             reproducida BOOLEAN DEFAULT FALSE, -- <--- AÑADE ESTA LÍNEA
                             FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
                             FOREIGN KEY (pelicula_id) REFERENCES peliculas(id) ON DELETE CASCADE
+);
+
+CREATE TABLE mensajes_chat (
+                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                            es_admin BOOLEAN NOT NULL DEFAULT FALSE,
+                            fecha_envio DATETIME(6) NOT NULL,
+                            leido BOOLEAN NOT NULL DEFAULT FALSE,
+                            texto TEXT NOT NULL,
+                            usuario_id BIGINT NOT NULL,
+                            FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );

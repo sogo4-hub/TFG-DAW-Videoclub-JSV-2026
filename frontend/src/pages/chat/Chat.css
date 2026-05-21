@@ -56,17 +56,15 @@
     border-radius: 12px;
 }
 
-/* Mensaje del usuario — derecha */
 .chat-mensaje-usuario {
     align-self: flex-end;
     background: #c7002c;
     border-bottom-right-radius: 2px;
 }
 
-/* Mensaje del admin — izquierda */
 .chat-mensaje-admin {
     align-self: flex-start;
-    background: #7b1fa2;
+    background: #2a2a4a;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom-left-radius: 2px;
 }
@@ -170,10 +168,8 @@
 
 .chat-ticks-leido {
     color: #4fc3f7;
-    /* azul */
 }
 
 .chat-ticks-noLeido {
     color: rgba(255, 255, 255, 0.4);
-    /* gris */
 }

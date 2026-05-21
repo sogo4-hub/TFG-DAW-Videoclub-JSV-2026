@@ -36,7 +36,7 @@
 
 /* ── SIDEBAR ── */
 .chatadmin-sidebar {
-    background: #7b1fa2;
+    background: #111111b3;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     overflow-y: auto;
@@ -104,7 +104,7 @@
 .chatadmin-chat {
     display: flex;
     flex-direction: column;
-    background: #ff4444;
+    background: #111111b3;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;

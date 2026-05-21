@@ -33,10 +33,10 @@ public class AuthService {
                 // COMENTAR ESTO PARA HACER PRUEBAS LOCALES EN EL BACKEND
                 // =============================================================================
                 // 2. NUEVO: Validar el reCAPTCHA con Google
-                // if (!recaptchaService.validateToken(request.getRecaptchaToken())) {
-                // throw new RecaptchaException("La validación de seguridad de reCAPTCHA ha
-                // fallado. Por favor, inténtalo de nuevo.");
-                // }
+                if (!recaptchaService.validateToken(request.getRecaptchaToken())) {
+                        throw new RecaptchaException(
+                                        "La validación de seguridad de reCAPTCHA ha fallado. Por favor, inténtalo de nuevo.");
+                }
                 // =====================================================================
 
                 // 3. Si todo es correcto, crear el usuario

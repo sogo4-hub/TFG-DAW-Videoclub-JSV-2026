@@ -4,7 +4,7 @@ import { toggleFavorito } from '../../api/favoritosApi';
 import { crearAlquiler } from '../../api/alquileresApi';
 import './PeliculaCard.css';
 
-const PeliculaCard = ({ pelicula, isLogged, initialFavorito = false, yaAlquilada = false, onAlquilar }) => {
+const PeliculaCard = ({ pelicula, isLogged, rol, initialFavorito = false, yaAlquilada = false, onAlquilar }) => {
   const [isFavorito, setIsFavorito] = useState(initialFavorito);
   const [loading, setLoading] = useState(false);
   const [mostrarPago, setMostrarPago] = useState(false);
@@ -22,13 +22,15 @@ const PeliculaCard = ({ pelicula, isLogged, initialFavorito = false, yaAlquilada
   const precioAlquiler = pelicula?.precio ?? 2.99;
   const precioFormateado = `${Number(precioAlquiler).toFixed(2).replace('.', ',')} €`;
 
+  const esAdmin = rol === 'ADMIN'; // <-- NUEVO
+
   const handleToggleFavorito = async (e) => {
     e.stopPropagation();
     if (loading) return;
     try {
       setLoading(true);
       await toggleFavorito(pelicula.id);
-      setIsFavorito(prev => !prev); // cambia al estado contrario
+      setIsFavorito(prev => !prev);
     } catch (error) {
       console.error('Error al cambiar favorito:', error);
       alert('Error al cambiar favorito');
@@ -79,7 +81,7 @@ const PeliculaCard = ({ pelicula, isLogged, initialFavorito = false, yaAlquilada
       await crearAlquiler(pelicula.id);
       setMostrarPago(false);
       alert(`'${pelicula.titulo}' alquilada correctamente por ${precioFormateado}. ¡Disfrútala durante 48 horas!`);
-      onAlquilar?.(pelicula.id); // avisa al padre para que actualice la lista
+      onAlquilar?.(pelicula.id);
     } catch (error) {
       console.error('Error al alquilar:', error);
       setErrorPago('Error al procesar el alquiler. Inténtalo de nuevo.');
@@ -159,7 +161,8 @@ const PeliculaCard = ({ pelicula, isLogged, initialFavorito = false, yaAlquilada
           )}
         </p>
 
-        {isLogged && (
+        {/* Botones solo para usuarios logueados que NO sean ADMIN */}
+        {isLogged && !esAdmin && (
           <div className="pelicula-botones">
             <button
               className={`btn-favorito ${isFavorito ? 'btn-favorito-activo' : ''} ${loading ? 'btn-loading' : ''}`}
@@ -179,6 +182,7 @@ const PeliculaCard = ({ pelicula, isLogged, initialFavorito = false, yaAlquilada
           </div>
         )}
 
+        {/* Aviso solo para visitantes sin sesión */}
         {!isLogged && (
           <div className="pelicula-no-logged">
             <p>Inicie sesión para alquilar.</p>
