@@ -1,4 +1,5 @@
 package es.daw.backend.dto;
+
 //Para el formulario de login
 import lombok.*;
 
@@ -7,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthRequest {
-    private String email;
+    // private String email;
+    private String nombreOemail;
     private String password;
 }

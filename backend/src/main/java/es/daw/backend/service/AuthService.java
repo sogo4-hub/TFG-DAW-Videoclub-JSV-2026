@@ -19,55 +19,60 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
-    private final RecaptchaService recaptchaService;
+        private final UsuarioRepository usuarioRepository;
+        private final PasswordEncoder passwordEncoder;
+        private final JwtService jwtService;
+        private final AuthenticationManager authenticationManager;
+        private final RecaptchaService recaptchaService;
 
-    public AuthResponse register(RegisterRequest request) {
-        // 1. Validar si el email ya existe
-        if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistsException(request.getEmail());
+        public AuthResponse register(RegisterRequest request) {
+                // 1. Validar si el email ya existe
+                if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
+                        throw new EmailAlreadyExistsException(request.getEmail());
+                }
+                // COMENTAR ESTO PARA HACER PRUEBAS LOCALES EN EL BACKEND
+                // =============================================================================
+                // 2. NUEVO: Validar el reCAPTCHA con Google
+                // if (!recaptchaService.validateToken(request.getRecaptchaToken())) {
+                // throw new RecaptchaException("La validación de seguridad de reCAPTCHA ha
+                // fallado. Por favor, inténtalo de nuevo.");
+                // }
+                // =====================================================================
+
+                // 3. Si todo es correcto, crear el usuario
+                Usuario user = Usuario.builder()
+                                .nombre(request.getNombre())
+                                .email(request.getEmail())
+                                .password(passwordEncoder.encode(request.getPassword()))
+                                .rol("USER")
+                                .build();
+
+                usuarioRepository.save(user);
+                String jwtToken = jwtService.generateToken(user);
+                // <--- NUEVO: Devolvemos el rol en la respuesta
+                return AuthResponse.builder()
+                                .token(jwtToken)
+                                .rol(user.getRol())
+                                .nombre(user.getNombre())
+                                .build();
         }
-        // COMENTAR ESTO PARA HACER PRUEBAS LOCALES EN EL BACKEND
-        // =============================================================================
-        // 2. NUEVO: Validar el reCAPTCHA con Google
-        // if (!recaptchaService.validateToken(request.getRecaptchaToken())) {
-        // throw new RecaptchaException("La validación de seguridad de reCAPTCHA ha
-        // fallado. Por favor, inténtalo de nuevo.");
-        // }
-        // =====================================================================
 
-        // 3. Si todo es correcto, crear el usuario
-        Usuario user = Usuario.builder()
-                .nombre(request.getNombre())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .rol("USER")
-                .build();
+        public AuthResponse login(AuthRequest request) {
+                authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(request.getNombreOemail(),
+                                                request.getPassword()));
 
-        usuarioRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-        // <--- NUEVO: Devolvemos el rol en la respuesta
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .rol(user.getRol())
-                .build();
-    }
+                Usuario user = usuarioRepository
+                                .findByEmailOrNombre(request.getNombreOemail(), request.getNombreOemail())
+                                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-    public AuthResponse login(AuthRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+                String jwtToken = jwtService.generateToken(user);
 
-        Usuario user = usuarioRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
-
-        String jwtToken = jwtService.generateToken(user);
-        // <--- NUEVO: Devolvemos el rol en la respuesta
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .rol(user.getRol())
-                .build();
-    }
+                // ahora devolvermos el rol tmb
+                return AuthResponse.builder()
+                                .token(jwtToken)
+                                .rol(user.getRol())
+                                .nombre(user.getNombre())
+                                .build();
+        }
 }
