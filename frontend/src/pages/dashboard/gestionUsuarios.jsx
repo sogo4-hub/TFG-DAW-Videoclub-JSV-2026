@@ -6,9 +6,9 @@ function GestionUsuarios() {
 
     useEffect(() => {
         // 1. Buscamos el token en el almacenamiento del navegador
-const savedAuth = sessionStorage.getItem('auth');
-const authObj = savedAuth ? JSON.parse(savedAuth) : null;
-const token = authObj ? authObj.token : null;
+        const savedAuth = sessionStorage.getItem('auth');
+        const authObj = savedAuth ? JSON.parse(savedAuth) : null;
+        const token = authObj ? authObj.token : null;
 
         if (!token) {
             setError("No se encontró el token de autenticación. Inicia sesión de nuevo.");
@@ -23,22 +23,24 @@ const token = authObj ? authObj.token : null;
                 'Authorization': `Bearer ${token}` // <- Aquí viaja tu pase de seguridad JWT
             }
         })
-        .then(res => {
-            if (res.status === 403) {
-                throw new Error("No tienes rol de ADMIN para acceder a este panel.");
-            }
-            if (!res.ok) {
-                throw new Error("Error en la respuesta del servidor.");
-            }
-            return res.json(); // Ahora sí llegará un JSON limpio
-        })
-        .then(data => {
-            setUsuarios(data);
-        })
-        .catch(err => {
-            console.error(err);
-            setError(err.message || "No se pudieron cargar los usuarios.");
-        });
+            .then(res => {
+                if (res.status === 403) {
+                    throw new Error("No tienes rol de ADMIN para acceder a este panel.");
+                }
+                if (!res.ok) {
+                    throw new Error("Error en la respuesta del servidor.");
+                }
+                return res.json(); // Ahora sí llegará un JSON limpio
+            })
+            .then(data => {
+                console.log("Usuario ejemplo:", data[0]); // 👈 mira esto en DevTools
+
+                setUsuarios(data);
+            })
+            .catch(err => {
+                console.error(err);
+                setError(err.message || "No se pudieron cargar los usuarios.");
+            });
     }, []);
 
     return (

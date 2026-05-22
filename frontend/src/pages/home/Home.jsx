@@ -80,7 +80,7 @@ export default function Home() {
               <Link to="/ayuda" className="ayuda-link">aquí</Link>
               {' '}y un administrador te responderá.
               <br />
-              <p class="nota-login">* Debes iniciar sesión para preguntar</p>
+              <span className="nota-login">* Debes iniciar sesión para preguntar</span>
             </>
           )}
         </p>
