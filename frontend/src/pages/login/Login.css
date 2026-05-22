@@ -13,24 +13,22 @@
     background-image: url('/imgs/logo-login.png');
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 60%;
+    background-size: 80%;
 }
 
-/* 2. Cuando la pantalla mide 500px o más */
+/*
 @media (min-width: 500px) {
     .login-page {
         background-size: 460px;
-        /* Un tamaño intermedio */
     }
 }
 
-/* 3. Cuando la pantalla mide 1024px o más (Desktop) */
 @media (min-width: 1024px) {
     .login-page {
         background-size: 650px;
-        /* Tamaño más pequeño para que no se vea gigante en PC */
     }
 }
+*/
 
 .login-titulo {
     position: absolute;
@@ -48,7 +46,8 @@
     width: 100%;
     max-width: 395px;
     color: white;
-    margin-top: 5rem;
+    margin-left:3rem;
+    
 }
 
 .login-card h2 {

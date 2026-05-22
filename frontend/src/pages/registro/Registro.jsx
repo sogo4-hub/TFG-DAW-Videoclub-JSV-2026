@@ -129,7 +129,7 @@ function Registro() {
         let token = null;
         if (recaptchaRef.current != null) {
             token = window.grecaptcha.enterprise.getResponse(recaptchaRef.current);
-            console.log('el token de racaptcha es: ', token);
+            // console.log('el token de racaptcha es: ', token);
 
             if (!token) {
                 erroresValidacion.recaptcha = "Debes completar el reCAPTCHA";
