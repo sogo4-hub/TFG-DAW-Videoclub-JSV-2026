@@ -12,7 +12,7 @@ public class UsuarioMapper {
         if (usuario == null) return null;
         return UsuarioResponse.builder()
                 .id(usuario.getId())
-                .nombre(usuario.getNombre()) // <--- OPCIONAL: Puedes añadirlo al response también si quieres
+                .nombre(usuario.getNombre())
                 .email(usuario.getEmail())
                 .rol(usuario.getRol())
                 .fechaRegistro(usuario.getFechaRegistro())
@@ -22,7 +22,7 @@ public class UsuarioMapper {
     public Usuario toEntity(UsuarioRequest dto) {
         if (dto == null) return null;
         return Usuario.builder()
-                .nombre(dto.getNombre()) // <--- NUEVO: Mapeamos el nombr
+                .nombre(dto.getNombre())
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .rol(dto.getRol())

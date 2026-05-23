@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
-//Este servicio se encargará exclusivamente de hablar con MongoDB
+// Este servicio se encargará exclusivamente de hablar con MongoDB
 // para guardar y recuperar los archivos binarios.
 public class MediaService {
 
@@ -25,8 +25,7 @@ public class MediaService {
         Object fileId = gridFsTemplate.store(
                 archivo.getInputStream(),
                 archivo.getOriginalFilename(),
-                archivo.getContentType()
-        );
+                archivo.getContentType());
         return fileId.toString();
     }
 
@@ -36,7 +35,6 @@ public class MediaService {
         return gridFsTemplate.getResource(file);
     }
 
-    // NUEVO MÉTODO: Elimina el archivo de MongoDB
     public void eliminarArchivo(String id) {
         gridFsTemplate.delete(new Query(Criteria.where("_id").is(id)));
     }
@@ -46,12 +44,11 @@ public class MediaService {
      */
     public String uploadFile(MultipartFile file) {
         try {
-            // Guardamos el flujo de bytes en GridFS pasándole el nombre y el tipo (ej: video/mp4)
+            // Guardamos el flujo de bytes en GridFS pasándole el nombre y el tipo
             ObjectId objectId = gridFsTemplate.store(
                     file.getInputStream(),
                     file.getOriginalFilename(),
-                    file.getContentType()
-            );
+                    file.getContentType());
 
             // Retornamos el ID generado por MongoDB convertido a String
             return objectId.toString();

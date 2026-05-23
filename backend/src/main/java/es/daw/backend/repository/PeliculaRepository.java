@@ -10,22 +10,21 @@ import java.util.List;
 
 public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
 
-    // 1. Necesario para la paginación y filtros de búsqueda del catálogo
-    Page<Pelicula> findByTituloContainingIgnoreCaseAndGeneroContainingIgnoreCase(
-            String titulo, String genero, Pageable pageable);
+        // para la paginación y filtros de búsqueda del catálogo
+        Page<Pelicula> findByTituloContainingIgnoreCaseAndGeneroContainingIgnoreCase(
+                        String titulo, String genero, Pageable pageable);
 
-    // 2. Necesario para comprobar duplicados antes de importar de TMDB
-    boolean existsByTmdbId(Long tmdbId);
+        // comprobar duplicados antes de importar de TMDB
+        boolean existsByTmdbId(Long tmdbId);
 
-    // 3. Tu consulta del Dashboard de administración (Sintaxis compatible con
-    // Hibernate 6 y tu clase DTO)
-@Query("SELECT new es.daw.backend.dto.PeliculaStatsDTO(" +
-        "p.id, " +
-        "STR(p.tmdbId), " +
-        "p.titulo, " +
-        "(SELECT COUNT(f) FROM Favorito f WHERE f.pelicula.id = p.id), " +
-        "(SELECT COUNT(a) FROM Alquiler a WHERE a.pelicula.id = p.id), " +
-        "COALESCE((SELECT AVG(c.nota) FROM Calificacion c WHERE c.id.peliculaId = p.id), 0.0)) " +
-        "FROM Pelicula p")
-List<PeliculaStatsDTO> obtenerEstadisticasPeliculas();
+        // consulta del Dashboard de administración
+        @Query("SELECT new es.daw.backend.dto.PeliculaStatsDTO(" +
+                        "p.id, " +
+                        "STR(p.tmdbId), " +
+                        "p.titulo, " +
+                        "(SELECT COUNT(f) FROM Favorito f WHERE f.pelicula.id = p.id), " +
+                        "(SELECT COUNT(a) FROM Alquiler a WHERE a.pelicula.id = p.id), " +
+                        "COALESCE((SELECT AVG(c.nota) FROM Calificacion c WHERE c.id.peliculaId = p.id), 0.0)) " +
+                        "FROM Pelicula p")
+        List<PeliculaStatsDTO> obtenerEstadisticasPeliculas();
 }

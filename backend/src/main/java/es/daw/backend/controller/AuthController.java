@@ -17,7 +17,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-        // La validación del reCAPTCHA y la creación del usuario se manejan en el AuthService
         return ResponseEntity.ok(authService.register(request));
     }
 

@@ -18,14 +18,14 @@ public class MensajeChatController {
 
     private final MensajeChatService mensajeChatService;
 
-    // El usuario obtiene su historial de mensajes
+    // el user ve su historial de mensajes
     @GetMapping("/historial")
     public ResponseEntity<List<MensajeChatDTO>> obtenerHistorial() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(mensajeChatService.obtenerHistorial(email));
     }
 
-    // El usuario guarda un mensaje — lo llama el servidor Node.js con el email del usuario
+    // guardar un mensaje
     @PostMapping("/mensaje")
     public ResponseEntity<MensajeChatDTO> guardarMensaje(@RequestBody Map<String, String> body) {
         String email = body.get("email");
@@ -33,7 +33,7 @@ public class MensajeChatController {
         return ResponseEntity.ok(mensajeChatService.guardarMensajeUsuario(email, texto));
     }
 
-    // El admin guarda su respuesta — lo llama el servidor Node.js
+    // guardar respuesta admin
     @PostMapping("/respuesta")
     public ResponseEntity<MensajeChatDTO> guardarRespuesta(@RequestBody Map<String, String> body) {
         String emailUsuario = body.get("emailUsuario");
@@ -41,14 +41,14 @@ public class MensajeChatController {
         return ResponseEntity.ok(mensajeChatService.guardarRespuestaAdmin(emailUsuario, texto));
     }
 
-    // El admin obtiene todas las conversaciones
+    // admin ve todas las conversaciones de los users
     @GetMapping("/conversaciones")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Map<String, List<MensajeChatDTO>>> obtenerTodasLasConversaciones() {
         return ResponseEntity.ok(mensajeChatService.obtenerTodasLasConversaciones());
     }
 
-    // El admin marca una conversación como leída
+    // marcar conversación como leída
     @PatchMapping("/leido/{emailUsuario}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> marcarComoLeidos(@PathVariable String emailUsuario) {

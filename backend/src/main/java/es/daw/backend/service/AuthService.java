@@ -30,9 +30,8 @@ public class AuthService {
                 if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
                         throw new EmailAlreadyExistsException(request.getEmail());
                 }
-                // COMENTAR ESTO PARA HACER PRUEBAS LOCALES EN EL BACKEND
+                // -------COMENTAD ESTO PARA HACER PRUEBAS LOCALES EN EL BACKEND!!!!!!
                 // =============================================================================
-                // 2. NUEVO: Validar el reCAPTCHA con Google
                 if (!recaptchaService.validateToken(request.getRecaptchaToken())) {
                         throw new RecaptchaException(
                                         "La validación de seguridad de reCAPTCHA ha fallado. Por favor, inténtalo de nuevo.");
@@ -49,7 +48,6 @@ public class AuthService {
 
                 usuarioRepository.save(user);
                 String jwtToken = jwtService.generateToken(user);
-                // <--- NUEVO: Devolvemos el rol en la respuesta
                 return AuthResponse.builder()
                                 .token(jwtToken)
                                 .rol(user.getRol())

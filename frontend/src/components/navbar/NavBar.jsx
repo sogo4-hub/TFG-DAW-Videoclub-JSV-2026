@@ -80,13 +80,11 @@ const NavBar = () => {
     <>
       <nav className="navbar">
 
-        {/* 1. IZQUIERDA: LOGO + TEXTO */}
         <div className="navbar-left">
           <img src="/imgs/logo.png" alt="StreamFlix Logo" className="navbar-logo" />
           <h3 className="navbar-title">StreamFlix</h3>
         </div>
 
-        {/* 2. ENLACES DE NAVEGACIÓN PRINCIPALES */}
         <div className="navbar-links">
           {!token && (
             <>
@@ -109,7 +107,6 @@ const NavBar = () => {
           )}
         </div>
 
-        {/* 3. BUSCADOR (Separado de los links para poder moverlo dinámicamente) */}
         <div className="navbar-search">
           <input
             type="text"
@@ -122,10 +119,8 @@ const NavBar = () => {
           <i className="fa-solid fa-magnifying-glass"></i>
         </div>
 
-        {/* 4. FILTROS (Filtro + Ordenar - Agrupados en una sola caja) */}
         {enCatalogo && (
           <div className="navbar-filtros-container">
-            {/* FILTRO DE GÉNEROS */}
             <div className="navbar-filtro" ref={desplegableRef}>
               <button
                 className={`filtro-btn ${generoActivo ? 'filtro-btn-activo' : ''}`}
@@ -158,7 +153,7 @@ const NavBar = () => {
               )}
             </div>
 
-            {/* ORDENAR */}
+            {/* ordenación */}
             <div className="navbar-filtro" ref={ordenRef}>
               <button
                 className={`filtro-btn ${sortActivo ? 'filtro-btn-activo' : ''}`}
@@ -193,7 +188,6 @@ const NavBar = () => {
           </div>
         )}
 
-        {/* 5. DERECHA: LOGIN / REGISTRO / CERRAR SESIÓN */}
         <div className="navbar-user">
           {!token && (
             <>

@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class TmdbCrewDTO {
     private String name;
-    private String job; // Aquí buscaremos la palabra "Director"
+    private String job; // aquí buscaremos la palabra Director
 }

@@ -1,6 +1,6 @@
 -- Borramos la tabla si ya existe para evitar errores al reiniciar
 ----para borrar al revés por las fk 
-DROP TABLE IF EXISTS mensajes_chat, alquileres, favoritos, peliculas, usuarios, calificaciones;
+DROP TABLE IF EXISTS calificaciones, mensajes_chat, alquileres, favoritos, peliculas, usuarios;
 
 -- Creación de la tabla usuarios basada en la entidad Usuario.java
 CREATE TABLE usuarios (

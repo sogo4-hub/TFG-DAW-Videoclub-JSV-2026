@@ -6,17 +6,13 @@ import "./Layout.css";
 export default function Layout({ children }) {
   return (
     <div className="layout-wrapper">
-
-
       {/* NAVBAR FIJO */}
       <Navbar />
 
-      {/* CONTENIDO PRINCIPAL */}
       <main className="layout-content">
         {children}
       </main>
 
-      {/* FOOTER */}
       <Footer />
     </div>
   );

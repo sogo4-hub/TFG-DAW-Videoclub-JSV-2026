@@ -21,7 +21,7 @@ import org.springframework.web.cors.CorsConfiguration;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-@EnableMethodSecurity // IMPRESCINDIBLE para que @PreAuthorize sea evaluado
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtFilter jwtAuthFilter;
@@ -30,18 +30,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // <--- AÑADE ESTA LÍNEA AQUÍ
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
-                // AÑADE ESTA LÍNEA PARA PERMITIR LOS IFRAMES DE LA CONSOLA H2
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Login y Registro públicos
-                        .requestMatchers("/h2-console/**").permitAll() // Permiso para la consola H2
-                        .requestMatchers("/error").permitAll() // Para ver el error
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/peliculas/**").permitAll() // Catálogo público
-                        .requestMatchers(HttpMethod.GET, "/api/media/**").permitAll() // AÑADE ESTA LÍNEA PARA LAS
-                                                                                      // IMÁGENES
+                        .requestMatchers(HttpMethod.GET, "/api/media/**").permitAll()
                         .requestMatchers("/api/chat/mensaje").permitAll() // lo llama Node.js sin token
                         .requestMatchers("/api/chat/respuesta").permitAll() // lo llama Node.js sin token
                         .anyRequest().authenticated())
@@ -72,19 +70,16 @@ public class SecurityConfig {
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
 
-        // 1. Permitir el puerto donde corre el frontend de Sara (React/Vite suele ser
-        // 5173, si usa Create React App es 3000)
         configuration.setAllowedOrigins(java.util.List.of("http://localhost:5173", "http://localhost:3000"));
 
-        // 2. Permitir los métodos HTTP que vais a usar
-        // ------julián, te añado patch para cancelación alquileres--------------
+        // ------ añado patch para cancelación alquileres--------------
         configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
-        // 3. Permitir las cabeceras (¡CRUCIAL para que pase el token JWT!)
+        // permitir cabeceras pa q pase el token jwt
         configuration.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type"));
 
         org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Aplica a todas las rutas de tu API
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }

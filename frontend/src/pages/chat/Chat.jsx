@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import './Chat.css';
 import { useNavigate } from 'react-router-dom';
 
-// Conexión al servidor Node.js de chat
+//conexión para el chat
 const socket = io('http://localhost:3000');
 
 const Chat = () => {
@@ -129,11 +129,11 @@ const Chat = () => {
 
                             {msg.esAdmin ? 'StreamFlix' : nombre || email}
                         </span>
-                        
+
                         <p className="chat-mensaje-texto">{msg.texto}</p>
 
 
-                        {/* Footer con fecha y ticks — solo en mensajes del usuario */}
+                        {/* Footer con fecha y ticks; solo en mensajes del usuario */}
                         <div className="chat-mensaje-footer">
                             <span className="chat-mensaje-fecha">
                                 {new Date(msg.fechaEnvio).toLocaleString('es-ES', {

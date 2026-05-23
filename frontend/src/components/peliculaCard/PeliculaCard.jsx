@@ -161,7 +161,7 @@ const PeliculaCard = ({ pelicula, isLogged, rol, initialFavorito = false, yaAlqu
           )}
         </p>
 
-        {/* Botones solo para usuarios logueados que NO sean ADMIN */}
+        {/* Botones solo para usuarios logueados que nooo sean ADMIN */}
         {isLogged && !esAdmin && (
           <div className="pelicula-botones">
             <button

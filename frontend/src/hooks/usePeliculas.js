@@ -33,7 +33,8 @@ const usePeliculas = () => {
         setLoading(true);
         setError(null);
 
-        // Pasamos sort al api — Spring Boot lo interpreta como ?sort=titulo,asc
+        // Pasamos sort al api
+        // Spring Boot lo interpreta como ?sort=titulo,asc
         const data = await getPeliculas(page, size, search, genre, sort);
 
         setPeliculas(data.content || []);

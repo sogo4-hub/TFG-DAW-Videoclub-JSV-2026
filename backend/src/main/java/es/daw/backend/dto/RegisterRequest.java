@@ -7,8 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-    private String nombre; // <--- NUEVO
+    private String nombre;
     private String email;
     private String password;
-    private String recaptchaToken; // <--- NUEVO: Lo capturamos para evitar errores
+    private String recaptchaToken;
 }

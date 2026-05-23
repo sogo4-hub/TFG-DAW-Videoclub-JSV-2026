@@ -20,10 +20,6 @@ public class CalificacionService {
     private final CalificacionRepository repository;
     private final AlquilerRepository alquilerRepository;
 
-    // En el futuro, cuando enlaces con tu lógica de alquileres, inyectarías aquí tu
-    // AlquilerRepository:
-    // private final AlquilerRepository alquilerRepository;
-
     public CalificacionService(CalificacionRepository repository, AlquilerRepository alquilerRepository) {
         this.repository = repository;
         this.alquilerRepository = alquilerRepository;
@@ -63,19 +59,17 @@ public class CalificacionService {
         return new CalificacionesResponse(peliculaId, media, total);
     }
 
-    /**
-     * Comprueba si un usuario ha visto/alquilado una película.
-     * Método requerido por CalificacionController.
-     */
+    // Comprueba si un usuario ha visto/alquilado una película.
     public boolean usuarioHaVistoPelicula(Long usuarioId, Long peliculaId) {
         System.out.println("DEBUG: Validando usuarioID: " + usuarioId + " y peliculaID: " + peliculaId);
 
-boolean existe = alquilerRepository.usuarioPuedeValorar(usuarioId, peliculaId);
+        boolean existe = alquilerRepository.usuarioPuedeValorar(usuarioId, peliculaId);
 
         System.out.println("DEBUG: ¿Se encontró alquiler? " + existe);
         return existe;
     }
+
     public List<Calificacion> obtenerValoracionesUsuario(Long usuarioId) {
-    return repository.findByIdUsuarioId(usuarioId);
-}
+        return repository.findByIdUsuarioId(usuarioId);
+    }
 }

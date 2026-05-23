@@ -30,7 +30,6 @@ const adminsConectados = new Map();
 io.on('connection', (socket) => {
     console.log('Nuevo cliente conectado:', socket.id);
 
-    // --- EVENTO: El usuario/admin se identifica al conectarse ---
     socket.on('identificarse', (data) => {
         const { email, esAdmin } = data;
 
@@ -39,13 +38,13 @@ io.on('connection', (socket) => {
             adminsConectados.set(socket.id, socket);
             console.log('Admin conectado:', socket.id, '— Total admins:', adminsConectados.size);
         } else {
-            // Es un usuario normal
+            // user normal
             usuariosConectados.set(email, socket.id);
             console.log('Usuario conectado:', email, socket.id);
         }
     });
 
-    // --- EVENTO: El usuario manda un mensaje ---
+    // --- user manda un mensaje
     socket.on('mensajeUsuario', async (data) => {
         const { email, texto } = data;
         console.log('Mensaje de usuario:', email, texto);
@@ -73,7 +72,7 @@ io.on('connection', (socket) => {
         }
     });
 
-    // --- EVENTO: El admin responde a un usuario ---
+    // --- admin responde a un usuario
     socket.on('respuestaAdmin', async (data) => {
         const { emailUsuario, texto } = data;
         console.log('Respuesta del admin a:', emailUsuario, texto);
@@ -104,7 +103,7 @@ io.on('connection', (socket) => {
         }
     });
 
-    // --- EVENTO: El admin abre una conversación y la marca como leída ---
+    // ---admin abre una conversación y la marca como leída
     // Notificamos al usuario para que actualice sus ticks a azul
     socket.on('conversacionLeida', (data) => {
         const { emailUsuario } = data;
@@ -116,8 +115,7 @@ io.on('connection', (socket) => {
         }
     });
 
-    // --- EVENTO: Cliente desconectado ---
-    socket.on('disconnect', () => {
+        socket.on('disconnect', () => {
         console.log('Cliente desconectado:', socket.id);
 
         // Si era un admin, lo eliminamos de la agenda
@@ -126,7 +124,7 @@ io.on('connection', (socket) => {
             console.log('Admin desconectado:', socket.id, '— Total admins:', adminsConectados.size);
         }
 
-        // Si era un usuario, lo eliminamos del mapa
+        // Si era un user, lo eliminamos del mapa
         for (const [email, socketId] of usuariosConectados.entries()) {
             if (socketId === socket.id) {
                 usuariosConectados.delete(email);
@@ -137,7 +135,6 @@ io.on('connection', (socket) => {
     });
 });
 
-// Arrancamos el servidor en el puerto 3000
 const PORT = 3000;
 httpServer.listen(PORT, () => {
     console.log(`Servidor de chat corriendo en http://localhost:${PORT}`);
