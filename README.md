@@ -1,4 +1,4 @@
-﻿# Para desplegar el proyecto:  
+# Para desplegar el proyecto:  
 
 (en la memoria hay imágenes con estos pasos por si acaso)
 

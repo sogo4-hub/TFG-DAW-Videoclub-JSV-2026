@@ -1,27 +1,35 @@
 package es.daw.backend.dto;
 
 public class PeliculaStatsDTO {
-    
+
     private Long id;
     private String tmdbId;
     private String titulo;
     private Long totalFavoritos;
     private Long totalAlquileres;
+    private Double notaMedia;
 
-    // 1. Constructor vacío (esencial para que Jackson serialice bien a JSON)
     public PeliculaStatsDTO() {
     }
 
-    // 2. Constructor completo (el que usa la Query JPQL de tu PeliculaRepository)
-    public PeliculaStatsDTO(Long id, String tmdbId, String titulo, Long totalFavoritos, Long totalAlquileres) {
+    public PeliculaStatsDTO(
+            Long id,
+            String tmdbId,
+            String titulo,
+            Long totalFavoritos,
+            Long totalAlquileres,
+            Double notaMedia
+    ) {
         this.id = id;
         this.tmdbId = tmdbId;
         this.titulo = titulo;
         this.totalFavoritos = totalFavoritos;
         this.totalAlquileres = totalAlquileres;
+        this.notaMedia = notaMedia != null
+                ? Math.round(notaMedia * 10.0) / 10.0
+                : 0.0;
     }
 
-    // 3. Getters y Setters
     public Long getId() {
         return id;
     }
@@ -60,5 +68,13 @@ public class PeliculaStatsDTO {
 
     public void setTotalAlquileres(Long totalAlquileres) {
         this.totalAlquileres = totalAlquileres;
+    }
+
+    public Double getNotaMedia() {
+        return notaMedia;
+    }
+
+    public void setNotaMedia(Double notaMedia) {
+        this.notaMedia = notaMedia;
     }
 }
