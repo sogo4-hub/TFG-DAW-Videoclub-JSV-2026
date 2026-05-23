@@ -60,23 +60,22 @@ public class PeliculaService {
     }
 
     public void eliminar(Long id) {
-        // 1. Buscamos la película antes de borrarla para obtener la URL de la imagen
         peliculaRepository.findById(id).ifPresent(pelicula -> {
 
-            String url = pelicula.getUrlImagen();
+            eliminarMediaSiEsDeMongo(pelicula.getUrlImagen());
+            eliminarMediaSiEsDeMongo(pelicula.getUrlVideo());
 
-            // 2. Comprobamos si la URL apunta a nuestro servicio de medios (/api/media/...)
-            if (url != null && url.startsWith("/api/media/")) {
-                // Extraemos el ID de MongoDB (la parte final de la cadena)
-                String mongoId = url.replace("/api/media/", "");
-
-                // 3. Borramos el archivo físico en MongoDB
-                mediaService.eliminarArchivo(mongoId);
-            }
-
-            // 4. Borramos el registro en la base de datos SQL (H2)
             peliculaRepository.deleteById(id);
         });
+    }
+
+    private void eliminarMediaSiEsDeMongo(String url) {
+        if (url == null || !url.startsWith("/api/media/")) {
+            return;
+        }
+
+        String mongoId = url.substring(url.lastIndexOf("/") + 1);
+        mediaService.eliminarArchivo(mongoId);
     }
 
     public PeliculaResponse guardarConImagen(PeliculaRequest request, MultipartFile archivo)
