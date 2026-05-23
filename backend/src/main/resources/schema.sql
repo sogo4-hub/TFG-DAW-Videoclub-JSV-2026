@@ -1,6 +1,6 @@
 -- Borramos la tabla si ya existe para evitar errores al reiniciar
 ----para borrar al revés por las fk 
-DROP TABLE IF EXISTS mensajes_chat, alquileres, favoritos, peliculas, usuarios;
+DROP TABLE IF EXISTS mensajes_chat, alquileres, favoritos, peliculas, usuarios, calificaciones;
 
 -- Creación de la tabla usuarios basada en la entidad Usuario.java
 CREATE TABLE usuarios (
@@ -59,4 +59,12 @@ CREATE TABLE mensajes_chat (
                             texto TEXT NOT NULL,
                             usuario_id BIGINT NOT NULL,
                             FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE calificaciones (
+                            usuario_id INT NOT NULL,
+                            pelicula_id INT NOT NULL,
+                            nota DECIMAL(2, 1) NOT NULL CHECK (nota >= 0.0 AND nota <= 5.0),
+                            fecha_calificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                            PRIMARY KEY (usuario_id, pelicula_id)
 );

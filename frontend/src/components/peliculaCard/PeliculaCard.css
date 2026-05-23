@@ -433,3 +433,83 @@
         font-size: 0.96rem;
     }
 }
+
+
+/* Contenedor general del bloque de estrellas */
+.seccion-calificar {
+  margin-top: 12px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.calificar-txt {
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-bottom: 4px;
+}
+
+/* El contenedor que agrupa las 5 estrellas */
+.stars-react {
+  display: inline-flex;
+  position: relative;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Cada una de las mitades (tanto izquierdas como derechas) */
+.star-half-react {
+  position: relative;
+  display: inline-block;
+  width: 0.75rem; /* La mitad del ancho total */
+  height: 1.5rem;
+  overflow: hidden;
+}
+
+/* Usamos FontAwesome o un caracter unicode para renderizar la estrella */
+.star-half-react::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  width: 1.5rem;
+}
+
+/* Las mitades derechas desplazan el dibujo para ocultar la parte izquierda */
+.star-half-react.right::before {
+  left: -0.75rem;
+}
+
+/* Color por defecto de la estrella apagada */
+.star-half-react::after {
+  color: #444;
+}
+
+/* Estilo cuando pasas el ratón por encima o cuando está seleccionada */
+.star-half-react.active {
+  color: #ffc107; /* Amarillo dorado */
+  text-shadow: 0 0 4px rgba(255, 193, 7, 0.5);
+}
+
+.nota-numerica {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #ffc107;
+  margin-top: 4px;
+}
+
+/* Estilo del nuevo botón Valorar Película */
+.btn-valorar-toggle {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-valorar-toggle:hover {
+  background-color: #218838;
+}
