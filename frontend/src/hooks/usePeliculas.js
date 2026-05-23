@@ -15,7 +15,7 @@ const usePeliculas = () => {
   const page = Number.isNaN(pageFromUrl) ? 0 : pageFromUrl;
 
   const [peliculas, setPeliculas] = useState([]);
-  const [size] = useState(16);
+  const [size] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(true);
