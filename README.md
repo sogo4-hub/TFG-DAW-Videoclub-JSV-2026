@@ -71,7 +71,7 @@ API externa TMDB
 
 Para el desarrollo del proyecto se han utilizado distintas tecnologías y herramientas.
 
-En el frontend se ha desarrollado una SPA con React, Vite y JavaScript. React permite crear una interfaz dinámica basada en componentes reutilizables, mientras que Vite facilita un entorno de desarrollo rápido. También se han utilizado CSS, React Router para la navegación entre páginas y Axios para realizar peticiones HTTP al backend.
+En el frontend se ha desarrollado una SPA con React con Vite y JavaScript. React permite crear una interfaz dinámica basada en componentes reutilizables, mientras que Vite facilita un entorno de desarrollo rápido. Además, hemos añadido algunos componentes de interfaz de usuario de la colección de código abierto React Bits. También se han utilizado CSS, React Router para la navegación entre páginas y Axios para realizar peticiones HTTP al backend.
 
 En el backend se ha utilizado Java con Spring Boot. Spring Boot permite construir una API REST de forma organizada, separando controladores, servicios, repositorios y entidades. Para la seguridad se ha utilizado Spring Security junto con JWT, lo que permite proteger rutas y diferenciar entre usuarios normales y administradores.
 
@@ -386,6 +386,7 @@ En conclusión, StreamFlix ha sido un proyecto útil para consolidar conocimient
 - MongoDB GridFS: [https://www.mongodb.com/docs/manual/core/gridfs/](https://www.mongodb.com/docs/manual/core/gridfs/)
 - Socket.IO: [https://socket.io/es/docs/v4/how-it-works/](https://socket.io/es/docs/v4/how-it-works/)
 - TMDB API: [https://developer.themoviedb.org/docs](https://developer.themoviedb.org/docs)
+- React Bits: [https://reactbits.dev/](https://reactbits.dev/)
 
 **IA usadas como apoyo:**
 
