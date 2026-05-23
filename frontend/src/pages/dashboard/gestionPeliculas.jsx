@@ -1,35 +1,25 @@
 import { useState, useEffect } from "react";
 import { getPeliculasTodas, deletePelicula } from "../../api/peliculasApi";
-import "./dashboard.css"; // Reutilizamos estilos o crea uno nuevo
+import "./dashboard.css";
 import FormularioPelicula from './formularioPeliculas.jsx';
 
 export default function GestionPeliculas() {
     const [peliculas, setPeliculas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
+    const [busqueda, setBusqueda] = useState("");
+    const [orden, setOrden] = useState({
+        campo: null,
+        direccion: null
+    });
 
-    // 1. Cargar películas al montar el componente
+    //Cargar películas al montar el componente
     useEffect(() => {
         cargarPeliculas();
     }, []);
-
-    // const cargarPeliculas = async () => {
-    //     try {
-    //         const data = await getPeliculas();
-    //         // Intentamos sacar los datos de .content si existe, si no, usamos data
-    //         const listaPeliculas = data.content ? data.content : data;
-    //         setPeliculas(Array.isArray(listaPeliculas) ? listaPeliculas : []);
-    //     } catch (error) {
-    //         console.error("Error al obtener películas:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    //-----cargar en una lista sin tener en cuenta paginacion:
     const cargarPeliculas = async () => {
+
         try {
-            // Usamos getPeliculasTodas que llama a /api/peliculas/todas sin paginación
             const listaPeliculas = await getPeliculasTodas();
             setPeliculas(listaPeliculas);
         } catch (error) {
@@ -37,14 +27,15 @@ export default function GestionPeliculas() {
         } finally {
             setLoading(false);
         }
+
     };
-    // 2. Función para eliminar
+    //Eliminar
     const handleEliminar = async (id) => {
         if (window.confirm("¿Estás seguro de eliminar esta película?")) {
             try {
                 await deletePelicula(id);
-                // Filtramos el estado para quitar la borrada sin recargar la página
-                setPeliculas(peliculas.filter(p => p.id !== id));
+                const nuevasPeliculas = peliculas.filter(p => p.id !== id);
+                setPeliculas(nuevasPeliculas);
             } catch (error) {
                 alert("No se pudo eliminar la película" + error);
             }
@@ -56,6 +47,96 @@ export default function GestionPeliculas() {
         cargarPeliculas();
     };
 
+    //Filtrar peliculas
+    const peliculasFiltradas = [...peliculas]
+        .filter((pelicula) => {
+            const texto = busqueda.toLowerCase();
+
+            return (
+                pelicula.titulo?.toLowerCase().includes(texto) ||
+                pelicula.genero?.toLowerCase().includes(texto) ||
+                pelicula.id?.toString().includes(texto) ||
+                pelicula.tmdbId?.toString().includes(texto)
+            );
+        })
+        .sort((a, b) => {
+
+            if (!orden.campo || !orden.direccion) {
+                return 0;
+            }
+
+            const valorA = a[orden.campo] ?? "";
+            const valorB = b[orden.campo] ?? "";
+
+            if (typeof valorA === "string") {
+
+                if (orden.direccion === "asc") {
+                    return valorA.localeCompare(valorB, "es", {
+                        sensitivity: "base"
+                    });
+                }
+
+                return valorB.localeCompare(valorA, "es", {
+                    sensitivity: "base"
+                });
+            }
+
+            if (orden.direccion === "asc") {
+                return valorA - valorB;
+            }
+
+            return valorB - valorA;
+        });
+
+    const obtenerIndicadorOrden = (campo) => {
+
+        if (orden.campo !== campo) {
+            return "";
+        }
+
+        if (orden.direccion === "asc") {
+            return "▲";
+        }
+
+        if (orden.direccion === "desc") {
+            return "▼";
+        }
+
+        return "";
+    };
+
+    const handleOrden = (campo) => {
+        setOrden((prev) => {
+
+            // Ascendente
+            if (prev.campo !== campo) {
+                return {
+                    campo,
+                    direccion: "asc"
+                };
+            }
+
+            // Descendente
+            if (prev.direccion === "asc") {
+                return {
+                    campo,
+                    direccion: "desc"
+                };
+            }
+
+            // Sin orden / Reset
+            return {
+                campo: null,
+                direccion: null
+            };
+        });
+    };
+    const estiloOrdenable = {
+        cursor: "pointer",
+        userSelect: "none"
+    };
+
+
     if (loading) return <p>Cargando catálogo...</p>;
 
     return (
@@ -64,6 +145,13 @@ export default function GestionPeliculas() {
             <button className="btn-add" onClick={() => setMostrarFormulario(!mostrarFormulario)} >
                 {mostrarFormulario ? "Cerrar Formulario" : "Añadir Nueva Película"}
             </button>
+            <input
+                type="text"
+                placeholder="Buscar por título, ID, TMDB o género..."
+                className="btn-search"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+            />
             {mostrarFormulario && (
                 <div className="formulario-wrapper">
                     <FormularioPelicula alFinalizar={handlePeliculaAnadida} />
@@ -72,15 +160,25 @@ export default function GestionPeliculas() {
             <table className="gestion-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>ID TMDB</th>
-                        <th>Título</th>
-                        <th>Género</th>
+                        <th onClick={() => handleOrden("id")} style={estiloOrdenable}>
+                            ID {obtenerIndicadorOrden("id")}
+                        </th>
+                        <th onClick={() => handleOrden("tmdbId")} style={estiloOrdenable}>
+                            ID TMDB {obtenerIndicadorOrden("tmdbId")}
+                        </th>
+
+                        <th onClick={() => handleOrden("titulo")} style={estiloOrdenable}>
+                            Título {obtenerIndicadorOrden("titulo")}
+                        </th>
+
+                        <th onClick={() => handleOrden("genero")} style={estiloOrdenable}>
+                            Género {obtenerIndicadorOrden("genero")}
+                        </th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {peliculas.map((pelicula) => (
+                    {peliculasFiltradas.map((pelicula) => (
                         <tr key={pelicula.id}>
                             <td>{pelicula.id}</td>
                             <td style={{ color: '#888', fontSize: '0.9em' }}>

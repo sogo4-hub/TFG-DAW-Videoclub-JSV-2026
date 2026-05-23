@@ -73,13 +73,46 @@
     left: 50%;
     top: 15px;
     transform: translate(-50%, -50%);
+}
+
+.btn-search {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    top: 10px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    transition: border-color 0.25s;
+}
+.btn-search:focus-visible{
+    border: 2px solid #e50914;
+    outline: none;
+    box-shadow: 0 0 8px rgba(229, 9, 20, 0.5);
+}
+
+.btn-search:hover {
+    background: #c7002c;
+    border: 1px solid transparent;
+    box-shadow: 0 1px 10px #ff4444ac;
 
 }
 
 .btn-add:hover,
 .btn-delete:hover {
     background: #c7002c;
-    
+
     border: 1px solid transparent;
     box-shadow: 0 1px 10px #ff4444ac;
 
@@ -96,6 +129,11 @@ h2 {
     color: #7b1fa2;
     text-shadow: 0 4px 12px rgba(179, 0, 255, 0.3);
     text-align: center;
+}
+.subtitle{
+    text-align: center;
+    margin: 2px;
+    font-size: large;
 }
 
 .gestionPeliculas {
