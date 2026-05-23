@@ -15,6 +15,7 @@ public class UsuarioMapper {
                 .nombre(usuario.getNombre()) // <--- OPCIONAL: Puedes añadirlo al response también si quieres
                 .email(usuario.getEmail())
                 .rol(usuario.getRol())
+                .fechaRegistro(usuario.getFechaRegistro())
                 .build();
     }
 
@@ -25,6 +26,7 @@ public class UsuarioMapper {
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .rol(dto.getRol())
+                .fechaRegistro(dto.getFechaRegistro())
                 .build();
     }
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,6 +30,7 @@ public class UsuarioService {
     public UsuarioResponse crearUsuario(UsuarioRequest request) {
         Usuario usuario = usuarioMapper.toEntity(request);
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        usuario.setFechaRegistro(LocalDateTime.now());
         Usuario saved = usuarioRepository.save(usuario);
         return usuarioMapper.toResponseDTO(saved);
     }

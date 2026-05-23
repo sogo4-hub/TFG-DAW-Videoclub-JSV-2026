@@ -41,14 +41,14 @@ function GestionAlquileres() {
             });
     }, []);
 
-    // 3. Función inteligente para calcular si un alquiler está Activo o Retrasado
+    // 3. Función inteligente para calcular si un alquiler está Activo o Caducado
     const calcularEstado = (fechaFin) => {
         if (!fechaFin) return 'Devuelto'; // Por si manejas un estado explícito de devolución
 
         const ahora = new Date();
         const vencimiento = new Date(fechaFin);
 
-        return vencimiento > ahora ? 'Activo' : 'Retrasado';
+        return vencimiento > ahora ? 'Activo' : 'Caducado';
     };
 
     // Función auxiliar para darle color visual al estado del alquiler
@@ -56,7 +56,7 @@ function GestionAlquileres() {
         switch (estado) {
             case 'Activo': return { color: '#00ffcc', backgroundColor: 'rgba(0, 255, 204, 0.1)', padding: '4px 8px', borderRadius: '4px' };
             case 'Devuelto': return { color: '#aaa', backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '4px 8px', borderRadius: '4px' };
-            case 'Retrasado': return { color: '#ff4b5c', backgroundColor: 'rgba(255, 75, 92, 0.1)', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' };
+            case 'Caducado': return { color: '#ff4b5c', backgroundColor: 'rgba(255, 75, 92, 0.1)', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' };
             default: return {};
         }
     };

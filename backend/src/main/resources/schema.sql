@@ -8,7 +8,8 @@ CREATE TABLE usuarios (
                           nombre VARCHAR(255) NOT NULL, -- <--- NUEVO CAMPO
                           email VARCHAR(255) NOT NULL UNIQUE,
                           password VARCHAR(255) NOT NULL,
-                          rol VARCHAR(50)
+                          rol VARCHAR(50),
+                          fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- <--- NUEVO CAMPO
 );
 
 -- Creación de la tabla peliculas
