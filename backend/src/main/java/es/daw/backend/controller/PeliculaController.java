@@ -40,7 +40,7 @@ public class PeliculaController {
     public ResponseEntity<Page<PeliculaResponse>> listarTodas(
             @RequestParam(required = false, defaultValue = "") String search,
             @RequestParam(required = false, defaultValue = "") String genre,
-            @PageableDefault(page = 0, size = 16)
+            @PageableDefault(page = 0, size = 12)
             Pageable pageable
     ) {
         return ResponseEntity.ok(peliculaService.listarPaginadas(search, genre, pageable));

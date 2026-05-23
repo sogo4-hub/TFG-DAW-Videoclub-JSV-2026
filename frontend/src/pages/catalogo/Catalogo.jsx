@@ -18,6 +18,33 @@ const Catalogo = () => {
     setAlquiladas(prev => [...prev, peliculaId]);
   };
 
+  const getPaginasVisibles = () => {
+    if (totalPages <= 4) {
+      return Array.from({ length: totalPages }, (_, i) => i);
+    }
+
+    const paginas = [0];
+
+    if (page > 2) {
+      paginas.push('start-ellipsis');
+    }
+
+    const inicio = Math.max(1, page - 1);
+    const fin = Math.min(totalPages - 2, page + 1);
+
+    for (let i = inicio; i <= fin; i++) {
+      paginas.push(i);
+    }
+
+    if (page < totalPages - 3) {
+      paginas.push('end-ellipsis');
+    }
+
+    paginas.push(totalPages - 1);
+
+    return paginas;
+  };
+
   useEffect(() => {
     if (!isLogged) return;
 
@@ -78,13 +105,36 @@ const Catalogo = () => {
           Anterior
         </button>
 
-        <span>
-          Página {totalPages === 0 ? 0 : page + 1} de {totalPages} — {totalElements} resultados
-        </span>
+        {getPaginasVisibles().map((item, index) =>
+          typeof item === 'number' ? (
+            <button
+              key={item}
+              onClick={() => setPage(item)}
+              className={page === item ? 'pagina-activa' : ''}
+              aria-current={page === item ? 'page' : undefined}
+            >
+              {item + 1}
+            </button>
+          ) : (
+            <span
+              key={`${item}-${index}`}
+              className="paginacion-puntos"
+              aria-hidden="true"
+            >
+              ...
+            </span>
+          )
+        )}
 
         <button onClick={() => setPage(page + 1)} disabled={page + 1 >= totalPages}>
           Siguiente
         </button>
+      </div>
+
+      <div className="catalogo-paginacion-info">
+        <span>
+          Página {totalPages === 0 ? 0 : page + 1} de {totalPages} — {totalElements} resultados
+        </span>
       </div>
     </div>
   );

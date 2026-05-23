@@ -13,7 +13,7 @@ export const getMediaUrl = (path, size = 'w500') => {
 // Para el catálogo público — con paginación, búsqueda, género y ordenación
 export const getPeliculas = async (
   page = 0,
-  size = 16,
+  size = 12,
   search = '',
   genre = '',
   sort = ''
