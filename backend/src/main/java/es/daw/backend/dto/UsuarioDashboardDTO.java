@@ -1,11 +1,13 @@
 package es.daw.backend.dto;
 
+import java.time.LocalDateTime;
+
 public class UsuarioDashboardDTO {
 
     private Long id;
     private String nombre;
     private String email;
-    private String fechaRegistro;
+    private LocalDateTime  fechaRegistro;
     private Long totalAlquileres;
 
     // 1. Constructor vacío (Obligatorio para que Jackson pueda transformarlo a JSON sin quejas)
@@ -13,7 +15,7 @@ public class UsuarioDashboardDTO {
     }
 
     // 2. Constructor completo (El que mapea en orden los campos de la query JPQL)
-    public UsuarioDashboardDTO(Long id, String nombre, String email, String fechaRegistro, Long totalAlquileres) {
+    public UsuarioDashboardDTO(Long id, String nombre, String email, LocalDateTime  fechaRegistro, Long totalAlquileres) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
@@ -46,11 +48,11 @@ public class UsuarioDashboardDTO {
         this.email = email;
     }
 
-    public String getFechaRegistro() {
+    public LocalDateTime getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(String fechaRegistro) {
+    public void setFechaRegistro(LocalDateTime  fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 

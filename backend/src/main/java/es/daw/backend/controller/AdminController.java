@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -44,7 +45,7 @@ public class AdminController {
                     .count();
 
             // Convertimos la fecha a String de forma segura
-            String fechaSimulada = "No disponible";
+            LocalDateTime fechaSimulada = LocalDateTime.now(); // O cualquier otra fecha por defecto
 
             // Llamamos a tu constructor completo de UsuarioDashboardDTO
             return new UsuarioDashboardDTO(
