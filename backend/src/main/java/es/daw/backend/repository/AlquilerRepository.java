@@ -4,6 +4,9 @@ import es.daw.backend.entity.Alquiler;
 import es.daw.backend.entity.Pelicula;
 import es.daw.backend.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +14,20 @@ import java.util.Optional;
 public interface AlquilerRepository extends JpaRepository<Alquiler, Long> {
     List<Alquiler> findByUsuario(Usuario usuario);
 
-    // Magia de Spring Boot: Busca si hay un alquiler de este usuario para esta peli que aún no haya caducado
-    Optional<Alquiler> findByUsuarioAndPeliculaAndFechaFinAfter(Usuario usuario, Pelicula pelicula, LocalDateTime fechaActual);
+    // Magia de Spring Boot: Busca si hay un alquiler de este usuario para esta peli
+    // que aún no haya caducado
+    Optional<Alquiler> findByUsuarioAndPeliculaAndFechaFinAfter(Usuario usuario, Pelicula pelicula,
+            LocalDateTime fechaActual);
+
+    @Query("""
+                SELECT COUNT(a) > 0
+                FROM Alquiler a
+                WHERE a.usuario.id = :usuarioId
+                AND a.pelicula.id = :peliculaId
+                AND a.reproducida = true
+                AND a.fechaFin > CURRENT_TIMESTAMP
+            """)
+    boolean usuarioPuedeValorar(
+            @Param("usuarioId") Long usuarioId,
+            @Param("peliculaId") Long peliculaId);
 }

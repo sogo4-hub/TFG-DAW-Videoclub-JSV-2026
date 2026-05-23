@@ -19,10 +19,13 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
 
     // 3. Tu consulta del Dashboard de administración (Sintaxis compatible con
     // Hibernate 6 y tu clase DTO)
-    @Query("SELECT new es.daw.backend.dto.PeliculaStatsDTO(" +
-            "p.id, STR(p.tmdbId), p.titulo, " +
-            "(SELECT COUNT(f) FROM Favorito f WHERE f.pelicula.id = p.id), " +
-            "(SELECT COUNT(a) FROM Alquiler a WHERE a.pelicula.id = p.id)) " +
-            "FROM Pelicula p")
-    List<PeliculaStatsDTO> obtenerEstadisticasPeliculas();
+@Query("SELECT new es.daw.backend.dto.PeliculaStatsDTO(" +
+        "p.id, " +
+        "STR(p.tmdbId), " +
+        "p.titulo, " +
+        "(SELECT COUNT(f) FROM Favorito f WHERE f.pelicula.id = p.id), " +
+        "(SELECT COUNT(a) FROM Alquiler a WHERE a.pelicula.id = p.id), " +
+        "COALESCE((SELECT AVG(c.nota) FROM Calificacion c WHERE c.id.peliculaId = p.id), 0.0)) " +
+        "FROM Pelicula p")
+List<PeliculaStatsDTO> obtenerEstadisticasPeliculas();
 }

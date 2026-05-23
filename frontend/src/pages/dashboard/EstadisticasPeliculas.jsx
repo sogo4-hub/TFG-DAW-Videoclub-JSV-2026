@@ -61,6 +61,7 @@ function EstadisticasPeliculas() {
                             <th style={{ padding: '12px' }}>Película</th>
                             <th style={{ padding: '12px' }}>En Favoritos</th>
                             <th style={{ padding: '12px' }}>Veces Alquilada</th>
+                            <th style={{ padding: '12px' }}>Nota Media</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,6 +72,11 @@ function EstadisticasPeliculas() {
                                 <td style={{ padding: '12px' }}>{movie.titulo}</td>
                                 <td style={{ padding: '12px', color: '#7b1fa2' }}>{movie.totalFavoritos} veces</td>
                                 <td style={{ padding: '12px', color: '#28a745' }}>{movie.totalAlquileres} alquileres</td>
+                                <td style={{ padding: '12px', color: '#ffc107' }}>
+                                    {movie.notaMedia !== null && movie.notaMedia !== undefined
+                                        ? `${movie.notaMedia} / 5`
+                                        : 'Sin votos'}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

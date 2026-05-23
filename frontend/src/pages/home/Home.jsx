@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/AuthContext';
 import "./Home.css";
 
 export default function Home() {
@@ -26,7 +26,6 @@ export default function Home() {
         </div>
         <img className="hero-img" src="/imgs/vhs-fondo.jpg" alt="Fondo" />
         <img className="hero-side-img" src="/imgs/posters.avif" alt="Videoclub" />
-
       </section>
 
       {/* ── HORARIO + AYUDA ── */}
@@ -59,31 +58,30 @@ export default function Home() {
           <p className="schedule-note">
             * El catálogo online está disponible <strong>24 horas</strong>, todos los días.
           </p>
-
-
         </div>
 
-        {/*-----chat de ayuda*/}
-        {/*el admin va al panel del dashboard, el usuario al chat normal*/}
-        <p className="schedule-ayuda">
+        {/* ----- CHAT DE AYUDA (ARREGLADO) ----- */}
+        <div className="schedule-ayuda">
           {rol === 'ADMIN' ? (
-            <>
+            <p className="ayuda-texto-admin">
               Gestiona las dudas de los usuarios desde{' '}
               <Link to="/dashboard/chat" className="ayuda-link">
                 el panel de ayuda
               </Link>.
-            </>
+            </p>
           ) : (
-            <>
-              ¿Tienes alguna duda?
-              <br />Pregunta{' '}
-              <Link to="/ayuda" className="ayuda-link">aquí</Link>
-              {' '}y un administrador te responderá.
+            <div className="ayuda-texto-user">
+              <span>¿Tienes alguna duda?</span>
               <br />
-              <p class="nota-login">* Debes iniciar sesión para preguntar</p>
-            </>
+              <span>
+                Pregunta <Link to="/ayuda" className="ayuda-link">aquí</Link>{' '}
+                y un administrador te responderá.
+              </span>
+              <br />
+              <p className="nota-login">* Debes iniciar sesión para preguntar</p>
+            </div>
           )}
-        </p>
+        </div>
       </section>
 
     </div>
