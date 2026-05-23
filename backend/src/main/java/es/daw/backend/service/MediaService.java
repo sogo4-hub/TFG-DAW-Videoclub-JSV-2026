@@ -1,5 +1,6 @@
 package es.daw.backend.service;
 
+import org.bson.types.ObjectId;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -35,8 +36,16 @@ public class MediaService {
         return gridFsTemplate.getResource(file);
     }
 
+    // NUEVO MÉTODO: Elimina el archivo de MongoDB
+
+
     public void eliminarArchivo(String id) {
-        gridFsTemplate.delete(new Query(Criteria.where("_id").is(id)));
+
+        // 2. SOLUCIÓN: Convertir el String plano a un ObjectId de MongoDB
+        ObjectId objectId = new ObjectId(id);
+
+        // 3. Ejecutar el borrado utilizando el tipo de dato correcto
+        gridFsTemplate.delete(new Query(Criteria.where("_id").is(objectId)));
     }
 
     /**

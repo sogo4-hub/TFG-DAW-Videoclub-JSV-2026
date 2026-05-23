@@ -60,21 +60,37 @@ public class PeliculaService {
     }
 
     public void eliminar(Long id) {
-        // ------buscar la peli antes de borrarla para obtener la url de la imagen
         peliculaRepository.findById(id).ifPresent(pelicula -> {
-
-            String url = pelicula.getUrlImagen();
-
-            // --- comprobamos si la url apunta a nuestro servicio de api/media
-            // hay q pillar el id de mongo de la url para borrarlo en monog
-            if (url != null && url.startsWith("/api/media/")) {
-                String mongoId = url.replace("/api/media/", "");
-                mediaService.eliminarArchivo(mongoId);
-            }
-
-            // borrar registro peli en h2
+            // Antes de borrar la película en H2, eliminamos los recursos multimedia
+            // asociados en MongoDB/GridFS, si pertenecen a nuestro servicio interno.
+            eliminarMediaSiEsDeMongo(pelicula.getUrlImagen());
+            eliminarMediaSiEsDeMongo(pelicula.getUrlVideo());
+            // Finalmente eliminamos el registro relacional de la película.
             peliculaRepository.deleteById(id);
         });
+    }
+
+    /**
+    * Elimina de MongoDB/GridFS un recurso multimedia asociado a una película.
+    *
+    * Solo actúa sobre URLs internas que empiezan por "/api/media/".
+    * Esto evita intentar borrar recursos externos, como imágenes de TMDB.
+    *
+    * Funciona tanto para:
+    * - Imágenes: /api/media/{mongoId}
+    * - Vídeos:   /api/media/stream/{mongoId}
+    *
+    * En ambos casos se extrae el último segmento de la URL, que corresponde
+    * al ObjectId del archivo almacenado en GridFS.
+    */
+
+    private void eliminarMediaSiEsDeMongo(String url) {
+        if (url == null || !url.startsWith("/api/media/")) {
+            return;
+        }
+
+        String mongoId = url.substring(url.lastIndexOf("/") + 1);
+        mediaService.eliminarArchivo(mongoId);
     }
 
     public PeliculaResponse guardarConImagen(PeliculaRequest request, MultipartFile archivo)
