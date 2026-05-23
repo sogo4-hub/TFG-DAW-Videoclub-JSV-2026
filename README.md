@@ -1,8 +1,8 @@
 <img width="130" height="auto" alt="logo" align="left" src="https://github.com/user-attachments/assets/91b79a52-9ed4-47c0-872a-79be89afeeff" />
 
-# StreamFlix – Videoclub Online.
+# StreamFlix – Videoclub Online
 
-Desarrollo de una aplicación web full stack para un videoclub online.
+Desarrollo de una aplicación web full stack para la gestión de un videoclub online.
 
 ## Autores
 
@@ -19,119 +19,389 @@ Desarrollo de una aplicación web full stack para un videoclub online.
 CFGS Desarrollo de Aplicaciones Web (DAW)  
 IES Alonso de Avellaneda
 
+---
+
 ## **1) INTRODUCCIÓN Y JUSTIFICACIÓN**
 
-Nuestro proyecto StreamFlixs es una aplicación web para un videoclub online. La finalidad principal es que los usuarios puedan alquilar películas por un tiempo limitado y dejar valoraciones sobre lo que han visto.
+StreamFlix es una aplicación web full stack orientada a la gestión de un videoclub online. La finalidad principal del proyecto es permitir que los usuarios puedan consultar un catálogo de películas, registrarse, iniciar sesión, alquilar películas durante un periodo limitado, añadirlas a favoritos, reproducir contenido multimedia y dejar valoraciones sobre las películas visualizadas.
 
-Aparte, la aplicación tiene un dashboard de administración donde solo los administradores podrán gestionar la página desde distintas secciones.
+Además, la aplicación incorpora un panel de administración desde el que los usuarios con rol de administrador pueden gestionar el catálogo, importar películas desde TMDB, subir archivos de vídeo, eliminar películas y consultar información relevante del sistema.
 
-Escogimos hacer este tipo de aplicación porque nos pareció que algo así podría abarcar todo lo aprendido en distintos módulos. Principalmente practicando a usar tecnologías como React junto con Spring Boot en un mismo proyecto.
+La elección de este proyecto se debe a que permite integrar gran parte de los contenidos trabajados durante el ciclo de Desarrollo de Aplicaciones Web: desarrollo frontend, backend, bases de datos, seguridad, consumo de APIs externas, gestión de archivos multimedia, control de versiones y despliegue local de una aplicación completa.
+
+---
 
 ## **2) ANÁLISIS Y DISEÑO DEL PROYECTO**
 
 ### **2.1) DESCRIPCIÓN DE LA ARQUITECTURA WEB**
 
-La arquitectura que tiene es cliente-servidor, usando una API REST para comunicar frontend con backend, y para hacer las peticiones desde React hemos usado Axios. El usuario interactúa con la aplicación con la interfaz que muestra el frontend y, el backend se encarga de la lógica de negocio, seguridad y acceso a los datos.
+La arquitectura del proyecto sigue un modelo cliente-servidor, con separación clara entre frontend, backend y persistencia de datos.
+
+El frontend está desarrollado con React y Vite, y es el encargado de mostrar la interfaz de usuario, gestionar la navegación y realizar peticiones HTTP al backend mediante Axios.
+
+El backend está desarrollado con Java y Spring Boot. Expone una API REST que centraliza la lógica de negocio, la seguridad, la autenticación, la gestión de usuarios, el catálogo de películas, los alquileres, los favoritos, las valoraciones y la comunicación con servicios externos como TMDB y MongoDB Atlas.
+
+La aplicación utiliza una base de datos relacional H2 para almacenar los datos estructurados del sistema, como usuarios, películas, alquileres, favoritos, mensajes y valoraciones. Para los archivos multimedia de vídeo se utiliza MongoDB Atlas con GridFS, lo que permite almacenar archivos grandes dividiéndolos en fragmentos o chunks.
+
+De forma simplificada, la arquitectura es:
+
+```text
+Usuario / Navegador
+        |
+        v
+Frontend React + Vite
+        |
+        v
+Backend Spring Boot REST API
+        |
+        +------------------------------+
+        |                              |
+        v                              v
+Base de datos relacional H2       MongoDB Atlas + GridFS
+(datos de negocio)                (archivos multimedia)
+        |
+        v
+API externa TMDB
+(metadatos de películas)
+```
+
+---
 
 ### **2.2) TECNOLOGÍAS Y HERRAMIENTAS UTILIZADAS**
 
-Cada miembro del grupo hemos usado nuestro IDE preferente: Visual Studio Code e IntelliJ IDEA. Para pruebas de API se ha usasdo Postman.
+Para el desarrollo del proyecto se han utilizado distintas tecnologías y herramientas.
 
-En el frontend es una SPA programada con React con Vite y JavaScript para crear la interfaz dinámica. También usamos estilos CSS para el diseño visual y React Router para la navegación entre páginas.
+En el frontend se ha desarrollado una SPA con React, Vite y JavaScript. React permite crear una interfaz dinámica basada en componentes reutilizables, mientras que Vite facilita un entorno de desarrollo rápido. También se han utilizado CSS, React Router para la navegación entre páginas y Axios para realizar peticiones HTTP al backend.
 
-En el backend se usa Java con Sping Boot, usando Spring Security con JWT para el control de acceso y proteger la aplicación.
+En el backend se ha utilizado Java con Spring Boot. Spring Boot permite construir una API REST de forma organizada, separando controladores, servicios, repositorios y entidades. Para la seguridad se ha utilizado Spring Security junto con JWT, lo que permite proteger rutas y diferenciar entre usuarios normales y administradores.
 
-Además hemos incluido un microservidor en Node.js con Socket.IO para crear un chat en tiempo real entre usuario y administrador cuando el usuario tenga alguna duda de la aplicación. También hemos añadido reCAPTCHA de Google en el formulario de registro para prevenir registros automáticos y mejorar la seguridad frente a bots.
+También se ha incluido un microservidor en Node.js con Socket.IO para ofrecer un chat en tiempo real entre usuarios y administradores. Esta funcionalidad permite añadir comunicación directa dentro de la aplicación.
 
-En cuanto al almacenamiento, hemos usado distintas bases de datos. MySQL para guardar la información de datos de negocio como los usuarios registrados, las películas, alquileres realizados, etc. Mientras que usamos MongoDB con GridFS para almacenar los archivos multimedia.
+En el formulario de registro se ha integrado reCAPTCHA de Google para reducir registros automáticos y mejorar la seguridad frente a bots.
 
-También hemos integrado la API de TMDB para completar la información de detalles de las películas que el administrador añade al catálogo.
+En cuanto al almacenamiento, se utiliza H2 como base de datos relacional durante el desarrollo. Esta base almacena la información de negocio: usuarios, películas, alquileres, favoritos, valoraciones y mensajes del chat. Para los vídeos se utiliza MongoDB Atlas con GridFS, ya que permite almacenar archivos grandes de forma más adecuada que una base de datos relacional.
 
-Finalmente, para organizar y juntar las funcionalidades que cada miembro del grupo hacía se usó GitHub, cada miembro teniendo su propia rama aparte de la rama principal para el trabajo conjunto.
+Además, se ha integrado la API de TMDB para obtener información enriquecida de las películas, como título, sinopsis, cartel, imagen de fondo, año, géneros, director y valoración media.
+
+Para la organización del trabajo se ha usado GitHub, con ramas individuales y Pull Requests hacia la rama `develop`. También se ha utilizado GitHub Projects como tablero Kanban para organizar las tareas del equipo.
+
+Herramientas utilizadas:
+
+- Visual Studio Code.
+- IntelliJ IDEA.
+- Git y GitHub.
+- GitHub Projects.
+- Postman / peticiones HTTP de prueba.
+- H2 Console.
+- MongoDB Atlas.
+- MongoDB Compass.
+- Miro para la planificación visual de pantallas.
+- ChatGPT, Claude y Copilot como apoyo durante el desarrollo.
+
+---
 
 ### **2.3) ANÁLISIS DE USUARIOS**
 
-La aplicación tiene dos tipos de usuarios. Uno es el usuario normal que puede registrarse y alquilar la películas; y el otro es el administrador, con privilegios de gestiónes como añadir películas al catálogo y consultar estadísticas entre otras cosas.
+La aplicación contempla dos tipos principales de usuario:
+
+#### Usuario registrado
+
+El usuario registrado puede:
+
+- Iniciar sesión.
+- Consultar el catálogo de películas.
+- Buscar y filtrar películas.
+- Ver el detalle de una película.
+- Añadir películas a favoritos.
+- Alquilar películas.
+- Consultar sus alquileres activos.
+- Reproducir películas alquiladas.
+- Escribir valoraciones.
+- Utilizar el chat para comunicarse con administración.
+
+#### Administrador
+
+El administrador tiene permisos ampliados y puede:
+
+- Acceder al panel de administración.
+- Buscar películas en TMDB.
+- Importar películas al catálogo local.
+- Subir archivos de vídeo.
+- Eliminar películas.
+- Gestionar elementos del catálogo.
+- Consultar información del sistema.
+- Atender mensajes del chat.
+
+---
 
 ### **2.4) DEFINICIÓN DE REQUISITOS FUNCIONALES Y NO FUNCIONALES**
 
-Para los requisitos funcionales, la aplicación debe mostrar un catálogo y permitir a cualquiera registrarse e iniciar sesión de forma segura.
+#### Requisitos funcionales
 
-A los usuarios registrados mostrarles un catálogo de películas con opciones para alquilar por tiempo limitado y, permitir añadirlas a sus favoritos, además de permitirles hacer una valoración sobre el contenido que visualicen.
+La aplicación debe permitir:
 
-Para los administradores también debe permitir añadir o borrar películas, además de las consultas desde su panel de administración.
+- Visualizar un catálogo de películas.
+- Registrar nuevos usuarios.
+- Iniciar sesión de forma segura.
+- Diferenciar entre usuarios normales y administradores.
+- Mostrar detalles de cada película.
+- Añadir películas a favoritos.
+- Alquilar películas por tiempo limitado.
+- Reproducir películas disponibles.
+- Permitir valoraciones de películas.
+- Importar películas desde la API de TMDB.
+- Subir vídeos asociados a películas.
+- Eliminar películas del catálogo.
+- Mantener comunicación mediante chat en tiempo real.
+- Proteger rutas según autenticación y rol.
 
-Para los requisitos no funcionales, la aplicación debe ser segura y fácil de usar a la vez que adaptable para distintos tamaños de dispositivos.
+#### Requisitos no funcionales
+
+La aplicación debe cumplir los siguientes aspectos:
+
+- Seguridad mediante JWT y control de roles.
+- Interfaz clara y fácil de usar.
+- Separación entre frontend, backend y persistencia.
+- Código organizado por capas.
+- Uso de variables de entorno para claves y datos sensibles.
+- Diseño adaptable a distintos tamaños de pantalla.
+- Persistencia de datos relacionales y multimedia.
+- Integración con servicios externos.
+- Control de errores básico y mensajes comprensibles para el usuario.
+
+---
 
 ### **2.5) ESTRUCTURA DE NAVEGACIÓN**
 
 ```text
-/                     Público      Landing con las películas
+/                     Público      Landing con películas destacadas
 |---- /login          Público      Formulario de acceso
-|---- /register       Público      Formulario con reCAPTCHA
+|---- /register       Público      Formulario de registro con reCAPTCHA
 |
-|---- /catalogo       USER/ADMIN   Grid paginado con filtros y buscador
-|---- /pelicula/:id   USER/ADMIN   Detalles de peli, valoraciones, alquilar, reproducir
-|---- /mis-alquileres USER         Alquileres activos
-|---- /favoritos      USER         Lista de películas en favoritos
+|---- /catalogo       USER/ADMIN   Catálogo paginado con filtros y buscador
+|---- /pelicula/:id   USER/ADMIN   Detalle de película, alquiler, valoración y reproducción
+|---- /mis-alquileres USER         Alquileres activos del usuario
+|---- /favoritos      USER         Lista de películas favoritas
 |
-|---- /admin          ADMIN        Dashboard con panel de gestiones
+|---- /admin          ADMIN        Dashboard con panel de gestión
 ```
 
-Las rutas de usuario autenticado están protegidas mediante el componente ProtectedRoute, que redirige al login si no hay token válido. Las rutas de administración usan además AdminRoute, que verifica que el rol del token sea de administrador.
+Las rutas de usuario autenticado están protegidas mediante `ProtectedRoute`, que redirige al login si no existe un token válido. Las rutas de administración usan además `AdminRoute`, que comprueba que el usuario autenticado tenga rol de administrador.
+
+---
 
 ### **2.6) ORGANIZACIÓN DE LA LÓGICA DE NEGOCIO**
 
-La estructura lógica del backend se organiza primero con controladores que reciben las peticiones HTTP. Cada entidad principal tiene su propio controlador. Luego están los servicios donde va lógica de negocio con operaciones, validaciones, gestiones transaccionales y preparan los datos que van a ser guardados.
-La capa de persistencia está en los repositorios que solo se ocupan de la interacción con las bases de datos para el acceso a datos.
-La seguridad en security genera y valida tokens. JwtFilter intercepta cada petición y carga el contexto de seguridad de Spring.
+La lógica del backend se organiza por capas:
 
-La aplicación se conecta con servicios externos que enriquecen su funcionalidad. Usamos el servicio TmdbService como adaptador hacia la API pública de TMDB. Entonces, cuando un administrador busque una película, el servicio le consulta a TMDB para autocompletar los detalles de la película.
+```text
+Controller → Service → Repository → Base de datos
+```
 
-### **2.7) MODLEO DE DATOS SIMPLIFICADO**
+Los controladores reciben las peticiones HTTP y devuelven respuestas REST. Cada entidad o bloque funcional dispone de sus propios controladores, por ejemplo autenticación, películas, alquileres, favoritos o multimedia.
 
-La base de datos relacional MySQL gestiona toda la información estructurada del negocio:  
--usuarios: almacena los datos de cada cuenta registrada.  
--peliculas: catálogo de contenido disponible para alquiler.  
--alquileres: registra cada transacción de alquiler.  
--favoritos: guarda los favoritos del usuario.  
--mensajes_chat: guarda el historial de mensajes de usuarios y administradores.  
--valoraciones: guarda las reseñas de los usuarios sobre las películas.
+Los servicios contienen la lógica de negocio. En esta capa se realizan validaciones, operaciones transaccionales, llamadas a servicios externos y preparación de datos antes de guardarlos o devolverlos al frontend.
 
-Las relaciones entre tablas son: un usuario puede tener muchos alquileres y muchas valoraciones; una película puede aparecer en muchos alquileres y recibir muchas valoraciones.
+Los repositorios se encargan del acceso a datos mediante Spring Data JPA, permitiendo consultar y modificar la información almacenada en la base de datos relacional.
 
-La base de datos MongoDB con GridFS, para dividir los archivos en chunks y almacenar los metadatos en colecciones automáticas, en vez de cargar los archivos completos en memoria.
+La seguridad se organiza en el paquete `security`. El sistema genera y valida tokens JWT. El filtro `JwtFilter` intercepta las peticiones, valida el token recibido y carga el contexto de seguridad de Spring.
 
-Se utiliza una colección adicional mediaMetadata con información extendida de cada archivo.
+La aplicación también se comunica con servicios externos. `TmdbService` actúa como adaptador hacia la API pública de TMDB. Cuando un administrador busca o importa una película, el backend consulta TMDB y transforma los datos recibidos en entidades propias de la aplicación.
+
+Para la gestión multimedia, `MediaService` se encarga de comunicarse con MongoDB Atlas mediante GridFS. Este servicio permite subir, recuperar y eliminar archivos binarios asociados a las películas.
+
+Frontend React + Vite
+    |
+    |  Peticiones HTTP mediante Axios
+    |  - Login / registro
+    |  - Catálogo
+    |  - Favoritos
+    |  - Alquileres
+    |  - Administración
+    |  - Subida de vídeos
+    v
+Backend Spring Boot REST API
+    |
+    +------------------------------------------------------+
+    |                                                      |
+    v                                                      v
+Security                                            Controllers
+Spring Security + JWT                              Capa de entrada REST
+    |                                                      |
+    |                                                      |
+    |  JwtFilter intercepta cada petición                  |
+    |  Valida token JWT                                    |
+    |  Comprueba usuario y rol                             |
+    |  Carga el contexto de seguridad                      |
+    |                                                      |
+    +--------------------------->--------------------------+
+                               |
+                               v
+                         Controllers
+                         Reciben peticiones HTTP
+                         y devuelven respuestas JSON
+                               |
+                               |
+        +----------------------+----------------------+
+        |                      |                      |
+        v                      v                      v
+ AuthController          PeliculaController      Otros controladores
+ Login / registro        Catálogo / TMDB         Favoritos, alquileres,
+ JWT / reCAPTCHA         vídeos / borrado        chat, usuarios, etc.
+        |                      |                      |
+        +----------------------+----------------------+
+                               |
+                               v
+                           Services
+                     Capa de lógica de negocio
+                               |
+        +----------------------+-----------------------------+
+        |                      |                             |
+        v                      v                             v
+ AuthService             PeliculaService              MediaService
+ Registro/login          Gestión catálogo             Gestión multimedia
+ Validaciones            Importar desde TMDB          MongoDB + GridFS
+ JWT                     Borrar películas             Subir vídeos
+ reCAPTCHA               Subir vídeo asociado         Recuperar archivos
+                         Control de duplicados        Eliminar archivos
+        |                      |                             |
+        |                      v                             v
+        |                 TmdbService                 MongoDB Atlas
+        |                 Adaptador API externa       GridFS
+        |                      |                      fs.files / fs.chunks
+        |                      v
+        |                 API externa TMDB
+        |                 Metadatos películas
+        |
+        v
+   Repositories
+   Spring Data JPA
+        |
+        v
+Base de datos relacional H2
+Datos estructurados de negocio
+    |
+    +------------------------------------------------------+
+    |                                                      |
+    v                                                      v
+USUARIOS                                             PELICULAS
+Credenciales, roles                                 Catálogo local
+datos de cuenta                                     datos TMDB
+                                                    urlVideo
+    |
+    +------------------------------------------------------+
+    |                                                      |
+    v                                                      v
+ALQUILERES                                          FAVORITOS
+Películas alquiladas                                Relación usuario-película
+por cada usuario
+
+MENSAJES_CHAT
+Historial de mensajes
+entre usuario y administrador
+
+---
+
+### **2.7) MODELO DE DATOS SIMPLIFICADO**
+
+La base de datos relacional H2 gestiona la información estructurada del negocio:
+
+- `usuarios`: almacena los datos de las cuentas registradas.
+- `peliculas`: contiene el catálogo de películas disponible.
+- `alquileres`: registra los alquileres realizados por los usuarios.
+- `favoritos`: almacena las películas favoritas de cada usuario.
+- `mensajes_chat`: guarda mensajes intercambiados entre usuarios y administradores.
+- `valoraciones`: almacena reseñas o puntuaciones de usuarios sobre películas, si está disponible en la versión final.
+
+Relaciones principales:
+
+- Un usuario puede tener muchos alquileres.
+- Un usuario puede tener muchas películas favoritas.
+- Una película puede aparecer en muchos alquileres.
+- Una película puede estar en favoritos de muchos usuarios.
+- Un usuario puede enviar varios mensajes de chat.
+- Una película puede recibir varias valoraciones.
+
+MongoDB Atlas con GridFS se utiliza para guardar los archivos multimedia. GridFS divide los vídeos en fragmentos y almacena los metadatos y los chunks en colecciones internas, evitando cargar archivos grandes directamente en memoria.
+
+Colecciones principales de GridFS:
+
+```text
+fs.files
+fs.chunks
+```
+
+El campo `urlVideo` de cada película guarda la ruta interna de streaming generada por el backend, por ejemplo:
+
+```text
+/api/media/stream/{idMongo}
+```
+
+---
 
 ## **3) CONCLUSIONES**
 
-Se han cumplido los objetivos propuestos en el anteproyecto y además se llegaron a añadir funcionalidades extras como el chat, y más seguridad con el añadido del reCAPTCHA en el registro. También se usó la API pública de TMDB que descubrimos más tarde.
+El desarrollo de StreamFlix ha permitido crear una aplicación web completa integrando frontend, backend, base de datos relacional, almacenamiento multimedia y servicios externos. Durante el proyecto se han aplicado muchos de los conocimientos trabajados durante el ciclo de Desarrollo de Aplicaciones Web, especialmente en el desarrollo de una aplicación full stack con React, Spring Boot, seguridad, bases de datos, consumo de APIs externas y control de versiones.
 
-Uno de los retos que nos encontramos fue la implementación de dos bases de datos en un mismo proyecto. Lo arreglamos añadiendo un servicio expclusivo para comunicarse con MongoDB para guardar y recuperar los archivos binarios.
+Se han cumplido los objetivos principales planteados en el anteproyecto: creación de un catálogo de películas, autenticación de usuarios, gestión de roles, alquiler de películas, favoritos, reproducción de contenido multimedia y administración del catálogo desde un panel específico para usuarios administradores.
 
-Otro reto fue cómo gestionar el estado de autenticación en el frontend. Al final optamos por almacenar el JWT en React Context con AuthContext y con Axios para no almacenarlo en el localStorage.
+Además, se han incorporado funcionalidades adicionales que aportan más valor a la aplicación, como el chat en tiempo real entre usuarios y administradores, el uso de reCAPTCHA en el formulario de registro para mejorar la seguridad frente a bots y la integración con la API pública de TMDB, que permite enriquecer automáticamente la información de las películas con datos como título, sinopsis, cartel, imagen de fondo, año, géneros, director y valoración media.
 
-La coordinación entre nosotros nos dio alguna que otra complicación sobre todo al principio. Esto ocurría al tener conflictos en los archivos a la hora de hacer más de uno los Pull Requests a la rama principal. Se solucionó con el tiempo aprendiendo a manejar GitHub, ya que el problema era la inexperiencia en el uso de esta plataforma.
+Uno de los principales retos técnicos fue trabajar con dos sistemas de almacenamiento distintos dentro de un mismo proyecto. Por un lado, se utiliza H2 como base de datos relacional para almacenar los datos estructurados de negocio, como usuarios, películas, alquileres y favoritos. Por otro lado, se utiliza MongoDB con GridFS para almacenar los archivos multimedia, especialmente los vídeos. Para resolver esta integración, se desarrolló un servicio específico encargado de comunicarse con MongoDB, permitiendo guardar, recuperar y eliminar archivos binarios de forma separada a los datos relacionales.
 
-Como mejoras futuras se podría tener en cuenta un sistema de pagos real integrado (como Stripe que vimos durante el curso).Tambiénel envío de notificaciones por email al alquilar, recibir un mensaje por chat… Y podríamos pensar también en un sistema de caché para reducir las llamadas a la API de TMDB.
+Otro reto importante fue mantener la coherencia entre H2 y MongoDB. Por ejemplo, al eliminar una película del catálogo, no bastaba con borrar el registro de la base de datos relacional, ya que también era necesario eliminar el vídeo asociado en GridFS para evitar que quedaran archivos huérfanos en MongoDB. Esta situación se resolvió actualizando la lógica de borrado para eliminar tanto el registro relacional como los recursos multimedia asociados.
 
-El desarrollo se organizó siguiendo un esquema Kanban gestionado desde GitHub Projects. Cada uno trabajaba en su rama individual y se fusionaba a develop mediante Pull Request cuando una funcionalidad estaba terminada y probada. Y el diseño de las pantallas de la app fue planificado en tablero digital en la aplicación Miro.
+También supuso un reto la gestión del estado de autenticación en el frontend. Finalmente, se optó por centralizar el estado del usuario mediante `AuthContext` y utilizar Axios para enviar el token JWT en las peticiones protegidas. De esta forma, el frontend puede controlar qué partes de la aplicación debe mostrar según el usuario autenticado y su rol.
+
+La coordinación del equipo también fue un aprendizaje relevante. Al principio surgieron algunas complicaciones, sobre todo por conflictos al trabajar con ramas y Pull Requests hacia la rama común del proyecto. Estos problemas se fueron solucionando a medida que el equipo ganó experiencia con GitHub, aprendiendo a organizar mejor el trabajo, revisar cambios y fusionar funcionalidades de forma más controlada.
+
+El desarrollo se organizó siguiendo un esquema Kanban gestionado desde GitHub Projects. Cada miembro trabajaba en su propia rama individual y, cuando una funcionalidad estaba terminada y probada, se fusionaba a la rama `develop` mediante Pull Request. Además, el diseño y planificación de algunas pantallas de la aplicación se apoyó en un tablero digital en Miro.
+
+Como mejoras futuras se podrían incorporar:
+
+- Pasarela de pago real, por ejemplo Stripe.
+- Notificaciones por email.
+- Sistema avanzado de recomendaciones.
+- Caché para reducir llamadas a TMDB.
+- Migración de H2 a MySQL o MariaDB para un entorno más cercano a producción.
+- Documentación Swagger/OpenAPI.
+- Más pruebas automatizadas.
+- Despliegue con Docker Compose.
+- Mejora del panel de administración.
+
+En conclusión, StreamFlix ha sido un proyecto útil para consolidar conocimientos técnicos y organizativos, ya que ha permitido desarrollar una aplicación web completa, trabajar en equipo, resolver problemas reales de integración y aplicar una arquitectura cercana a la de una aplicación profesional.
 
 ## **4) BIBLIOGRAFÍA Y FUENTES DE INFORMACIÓN**
 
-**Documentación usada:**  
-React: [https://react.dev](https://react.dev)  
-Spring Boot: [https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)  
-MongoDB GridFS: [https://www.mongodb.com/docs/manual/core/gridfs/](https://www.mongodb.com/docs/manual/core/gridfs/)  
-Socket.io: [https://socket.io/es/docs/v4/how-it-works/](https://socket.io/es/docs/v4/how-it-works/)  
+**Documentación usada:**
 
-**IA usadas:**  
-Claude: [https://claude.ai/](https://claude.ai/)  
-ChatGPT: [https://chatgpt.com/](https://chatgpt.com/)  
-Copilot: [https://copilot.microsoft.com/](https://copilot.microsoft.com/)  
+- React: [https://react.dev](https://react.dev)
+- Vite: [https://vite.dev](https://vite.dev)
+- Spring Boot: [https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
+- Spring Security: [https://spring.io/projects/spring-security](https://spring.io/projects/spring-security)
+- MongoDB GridFS: [https://www.mongodb.com/docs/manual/core/gridfs/](https://www.mongodb.com/docs/manual/core/gridfs/)
+- Socket.IO: [https://socket.io/es/docs/v4/how-it-works/](https://socket.io/es/docs/v4/how-it-works/)
+- TMDB API: [https://developer.themoviedb.org/docs](https://developer.themoviedb.org/docs)
+
+**IA usadas como apoyo:**
+
+- Claude: [https://claude.ai/](https://claude.ai/)
+- ChatGPT: [https://chatgpt.com/](https://chatgpt.com/)
+- Gemini: [https://gemini.google.com/](https://gemini.google.com/)
+- GitHub Copilot: [https://github.com/features/copilot](https://github.com/features/copilot)
+- Microsoft Copilot: [https://copilot.microsoft.com/](https://copilot.microsoft.com/)
+
+---
 
 ## **5) ANEXOS**
+
+Para ejecutar el proyecto en local es necesario tener instalados:
+
+- Java 21.
+- Node.js y npm.
+- Git.
+- Acceso a MongoDB Atlas.
+- Archivo `.env` con las variables de entorno necesarias.
 
 ### **Guía de instalación y configuración**
 
