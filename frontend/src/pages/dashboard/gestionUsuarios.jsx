@@ -20,7 +20,7 @@ function GestionUsuarios() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // <- Aquí viaja tu pase de seguridad JWT
+                'Authorization': `Bearer ${token}` // aquí viaja tu pase de seguridad JWT
             }
         })
             .then(res => {
@@ -30,10 +30,10 @@ function GestionUsuarios() {
                 if (!res.ok) {
                     throw new Error("Error en la respuesta del servidor.");
                 }
-                return res.json(); // Ahora sí llegará un JSON limpio
+                return res.json(); // Ahora sí llegará un json limpio
             })
             .then(data => {
-                console.log("Usuario ejemplo:", data[0]); // 👈 mira esto en DevTools
+                console.log("Usuario ejemplo:", data[0]);
 
                 setUsuarios(data);
             })

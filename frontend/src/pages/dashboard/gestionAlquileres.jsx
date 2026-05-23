@@ -6,7 +6,7 @@ function GestionAlquileres() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // 1. Recuperamos el token de forma segura desde el sessionStorage tal y como lo guarda tu AuthContext
+        // 1. Recuperamos el token de forma segura desde el sessionStorage tal y como lo guarda AuthContext
         const savedAuth = sessionStorage.getItem('auth');
         const authObj = savedAuth ? JSON.parse(savedAuth) : null;
         const token = authObj ? authObj.token : null;

@@ -13,5 +13,5 @@ public interface MensajeChatRepository extends JpaRepository<MensajeChat, Long> 
     //obtiene todos los mensajes de la conversación de un usuario ordenados por fecha
     List<MensajeChat> findByUsuarioOrderByFechaEnvioAsc(Usuario usuario);
 
-    //el service obtiene todos los usuarios que tienen mensajes (para el panel del admin)
+    //el service obtiene todos los usuarios que tienen mensajes---para el panel del admin
 }

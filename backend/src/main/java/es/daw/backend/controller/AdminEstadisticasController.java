@@ -22,7 +22,7 @@ public class AdminEstadisticasController {
     private EstadisticasService estadisticasService;
 
     @GetMapping("/estadisticas")
-    @PreAuthorize("hasRole('ADMIN')") // Solo usuarios con Rol ADMIN pueden consumir estas métricas
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PeliculaStatsDTO>> getEstadisticasPeliculas() {
         List<PeliculaStatsDTO> stats = estadisticasService.obtenerRendimientoCatalogo();
         return ResponseEntity.ok(stats);

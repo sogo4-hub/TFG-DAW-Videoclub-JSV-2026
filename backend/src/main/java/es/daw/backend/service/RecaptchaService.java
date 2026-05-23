@@ -51,7 +51,7 @@ public class RecaptchaService {
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         try {
-            // 4. Hacer la petición POST a Google Cloud
+            // 4. Hacer la petición post a googlelcloud
             Map<String, Object> response = restTemplate.postForObject(url, requestEntity, Map.class);
 
             // 5. Analizar la respuesta de Enterprise

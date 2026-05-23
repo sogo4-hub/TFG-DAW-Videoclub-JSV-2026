@@ -31,8 +31,6 @@ public class CalificacionController {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         dto.setUsuarioId(usuario.getId());
-
-        // Ahora usamos calificacionService correctamente
         calificacionService.guardarOActualizar(dto);
 
         return ResponseEntity.ok("Calificación guardada");
@@ -41,7 +39,6 @@ public class CalificacionController {
     // 2. Obtener el promedio y total de una película
     @GetMapping("/pelicula/{peliculaId}")
     public ResponseEntity<CalificacionesResponse> getCalificacionesPelicula(@PathVariable Long peliculaId) {
-        // CORREGIDO: Usamos calificacionService en lugar de 'service'
         return ResponseEntity.ok(calificacionService.getResumenPelicula(peliculaId));
     }
 
@@ -51,16 +48,13 @@ public class CalificacionController {
             @PathVariable Long usuarioId,
             @PathVariable Long peliculaId) {
 
-        // CORREGIDO: Usamos calificacionService en lugar de 'service'
         boolean puedeVotar = calificacionService.usuarioHaVistoPelicula(usuarioId, peliculaId);
         return ResponseEntity.ok(puedeVotar);
     }
 
     @GetMapping("/mis-valoraciones")
     public ResponseEntity<List<Calificacion>> obtenerMisValoraciones(Principal principal) {
-
         String email = principal.getName();
-
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 

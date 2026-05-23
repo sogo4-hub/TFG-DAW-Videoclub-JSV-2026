@@ -8,7 +8,6 @@ export default function Home() {
     return (
         <div className="home">
 
-            {/* ── HERO ── */}
             <section className="hero">
                 <div className="hero-glow" />
 
@@ -28,7 +27,6 @@ export default function Home() {
                 <img className="hero-side-img" src="/imgs/posters.avif" alt="Videoclub" />
             </section>
 
-            {/* ── HORARIO + AYUDA ── */}
             <section className="schedule">
                 <div className="schedule-glow" />
 
@@ -60,7 +58,6 @@ export default function Home() {
                     </p>
                 </div>
 
-                {/* ----- CHAT DE AYUDA (ARREGLADO) ----- */}
                 <div className="schedule-ayuda">
                     {rol === 'ADMIN' ? (
                         <p className="ayuda-texto-admin">

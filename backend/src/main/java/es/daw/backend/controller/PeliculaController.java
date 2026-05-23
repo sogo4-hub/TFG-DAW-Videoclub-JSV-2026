@@ -28,25 +28,24 @@ public class PeliculaController {
     private final PeliculaService peliculaService;
     private final TmdbService tmdbService;
 
-    //-----cambio endpoint para paginación
+    // -----cambio endpoint para paginación
     // lo dejo en 16 por ahora...
 
     // @GetMapping
     // public ResponseEntity<List<PeliculaResponse>> listarTodas() {
-    //     return ResponseEntity.ok(peliculaService.listarTodas());
+    // return ResponseEntity.ok(peliculaService.listarTodas());
     // }
 
-   @GetMapping
+    @GetMapping
     public ResponseEntity<Page<PeliculaResponse>> listarTodas(
             @RequestParam(required = false, defaultValue = "") String search,
             @RequestParam(required = false, defaultValue = "") String genre,
-            @PageableDefault(page = 0, size = 12)
-            Pageable pageable
-    ) {
+            @PageableDefault(page = 0, size = 12) Pageable pageable) {
         return ResponseEntity.ok(peliculaService.listarPaginadas(search, genre, pageable));
     }
 
-    // Endpoint exclusivo para el admin — devuelve todas sin paginación
+    // Endpoint exclusivo para el admin
+    // devuelve todas sin paginación
     @GetMapping("/todas")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<PeliculaResponse>> listarTodasSinPaginar() {
@@ -56,12 +55,10 @@ public class PeliculaController {
     @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PeliculaResponse> crear(
-            @RequestPart("datos") PeliculaRequest request, // El JSON de la película
-            @RequestPart("archivo") MultipartFile archivo, // La imagen real
-            @RequestPart("video") MultipartFile video // ARCHIVO DE VIDEO
-    ) throws java.io.IOException {
+            @RequestPart("datos") PeliculaRequest request, // json de la película
+            @RequestPart("archivo") MultipartFile archivo,
+            @RequestPart("video") MultipartFile video) throws java.io.IOException {
         return ResponseEntity.status(HttpStatus.CREATED)
-                // Usamos el método nuevo pasándole imagen y vídeo
                 .body(peliculaService.guardarConMultimedia(request, archivo, video));
     }
 
@@ -80,7 +77,7 @@ public class PeliculaController {
 
     // Endpoint para importar la película de TMDB a tu Base de Datos local H2
     @PostMapping("/tmdb/import/{tmdbId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')") // Usa hasAuthority en lugar de hasRole
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')") // usa hasAuthority en lugar de hasRole
     public ResponseEntity<PeliculaResponse> importFromTmdb(@PathVariable Long tmdbId) {
         return ResponseEntity.ok(peliculaService.importarPeliculaTmdb(tmdbId));
     }
@@ -89,7 +86,7 @@ public class PeliculaController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<PeliculaResponse> uploadVideo(
             @PathVariable Long id,
-            @RequestParam("file") MultipartFile file) { // El enunciado exige que se llame "file"
+            @RequestParam("file") MultipartFile file) {
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().build();

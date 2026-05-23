@@ -18,17 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MensajeChatService {
 
-    /*
-     * guardarMensajeUsuario → guarda un mensaje del usuario en H2
-     * guardarRespuestaAdmin → guarda la respuesta del admin
-     * obtenerHistorial → devuelve todos los mensajes de una conversación ordenados
-     * por fecha
-     * obtenerTodasLasConversaciones → para el admin, devuelve todas las
-     * conversaciones agrupadas por usuario
-     * marcarComoLeidos → cuando el admin abre una conversación, marca los mensajes
-     * como leídos
-     */
-
     private final MensajeChatRepository mensajeChatRepository;
     private final UsuarioRepository usuarioRepository;
 
@@ -69,14 +58,13 @@ public class MensajeChatService {
                 .texto(texto)
                 .fechaEnvio(LocalDateTime.now())
                 .esAdmin(true)
-                .leido(true) // Los mensajes del admin se marcan como leídos directamente
+                .leido(true) // ---los mensajes del admin se marcan como leídos directamente
                 .usuario(usuario)
                 .build();
 
         return toDTO(mensajeChatRepository.save(mensaje));
     }
 
-    // Obtiene el historial de mensajes de un usuario
     public List<MensajeChatDTO> obtenerHistorial(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
         return mensajeChatRepository.findByUsuarioOrderByFechaEnvioAsc(usuario)
@@ -85,7 +73,6 @@ public class MensajeChatService {
                 .collect(Collectors.toList());
     }
 
-    // Para el admin: obtiene todas las conversaciones agrupadas por usuario
     public Map<String, List<MensajeChatDTO>> obtenerTodasLasConversaciones() {
         return mensajeChatRepository.findAll()
                 .stream()
@@ -93,7 +80,6 @@ public class MensajeChatService {
                 .collect(Collectors.groupingBy(MensajeChatDTO::getEmailUsuario));
     }
 
-    // Marca los mensajes de un usuario como leídos cuando el admin abre la conversación
     @Transactional
     public void marcarComoLeidos(String emailUsuario) {
         Usuario usuario = usuarioRepository.findByEmail(emailUsuario).orElseThrow();

@@ -14,8 +14,7 @@ import java.util.Optional;
 public interface AlquilerRepository extends JpaRepository<Alquiler, Long> {
     List<Alquiler> findByUsuario(Usuario usuario);
 
-    // Magia de Spring Boot: Busca si hay un alquiler de este usuario para esta peli
-    // que aún no haya caducado
+    // busca si hay un alquiler de este usuario para esta peli q aún no haya caducado
     Optional<Alquiler> findByUsuarioAndPeliculaAndFechaFinAfter(Usuario usuario, Pelicula pelicula,
             LocalDateTime fechaActual);
 

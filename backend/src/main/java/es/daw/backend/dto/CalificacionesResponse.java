@@ -11,7 +11,6 @@ public class CalificacionesResponse {
         this.totalVotos = (totalVotos != null) ? totalVotos : 0L;
     }
 
-    // Getters
     public Long getPeliculaId() { return peliculaId; }
     public Double getNotaMedia() { return notaMedia; }
     public Long getTotalVotos() { return totalVotos; }

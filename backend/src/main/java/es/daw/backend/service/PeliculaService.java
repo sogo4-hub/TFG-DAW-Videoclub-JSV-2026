@@ -145,12 +145,12 @@ public class PeliculaService {
         pelicula.setBackdropPath(tmdbData.getBackdropPath());
         pelicula.setVoteAverage(tmdbData.getVoteAverage());
 
-        // 🔥 EXTRAER EL AÑO (Los primeros 4 caracteres de '2010-07-15')
+        // extraer año (Los primeros 4 caracteres de '2010-07-15')
         if (tmdbData.getReleaseDate() != null && tmdbData.getReleaseDate().length() >= 4) {
             pelicula.setAnio(Integer.parseInt(tmdbData.getReleaseDate().substring(0, 4)));
         }
 
-        // 🔥 EXTRAER LOS GÉNEROS (Concatenados por comas: "Acción, Ciencia Ficción")
+        // extraer géneros (Concatenados por comas: "Acción, Ciencia Ficción")
         if (tmdbData.getGenres() != null && !tmdbData.getGenres().isEmpty()) {
             String generosFormateados = tmdbData.getGenres().stream()
                     .map(TmdbGenreDTO::getName)
@@ -159,7 +159,7 @@ public class PeliculaService {
             pelicula.setGenero(generosFormateados);
         }
 
-        // 🔥 EXTRAER EL DIRECTOR (Filtrando el equipo técnico)
+        // extraer el director (Filtrando el equipo técnico)
         if (tmdbData.getCredits() != null && tmdbData.getCredits().getCrew() != null) {
             String director = tmdbData.getCredits().getCrew().stream()
                     .filter(crewMember -> "Director".equals(crewMember.getJob()))
@@ -168,10 +168,6 @@ public class PeliculaService {
                     .orElse("Desconocido");
             pelicula.setDirector(director);
         }
-
-        // OJO: El GridFsId (el vídeo en mongo) estará nulo/vacío hasta que lo subas
-        // desde un panel de admin.
-        // pelicula.setGridFsId(null);
 
         // 4. Guardar en H2 y retornar DTO
         Pelicula saved = peliculaRepository.save(pelicula);
@@ -185,12 +181,10 @@ public class PeliculaService {
                 .orElseThrow(() -> new RuntimeException("Película no encontrada con ID: " + peliculaId));
 
         try {
-            // 2. Subimos el archivo a MongoDB Atlas mediante tu MediaService
-            // NOTA: Asumo que en tu MediaService tienes un método llamado 'uploadFile'
-            // o 'guardarVideo'. Si se llama distinto, ajusta este nombre.
+            // 2. Subimos el archivo a mongo de atlas mediante mediaservice
             String gridFsId = mediaService.uploadFile(file);
 
-            // 3. Creamos la URL estandarizada para que Sara la consuma en React
+            // 3. Creamos la url estandarizada para consumirla en React
             pelicula.setUrlVideo("/api/media/stream/" + gridFsId);
 
             // 5. Guardamos los cambios y devolvemos el DTO actualizado
@@ -203,15 +197,12 @@ public class PeliculaService {
 
     @Transactional
     public PeliculaResponse importarPeliculaConVideo(Long tmdbId, MultipartFile videoFile) throws java.io.IOException {
-        // 1. Reutilizamos tu lógica de importación actual para obtener la entidad
-        // Ojo: He modificado un poco el flujo para que no se guarde dos veces
-        // innecesariamente
 
         if (peliculaRepository.existsByTmdbId(tmdbId)) {
             throw new PeliculaAlreadyExistsException("La película ya existe en nuestro catálogo local.");
         }
 
-        // Traemos datos de TMDB (reutilizando tu lógica)
+        //----traemos datos de tmdb
         TmdbMovieDTO tmdbData = tmdbService.getMovieDetails(tmdbId)
                 .orElseThrow(() -> new RuntimeException("Película no encontrada en TMDB."));
 
@@ -223,12 +214,10 @@ public class PeliculaService {
         pelicula.setBackdropPath(tmdbData.getBackdropPath());
         pelicula.setVoteAverage(tmdbData.getVoteAverage());
 
-        // Año
         if (tmdbData.getReleaseDate() != null && tmdbData.getReleaseDate().length() >= 4) {
             pelicula.setAnio(Integer.parseInt(tmdbData.getReleaseDate().substring(0, 4)));
         }
 
-        // Géneros
         if (tmdbData.getGenres() != null && !tmdbData.getGenres().isEmpty()) {
             String generosFormateados = tmdbData.getGenres().stream()
                     .map(TmdbGenreDTO::getName)
@@ -237,7 +226,6 @@ public class PeliculaService {
             pelicula.setGenero(generosFormateados);
         }
 
-        // Director
         if (tmdbData.getCredits() != null && tmdbData.getCredits().getCrew() != null) {
             String director = tmdbData.getCredits().getCrew().stream()
                     .filter(crewMember -> "Director".equals(crewMember.getJob()))
@@ -247,11 +235,9 @@ public class PeliculaService {
             pelicula.setDirector(director);
         }
 
-        // 2. PROCESAR EL VIDEO (La parte nueva)
+        // 2. PROCESAR EL VIDEO
         if (videoFile != null && !videoFile.isEmpty()) {
-            // Usamos el método que ya tienes en tu service (uploadFile)
             String gridFsId = mediaService.uploadFile(videoFile);
-            // Usamos tu ruta de stream
             pelicula.setUrlVideo("/api/media/stream/" + gridFsId);
         }
 

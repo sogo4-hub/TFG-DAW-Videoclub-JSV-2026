@@ -53,7 +53,7 @@ public class AlquilerService {
                 .usuario(usuario)
                 .pelicula(pelicula)
                 .fechaInicio(LocalDateTime.now())
-                .fechaFin(LocalDateTime.now().plusHours(48)) // Asignamos 48 horas de alquiler
+                .fechaFin(LocalDateTime.now().plusHours(48)) // asignamos 48 horas de alquiler
                 .build();
 
         alquilerRepository.save(nuevoAlquiler);
@@ -84,11 +84,10 @@ public class AlquilerService {
                 throw new AlquilerNoActivoException("No puedes cancelar una película que ya has empezado a ver.");
             }
             Alquiler alquiler = activo.get();
-            // 2. MAGIA DE ARQUITECTURA: En vez de borrar, "caducamos" el alquiler instantáneamente
+            // En vez de borrar, caducamos el alquiler instantáneamente
             alquiler.setFechaFin(LocalDateTime.now());
             alquilerRepository.save(alquiler);
         } else {
-            // USAMOS NUESTRA EXCEPCIÓN PERSONALIZADA
             throw new AlquilerNoActivoException("No tienes un alquiler activo para esta película.");
         }
     }

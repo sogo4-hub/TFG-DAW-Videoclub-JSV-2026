@@ -37,17 +37,12 @@ public class AdminController {
         // 2. Los transformamos a tu objeto UsuarioDashboardDTO usando streams de Java
         List<UsuarioDashboardDTO> dtos = usuarios.stream().map(u -> {
             // Buscamos cuántos alquileres tiene este usuario concreto en el historial
-            // Nota: Si en tu AlquilerRepository no tienes findByUsuario, puedes usar un
-            // findAll intermedio
-            // o simplemente contar filtrando por id de usuario.
             long totalAlquileres = alquilerRepository.findAll().stream()
                     .filter(alquiler -> alquiler.getUsuario().getId().equals(u.getId()))
                     .count();
 
-            // Convertimos la fecha a String de forma segura
-            LocalDateTime fechaSimulada = LocalDateTime.now(); // O cualquier otra fecha por defecto
+            LocalDateTime fechaSimulada = LocalDateTime.now();
 
-            // Llamamos a tu constructor completo de UsuarioDashboardDTO
             return new UsuarioDashboardDTO(
                     u.getId(),
                     u.getNombre(),
@@ -59,28 +54,27 @@ public class AdminController {
         return ResponseEntity.ok(dtos);
     }
 
-   @GetMapping("/alquileres")
+    @GetMapping("/alquileres")
     public ResponseEntity<List<es.daw.backend.dto.AlquilerDashboardDTO>> obtenerTodosLosAlquileres() {
         // 1. Traemos las entidades de la base de datos de forma limpia
         List<Alquiler> alquileres = alquilerRepository.findAll();
-        
-        // 2. Mapeamos manualmente a un DTO plano y seguro para transferir por HTTP
+
+        // 2. Mapeamos manualmente a un dto plano y seguro para transferir por HTTP
         List<es.daw.backend.dto.AlquilerDashboardDTO> dtos = alquileres.stream().map(a -> {
             String nombre = (a.getUsuario() != null) ? a.getUsuario().getNombre() : "Usuario Eliminado";
             String email = (a.getUsuario() != null) ? a.getUsuario().getEmail() : "---";
             String titulo = (a.getPelicula() != null) ? a.getPelicula().getTitulo() : "Película Eliminada";
-            
+
             String inicioStr = (a.getFechaInicio() != null) ? a.getFechaInicio().toString() : "";
             String finStr = (a.getFechaFin() != null) ? a.getFechaFin().toString() : "";
 
             return new es.daw.backend.dto.AlquilerDashboardDTO(
-                a.getId(),
-                nombre,
-                email,
-                titulo,
-                inicioStr,
-                finStr
-            );
+                    a.getId(),
+                    nombre,
+                    email,
+                    titulo,
+                    inicioStr,
+                    finStr);
         }).toList();
 
         return ResponseEntity.ok(dtos);

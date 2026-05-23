@@ -10,11 +10,9 @@ public class UsuarioDashboardDTO {
     private LocalDateTime  fechaRegistro;
     private Long totalAlquileres;
 
-    // 1. Constructor vacío (Obligatorio para que Jackson pueda transformarlo a JSON sin quejas)
     public UsuarioDashboardDTO() {
     }
 
-    // 2. Constructor completo (El que mapea en orden los campos de la query JPQL)
     public UsuarioDashboardDTO(Long id, String nombre, String email, LocalDateTime  fechaRegistro, Long totalAlquileres) {
         this.id = id;
         this.nombre = nombre;
@@ -23,7 +21,6 @@ public class UsuarioDashboardDTO {
         this.totalAlquileres = totalAlquileres;
     }
 
-    // 3. Getters y Setters
     public Long getId() {
         return id;
     }

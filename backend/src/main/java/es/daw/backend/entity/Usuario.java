@@ -37,7 +37,6 @@ public class Usuario implements UserDetails {
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
 
-    // MÉTODOS DE USERDETAILS
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + rol));

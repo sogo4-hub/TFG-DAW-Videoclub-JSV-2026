@@ -32,7 +32,7 @@ public class PeliculaMapper {
                 .anio(dto.getAnio())
                 .genero(dto.getGenero())
                 .urlImagen(dto.getUrlImagen())
-                .urlVideo(dto.getUrlVideo()) // <--- NUEVO: Añadimos el vídeo a la entidad
+                .urlVideo(dto.getUrlVideo())
                 .build();
     }
 }

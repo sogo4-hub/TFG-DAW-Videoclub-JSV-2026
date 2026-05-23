@@ -4,16 +4,16 @@ import { useAuth } from "../context/AuthContext";
 export default function PrivateAdminRoute({ children }) {
     const { token, rol } = useAuth();
 
-    // No está logueado → fuera
+    // No está logueado; fuera
     if (!token) {
         return <Navigate to="/login" replace />;
     }
 
-    // Está logueado pero NO es admin → fuera
+    // Está logueado pero no es admin ; fuera
     if (rol !== "ADMIN") {
         return <Navigate to="/" replace />;
     }
 
-    // Es admin → puede entrar
+    // si es adminpuede entrar
     return children;
 }
