@@ -210,6 +210,8 @@ La aplicación también se comunica con servicios externos. `TmdbService` actúa
 
 Para la gestión multimedia, `MediaService` se encarga de comunicarse con MongoDB Atlas mediante GridFS. Este servicio permite subir, recuperar y eliminar archivos binarios asociados a las películas.
 
+```text
+
 Frontend React + Vite
     |
     |  Peticiones HTTP mediante Axios
@@ -299,6 +301,8 @@ por cada usuario
 MENSAJES_CHAT
 Historial de mensajes
 entre usuario y administrador
+
+```
 
 ---
 
