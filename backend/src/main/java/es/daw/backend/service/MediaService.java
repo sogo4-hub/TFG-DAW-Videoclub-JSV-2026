@@ -36,9 +36,7 @@ public class MediaService {
         return gridFsTemplate.getResource(file);
     }
 
-    // NUEVO MÉTODO: Elimina el archivo de MongoDB
-
-
+    // ----eliminar el archivo de MongoDB
     public void eliminarArchivo(String id) {
 
         // 2. SOLUCIÓN: Convertir el String plano a un ObjectId de MongoDB
