@@ -95,7 +95,7 @@ const FormularioPelicula = ({ alFinalizar }) => {
                 console.log("=====================================");
             }
             alert(
-                error?.response?.data?.mensaje ||
+                error?.response?.data?.message ||
                 error?.response?.data ||
                 error?.message ||
                 "Error importando película o la subida del vídeo."
