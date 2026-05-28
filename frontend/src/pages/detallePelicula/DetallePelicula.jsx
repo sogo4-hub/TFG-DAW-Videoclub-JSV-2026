@@ -72,6 +72,8 @@ const DetallePelicula = () => {
           <video
             ref={videoRef}
             controls
+            controlsList="nodownload"
+            onContextMenu={(e) => e.preventDefault()}
             autoPlay
             poster={posterUrl}
             className="detalle-video"
