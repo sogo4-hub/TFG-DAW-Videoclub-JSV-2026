@@ -1,4 +1,4 @@
-<img width="130" height="auto" alt="logo" align="left" src="https://github.com/user-attachments/assets/91b79a52-9ed4-47c0-872a-79be89afeeff" />
+<p><img width="130" height="auto" alt="logo" align="left" src="https://github.com/user-attachments/assets/91b79a52-9ed4-47c0-872a-79be89afeeff" /></p>
 
 # StreamFlix – Videoclub Online
 
