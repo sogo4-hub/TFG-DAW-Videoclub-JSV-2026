@@ -1,0 +1,17 @@
+.layout-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+
+
+.layout-content {
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+html, body {
+    overflow-x: hidden;
+}

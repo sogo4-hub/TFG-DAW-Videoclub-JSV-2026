@@ -1,0 +1,31 @@
+.detalle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background: #070309;
+    margin: 0;
+    padding: 0;
+}
+
+.detalle-video {
+    width: auto;
+    max-width: 1000px;
+    max-height: 90vh;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(75, 50, 80, 0.8);
+    background: #070309;
+}
+
+.detalle-loading,
+.detalle-error,
+.detalle-sin-video {
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+    background: #070309;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(75, 50, 80, 0.8);
+}

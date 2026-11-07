@@ -24,7 +24,7 @@ public class TmdbService {
 
     private final RestTemplate restTemplate;
 
-    // Busca una lista de películas por nombre
+    // buscar pelis por nombre
     public List<TmdbMovieDTO> searchMovies(String query) {
         String url = UriComponentsBuilder.fromHttpUrl(baseUrl + "/search/movie")
                 .queryParam("api_key", apiKey)
@@ -36,12 +36,12 @@ public class TmdbService {
         return (response != null && response.getResults() != null) ? response.getResults() : Collections.emptyList();
     }
 
-    // Obtiene el detalle exacto de una película por su ID de TMDB
+    // pillar los detalles
     public Optional<TmdbMovieDTO> getMovieDetails(Long tmdbId) {
         String url = UriComponentsBuilder.fromHttpUrl(baseUrl + "/movie/" + tmdbId)
                 .queryParam("api_key", apiKey)
                 .queryParam("language", "es-ES")
-                .queryParam("append_to_response", "credits") // 🔥 LA MAGIA OCURRE AQUÍ
+                .queryParam("append_to_response", "credits")
                 .toUriString();
 
         try {

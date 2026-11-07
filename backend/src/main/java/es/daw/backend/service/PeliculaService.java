@@ -10,6 +10,9 @@ import es.daw.backend.exception.PeliculaAlreadyExistsException;
 import es.daw.backend.mapper.PeliculaMapper;
 import es.daw.backend.repository.PeliculaRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +28,26 @@ public class PeliculaService {
     private final PeliculaMapper peliculaMapper;
     private final MediaService mediaService;
 
-    public List<PeliculaResponse> listarTodas() {
+    // public List<PeliculaResponse> listarTodas() {
+    // return peliculaRepository.findAll().stream()
+    // .map(peliculaMapper::toResponseDTO)
+    // .toList();
+    // }
+
+    public Page<PeliculaResponse> listarPaginadas(String search, String genero, Pageable pageable) {
+        String tituloFiltro = (search == null) ? "" : search.trim();
+        String generoFiltro = (genero == null) ? "" : genero.trim();
+
+        return peliculaRepository
+                .findByTituloContainingIgnoreCaseAndGeneroContainingIgnoreCase(
+                        tituloFiltro,
+                        generoFiltro,
+                        pageable)
+                .map(peliculaMapper::toResponseDTO);
+    }
+
+    // Para el dashboard del admin — devuelve todas sin límite de paginación
+    public List<PeliculaResponse> listarTodasSinPaginar() {
         return peliculaRepository.findAll().stream()
                 .map(peliculaMapper::toResponseDTO)
                 .toList();
@@ -38,26 +60,41 @@ public class PeliculaService {
     }
 
     public void eliminar(Long id) {
-        // 1. Buscamos la película antes de borrarla para obtener la URL de la imagen
         peliculaRepository.findById(id).ifPresent(pelicula -> {
-
-            String url = pelicula.getUrlImagen();
-
-            // 2. Comprobamos si la URL apunta a nuestro servicio de medios (/api/media/...)
-            if (url != null && url.startsWith("/api/media/")) {
-                // Extraemos el ID de MongoDB (la parte final de la cadena)
-                String mongoId = url.replace("/api/media/", "");
-
-                // 3. Borramos el archivo físico en MongoDB
-                mediaService.eliminarArchivo(mongoId);
-            }
-
-            // 4. Borramos el registro en la base de datos SQL (H2)
+            // Antes de borrar la película en H2, eliminamos los recursos multimedia
+            // asociados en MongoDB/GridFS, si pertenecen a nuestro servicio interno.
+            eliminarMediaSiEsDeMongo(pelicula.getUrlImagen());
+            eliminarMediaSiEsDeMongo(pelicula.getUrlVideo());
+            // Finalmente eliminamos el registro relacional de la película.
             peliculaRepository.deleteById(id);
         });
     }
 
-    public PeliculaResponse guardarConImagen(PeliculaRequest request, MultipartFile archivo) throws java.io.IOException {
+    /**
+    * Elimina de MongoDB/GridFS un recurso multimedia asociado a una película.
+    *
+    * Solo actúa sobre URLs internas que empiezan por "/api/media/".
+    * Esto evita intentar borrar recursos externos, como imágenes de TMDB.
+    *
+    * Funciona tanto para:
+    * - Imágenes: /api/media/{mongoId}
+    * - Vídeos:   /api/media/stream/{mongoId}
+    *
+    * En ambos casos se extrae el último segmento de la URL, que corresponde
+    * al ObjectId del archivo almacenado en GridFS.
+    */
+
+    private void eliminarMediaSiEsDeMongo(String url) {
+        if (url == null || !url.startsWith("/api/media/")) {
+            return;
+        }
+
+        String mongoId = url.substring(url.lastIndexOf("/") + 1);
+        mediaService.eliminarArchivo(mongoId);
+    }
+
+    public PeliculaResponse guardarConImagen(PeliculaRequest request, MultipartFile archivo)
+            throws java.io.IOException {
         // 1. Guardamos la imagen en MongoDB y obtenemos su ID
         String mongoId = mediaService.guardarArchivo(archivo);
 
@@ -71,7 +108,8 @@ public class PeliculaService {
         return peliculaMapper.toResponseDTO(guardada);
     }
 
-    public PeliculaResponse guardarConMultimedia(PeliculaRequest request, MultipartFile imagen, MultipartFile video) throws java.io.IOException {
+    public PeliculaResponse guardarConMultimedia(PeliculaRequest request, MultipartFile imagen, MultipartFile video)
+            throws java.io.IOException {
         // 1. Guardamos la imagen en MongoDB
         String imgId = mediaService.guardarArchivo(imagen);
 
@@ -107,12 +145,12 @@ public class PeliculaService {
         pelicula.setBackdropPath(tmdbData.getBackdropPath());
         pelicula.setVoteAverage(tmdbData.getVoteAverage());
 
-        // 🔥 EXTRAER EL AÑO (Los primeros 4 caracteres de '2010-07-15')
+        // extraer año (Los primeros 4 caracteres de '2010-07-15')
         if (tmdbData.getReleaseDate() != null && tmdbData.getReleaseDate().length() >= 4) {
             pelicula.setAnio(Integer.parseInt(tmdbData.getReleaseDate().substring(0, 4)));
         }
 
-        // 🔥 EXTRAER LOS GÉNEROS (Concatenados por comas: "Acción, Ciencia Ficción")
+        // extraer géneros (Concatenados por comas: "Acción, Ciencia Ficción")
         if (tmdbData.getGenres() != null && !tmdbData.getGenres().isEmpty()) {
             String generosFormateados = tmdbData.getGenres().stream()
                     .map(TmdbGenreDTO::getName)
@@ -121,7 +159,7 @@ public class PeliculaService {
             pelicula.setGenero(generosFormateados);
         }
 
-        // 🔥 EXTRAER EL DIRECTOR (Filtrando el equipo técnico)
+        // extraer el director (Filtrando el equipo técnico)
         if (tmdbData.getCredits() != null && tmdbData.getCredits().getCrew() != null) {
             String director = tmdbData.getCredits().getCrew().stream()
                     .filter(crewMember -> "Director".equals(crewMember.getJob()))
@@ -130,9 +168,6 @@ public class PeliculaService {
                     .orElse("Desconocido");
             pelicula.setDirector(director);
         }
-
-        // OJO: El GridFsId (el vídeo en mongo) estará nulo/vacío hasta que lo subas desde un panel de admin.
-        // pelicula.setGridFsId(null);
 
         // 4. Guardar en H2 y retornar DTO
         Pelicula saved = peliculaRepository.save(pelicula);
@@ -146,12 +181,10 @@ public class PeliculaService {
                 .orElseThrow(() -> new RuntimeException("Película no encontrada con ID: " + peliculaId));
 
         try {
-            // 2. Subimos el archivo a MongoDB Atlas mediante tu MediaService
-            // NOTA: Asumo que en tu MediaService tienes un método llamado 'uploadFile'
-            // o 'guardarVideo'. Si se llama distinto, ajusta este nombre.
+            // 2. Subimos el archivo a mongo de atlas mediante mediaservice
             String gridFsId = mediaService.uploadFile(file);
 
-            // 3. Creamos la URL estandarizada para que Sara la consuma en React
+            // 3. Creamos la url estandarizada para consumirla en React
             pelicula.setUrlVideo("/api/media/stream/" + gridFsId);
 
             // 5. Guardamos los cambios y devolvemos el DTO actualizado
@@ -160,5 +193,56 @@ public class PeliculaService {
         } catch (Exception e) {
             throw new RuntimeException("Error crítico al subir el archivo a MongoDB Atlas: " + e.getMessage());
         }
+    }
+
+    @Transactional
+    public PeliculaResponse importarPeliculaConVideo(Long tmdbId, MultipartFile videoFile) throws java.io.IOException {
+
+        if (peliculaRepository.existsByTmdbId(tmdbId)) {
+            throw new PeliculaAlreadyExistsException("La película ya existe en nuestro catálogo local.");
+        }
+
+        //----traemos datos de tmdb
+        TmdbMovieDTO tmdbData = tmdbService.getMovieDetails(tmdbId)
+                .orElseThrow(() -> new RuntimeException("Película no encontrada en TMDB."));
+
+        Pelicula pelicula = new Pelicula();
+        pelicula.setTitulo(tmdbData.getTitle());
+        pelicula.setSinopsis(tmdbData.getOverview());
+        pelicula.setUrlImagen(tmdbData.getPosterPath());
+        pelicula.setTmdbId(tmdbId);
+        pelicula.setBackdropPath(tmdbData.getBackdropPath());
+        pelicula.setVoteAverage(tmdbData.getVoteAverage());
+
+        if (tmdbData.getReleaseDate() != null && tmdbData.getReleaseDate().length() >= 4) {
+            pelicula.setAnio(Integer.parseInt(tmdbData.getReleaseDate().substring(0, 4)));
+        }
+
+        if (tmdbData.getGenres() != null && !tmdbData.getGenres().isEmpty()) {
+            String generosFormateados = tmdbData.getGenres().stream()
+                    .map(TmdbGenreDTO::getName)
+                    .reduce((g1, g2) -> g1 + ", " + g2)
+                    .orElse("Desconocido");
+            pelicula.setGenero(generosFormateados);
+        }
+
+        if (tmdbData.getCredits() != null && tmdbData.getCredits().getCrew() != null) {
+            String director = tmdbData.getCredits().getCrew().stream()
+                    .filter(crewMember -> "Director".equals(crewMember.getJob()))
+                    .map(TmdbCrewDTO::getName)
+                    .findFirst()
+                    .orElse("Desconocido");
+            pelicula.setDirector(director);
+        }
+
+        // 2. PROCESAR EL VIDEO
+        if (videoFile != null && !videoFile.isEmpty()) {
+            String gridFsId = mediaService.uploadFile(videoFile);
+            pelicula.setUrlVideo("/api/media/stream/" + gridFsId);
+        }
+
+        // 3. Guardar todo el conjunto en H2
+        Pelicula guardada = peliculaRepository.save(pelicula);
+        return peliculaMapper.toResponseDTO(guardada);
     }
 }

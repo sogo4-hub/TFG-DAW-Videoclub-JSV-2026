@@ -36,10 +36,9 @@ public class AlquilerController {
             @PathVariable Long peliculaId,
             org.springframework.security.core.Authentication authentication) {
 
-        String email = authentication.getName(); // Extraemos email del Token JWT
+        String email = authentication.getName(); //--extraer email del token jwt
         alquilerService.cancelarAlquiler(email, peliculaId);
 
-        // Devolvemos un JSON amigable para el frontend
         Map<String, String> response = new HashMap<>();
         response.put("mensaje", "Alquiler cancelado correctamente");
         return ResponseEntity.ok(response);

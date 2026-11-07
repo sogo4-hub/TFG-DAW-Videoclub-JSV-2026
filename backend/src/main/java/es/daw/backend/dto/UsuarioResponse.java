@@ -1,5 +1,7 @@
 package es.daw.backend.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +16,5 @@ public class UsuarioResponse {
     private String nombre;
     private String email;
     private String rol;
+    private LocalDateTime fechaRegistro;
 }

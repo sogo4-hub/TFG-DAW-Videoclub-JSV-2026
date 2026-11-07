@@ -36,9 +36,7 @@ build/
 .env
 
 # Base de datos H2 local
-backend/data/*.db
-backend/data/*.mv.db
-backend/data/*.trace.db
+/data/
 
 # Fichero local de pruebas HTTP
 src/main/resources/endpoints.http

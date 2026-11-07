@@ -9,6 +9,7 @@ import lombok.*;
 //(Para mostrar al usuario)
 public class PeliculaResponse {
     private Long id;
+    private Long tmdbId;
     private String titulo;
     private String sinopsis;
     private String director;

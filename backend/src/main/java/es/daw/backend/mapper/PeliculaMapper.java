@@ -12,13 +12,14 @@ public class PeliculaMapper {
         if (pelicula == null) return null;
         return PeliculaResponse.builder()
                 .id(pelicula.getId())
+                .tmdbId(pelicula.getTmdbId())
                 .titulo(pelicula.getTitulo())
                 .sinopsis(pelicula.getSinopsis())
                 .director(pelicula.getDirector())
                 .anio(pelicula.getAnio())
                 .genero(pelicula.getGenero())
                 .urlImagen(pelicula.getUrlImagen())
-                .urlVideo(pelicula.getUrlVideo()) // <--- NUEVO: Añadimos el vídeo a la respuesta
+                .urlVideo(pelicula.getUrlVideo())
                 .build();
     }
 
@@ -31,7 +32,7 @@ public class PeliculaMapper {
                 .anio(dto.getAnio())
                 .genero(dto.getGenero())
                 .urlImagen(dto.getUrlImagen())
-                .urlVideo(dto.getUrlVideo()) // <--- NUEVO: Añadimos el vídeo a la entidad
+                .urlVideo(dto.getUrlVideo())
                 .build();
     }
 }

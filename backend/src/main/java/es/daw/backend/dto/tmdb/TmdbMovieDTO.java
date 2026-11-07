@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class TmdbMovieDTO {
-    private Long id; // ID interno de TMDB
+    private Long id; //---id interno de tmdb
     private String title;
     private String overview;
 
@@ -22,7 +22,6 @@ public class TmdbMovieDTO {
     @JsonProperty("vote_average")
     private Double voteAverage;
 
-    // 🔥 NUEVOS CAMPOS:
     private List<TmdbGenreDTO> genres;
     private TmdbCreditsDTO credits;
 }

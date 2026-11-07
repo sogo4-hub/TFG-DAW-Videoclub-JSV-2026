@@ -1,5 +1,6 @@
 -- Borramos la tabla si ya existe para evitar errores al reiniciar
-DROP TABLE IF EXISTS usuarios, peliculas, favoritos, alquileres;
+----para borrar al revés por las fk 
+DROP TABLE IF EXISTS calificaciones, mensajes_chat, alquileres, favoritos, peliculas, usuarios;
 
 -- Creación de la tabla usuarios basada en la entidad Usuario.java
 CREATE TABLE usuarios (
@@ -7,7 +8,8 @@ CREATE TABLE usuarios (
                           nombre VARCHAR(255) NOT NULL, -- <--- NUEVO CAMPO
                           email VARCHAR(255) NOT NULL UNIQUE,
                           password VARCHAR(255) NOT NULL,
-                          rol VARCHAR(50)
+                          rol VARCHAR(50),
+                          fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- <--- NUEVO CAMPO
 );
 
 -- Creación de la tabla peliculas
@@ -48,4 +50,22 @@ CREATE TABLE alquileres (
                             reproducida BOOLEAN DEFAULT FALSE, -- <--- AÑADE ESTA LÍNEA
                             FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
                             FOREIGN KEY (pelicula_id) REFERENCES peliculas(id) ON DELETE CASCADE
+);
+
+CREATE TABLE mensajes_chat (
+                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                            es_admin BOOLEAN NOT NULL DEFAULT FALSE,
+                            fecha_envio DATETIME(6) NOT NULL,
+                            leido BOOLEAN NOT NULL DEFAULT FALSE,
+                            texto TEXT NOT NULL,
+                            usuario_id BIGINT NOT NULL,
+                            FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE calificaciones (
+                            usuario_id INT NOT NULL,
+                            pelicula_id INT NOT NULL,
+                            nota DECIMAL(2, 1) NOT NULL CHECK (nota >= 0.0 AND nota <= 5.0),
+                            fecha_calificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                            PRIMARY KEY (usuario_id, pelicula_id)
 );

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/usuarios") // ✅ Nueva ruta base para usuarios normales
+@RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
 public class UserProfileController {
 
